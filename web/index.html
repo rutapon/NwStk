@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="TIS-620">
+  <!--  <meta charset="Windows-874">-->
+   <!-- <meta http-equiv="content-type" content="text/html; charset=TIS-620" />-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anda-Stock</title>
+    <!--<link rel="shortcut icon" href="../demos/favicon.ico">-->
+    <!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">-->
+    <link href="css/family.css" rel="stylesheet" />
+
+    <link href="lib/jquery.mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-demos.css" rel="stylesheet" />
+
+    <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="lib/jquery.mobile/jquery.mobile-1.4.5.js"></script>
+
+    <script src="lib/jquery-mobile-datepicker-wrapper/external/jquery-ui/datepicker.js"></script>
+    <link href="lib/jquery-mobile-datepicker-wrapper/jquery.mobile.datepicker.css" rel="stylesheet" />
+    <script src="lib/jquery-mobile-datepicker-wrapper/jquery.mobile.datepicker.js"></script>
+    <link href="lib/jquery-mobile-datepicker-wrapper/jquery.mobile.datepicker.theme.css" rel="stylesheet" />
+
+    <script src="lib/backbone/backbone-min.js"></script>
+
+    <link href="lib/backgrid/lib/backgrid.css" rel="stylesheet" />
+    <script src="lib/backgrid/lib/backgrid.min.js"></script>
+    <link href="lib/backgrid-select-all-master/backgrid-select-all.min.css" rel="stylesheet" />
+    <script src="lib/backgrid-select-all-master/backgrid-select-all.min.js"></script>
+
+    <link rel="stylesheet" media="screen" href="lib/handsontable/handsontable.css">
+    <link rel="stylesheet" media="screen" href="lib/handsontable/pikaday/pikaday.css">
+    <script src="lib/handsontable/pikaday/pikaday.js"></script>
+    <script src="lib/handsontable/moment/moment.js"></script>
+    <script src="lib/handsontable/zeroclipboard/ZeroClipboard.js"></script>
+    <script src="lib/handsontable/handsontable.js"></script>
+
+    <!--<link rel="stylesheet" media="screen" href="lib/handsontable/css/samples.css?20140331">-->
+    <link rel="stylesheet" href="lib/handsontable/css/font-awesome/css/font-awesome.min.css">
+
+    <script src="lib/xdr.js"></script>
+    <script src="lib/socket.io-1.2.1.js"></script>
+
+    <script src="lib/step/step.js"></script>
+    <script src="lib/async/async.min.js"></script>
+
+    <script src="NwLib/NwLib.js"></script>
+    <script src="NwUtil/NwDataMsgObj.js"></script>
+
+    <script src="NwConn/NwWsClient.js"></script>
+    <script src="service_conn/NwStockServiceConn.js"></script>
+
+    <script src="lib/xlsx/xlsx.core.min.js"></script>
+    <script src="lib/xlsx/Blob.js"></script>
+    <script src="lib/xlsx/FileSaver.js"></script>
+    <script src="lib/xlsx/NwXlsx.js"></script>
+
+    <script src="js/models/product.js"></script>
+    <script src="js/models/Stock.js"></script>
+    <script src="js/models/ImportProductModel.js"></script>
+
+    <script src="js/collections/products.js"></script>
+    <script src="js/collections/ImportProductCollection.js"></script>
+    <script src="js/collections/SupplyLogCollection.js"></script>
+
+    <script src="js/models/AddImportProductModel.js"></script>
+
+    <script src="js/views/CreateProductTableTr.js"></script>
+    <script src="js/views/CreateProductTable.js"></script>
+    <script src="js/views/CreateProduct.js"></script>
+    <script src="js/views/ShowProduct.js"></script>
+    <script src="js/views/EditProductTableTr.js"></script>
+    <script src="js/views/EditProduct.js"></script>
+
+    <script src="js/views/SelectProduct.js"></script>
+    <script src="js/views/AddImportProduct.js"></script>
+    <!--   
+    <script src="js/views/ImportProduct.js"></script>-->
+
+    <script src="js/app.js"></script>
+
+    <link href="css/index.css" rel="stylesheet" />
+    <script src="index.js"></script>
+
+    <script>
+
+    </script>
+    <style type="text/css">
+        td {
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding-top: 1px;
+            padding-right: 1px;
+            padding-left: 1px;
+            color: black;
+            font-size: 11.0pt;
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            text-align: general;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
+
+        .auto-style1 {
+            height: 20.1pt;
+            width: 39pt;
+            color: black;
+            font-size: 11.0pt;
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding-left: 1px;
+            padding-right: 1px;
+            padding-top: 1px;
+        }
+
+        .auto-style2 {
+            height: 20.1pt;
+            color: black;
+            font-size: 11.0pt;
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding-left: 1px;
+            padding-right: 1px;
+            padding-top: 1px;
+        }
+
+        .auto-style3 {
+            height: 14.25pt;
+            color: black;
+            font-size: 11.0pt;
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-style: none;
+            border-color: inherit;
+            border-width: medium;
+            padding-left: 1px;
+            padding-right: 1px;
+            padding-top: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div data-role="page" data-title="Anda-Stock" class="jqm-demos ui-responsive-panel">
+
+        <div data-role="header" data-position="fixed" data-theme="a">
+            <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
+
+            <h1>Anda-Stock</h1>
+            <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
+            <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
+
+            <!--  <form> 
+            <label for="searchbar" class="ui-hidden-accessible">Search:</label>
+            <input type="search" name="searchbar" id="search1" value="" data-theme="d" data-mini="true" />
+        </form>-->
+
+        </div>
+
+        <!-- /header -->
+        <div role="main" id="main" class="ui-content jqm-content jqm-fullwidth">
+            <h1>Andamania Stock</h1>
+            <h2>Activity: Database</h2>
+
+            <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 631pt"
+                width="839">
+                <colgroup>
+                    <col style="mso-width-source: userset; mso-width-alt: 1664; width: 39pt" width="52" />
+                    <col style="mso-width-source: userset; mso-width-alt: 2944; width: 69pt" width="92" />
+                    <col style="mso-width-source: userset; mso-width-alt: 5952; width: 140pt" width="186" />
+                    <col style="mso-width-source: userset; mso-width-alt: 4512; width: 106pt" width="141" />
+                    <col style="mso-width-source: userset; mso-width-alt: 3136; width: 74pt" width="98" />
+                    <col style="mso-width-source: userset; mso-width-alt: 2368; width: 56pt" width="74" />
+                    <col style="width: 54pt" width="72" />
+                    <col style="mso-width-source: userset; mso-width-alt: 1664; width: 39pt" width="52" />
+                    <col style="width: 54pt" width="72" />
+                </colgroup>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td class="auto-style1" height="26" width="52">1 )</td>
+                    <td align="left" colspan="8" style="mso-ignore: colspan; width: 592pt" width="787">เขียน<span style="mso-spacerun: yes">&nbsp; </span>Database ที่เก็บข้อมูลทั้งหมดของ สินค้าแต่ละตัว<span style="mso-spacerun: yes">&nbsp; </span>โดยแยกเก็บเป็น<span style="mso-spacerun: yes">&nbsp; </span>2 คลีงสินค้า คือ<span style="mso-spacerun: yes">&nbsp; </span>Store-ใหญ่ และ Store-ช่าง</td>
+                </tr>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td height="26" style="height: 20.1pt"></td>
+                    <td align="left" colspan="2" style="mso-ignore: colspan">ตาม ตัวอย่าง<span style="mso-spacerun: yes">&nbsp; </span>Form-1 and Form-2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td height="26" style="height: 20.1pt"></td>
+                    <td align="left" colspan="3" style="mso-ignore: colspan">ต้อง<span style="mso-spacerun: yes">&nbsp; </span>set ให้ สามารถ<span style="mso-spacerun: yes">&nbsp; </span>add/ deleate<span style="mso-spacerun: yes">&nbsp; </span>รายการสินค้าได้<span style="mso-spacerun: yes">&nbsp;</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td height="26" style="height: 20.1pt"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td class="auto-style2" height="26">2 )</td>
+                    <td align="left" colspan="7" style="mso-ignore: colspan">รวบรวม<span style="mso-spacerun: yes">&nbsp; </span>Stock liist<span style="mso-spacerun: yes">&nbsp; </span>ที่มีอยู่ทั้งสิ้น ทั้ง<span style="mso-spacerun: yes">&nbsp; </span>Store ใหญ่ และ Store ช่าง ตามแบบ ฟอร์มข้างต้น ( Form 1 &amp; 2)- Excel Files</td>
+                    <td></td>
+                </tr>
+                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
+                    <td height="26" style="height: 20.1pt"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="19" style="height: 14.25pt">
+                    <td class="auto-style3" height="19">3 )</td>
+                    <td align="left" colspan="5" style="mso-ignore: colspan">กำหนด รห้สสินค้า ให้สืนค้าแต่ละรายการ โดย แยกแป็น กลุ่ม ประเภท ตามความเหมาะสม</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="19" style="height: 14.25pt">
+                    <td height="19" style="height: 14.25pt"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="19" style="height: 14.25pt">
+                    <td class="auto-style3" height="19">4 )</td>
+                    <td align="left" colspan="6" style="mso-ignore: colspan">Upload<span style="mso-spacerun: yes">&nbsp; </span>ข้อมูล stock lists, รหัสสินค้า และ ข้อมูลอื่น จาก<span style="mso-spacerun: yes">&nbsp; </span>Excel file<span style="mso-spacerun: yes">&nbsp; </span>เข้า database ของโปรแกรม<span style="mso-spacerun: yes">&nbsp;</span></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+
+
+            <br />
+            <h2>Activity: In</h2>
+
+
+            <p>
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 228pt"
+                    width="303">
+                    <colgroup>
+                        <col width="42" />
+                        <col width="85" />
+                        <col width="176" />
+                    </colgroup>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl66" height="19">1 )</td>
+                        <td align="left" class="xl67" colspan="2">วันที่<span style="mso-spacerun: yes">&nbsp; </span>default<span style="mso-spacerun: yes">&nbsp; </span>จ่ากเครื่อง</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl66" height="19">2 )</td>
+                        <td align="left" class="xl67" colspan="2">เป็นส่วน ที่ เครื่องจะดีงจาก<span style="mso-spacerun: yes">&nbsp; </span>database<span style="mso-spacerun: yes">&nbsp; </span>อัตโนมัติ เมิ่อมีการ<span style="mso-spacerun: yes">&nbsp; </span>key รห้ส หรือ ชื่อ สินค้า</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td align="left" class="xl65" colspan="2">ต้องสร้าง ให้มีการ search จากการ key รหัสหรือขื่อสินค้าตัวแรก</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td class="xl65"></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl69" height="19">3 )</td>
+                        <td align="left" class="xl68" colspan="2"><span style="mso-spacerun: yes">&nbsp;</span>Entry by user<span style="mso-spacerun: yes">&nbsp; </span>:<span style="mso-spacerun: yes">&nbsp; </span>ดลังสินค้า , ชื่อผู้ขาย,<span style="mso-spacerun: yes">&nbsp; </span>เลขที่เอกสาร/วันที่<span style="mso-spacerun: yes">&nbsp; </span>ใบส่งสืนค้า (invoice) จากผู้ขาย<span style="mso-spacerun: yes">&nbsp; </span>,ปรืมาณ รับ</td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl68" height="19">&nbsp;</td>
+                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span></td>
+                        <td class="xl68">&nbsp;</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td align="left" class="xl70" height="19">4)</td>
+                        <td align="left" class="xl70" colspan="2">ส่วนที่เครื่องคำนวณให้<span style="mso-spacerun: yes">&nbsp; </span>โดย นำราคา จาก database X จำนวนรับ-จ่าย</td>
+                    </tr>
+                </table>
+            </p>
+            <h2>Activity :Out</h2>
+
+            <p>
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 96pt"
+                    width="127">
+                    <colgroup>
+                        <col width="42" />
+                        <col width="85" />
+                    </colgroup>
+                    <tr height="19">
+                        <td class="xl66" height="19" width="42">1 )</td>
+                        <td align="left" class="xl67" width="85">วันที่<span style="mso-spacerun: yes">&nbsp; </span>default<span style="mso-spacerun: yes">&nbsp; </span>จ่ากเครื่อง</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl66" height="19">2 )</td>
+                        <td align="left" class="xl67">เป็นส่วน ที่ เครื่องจะดีงจาก<span style="mso-spacerun: yes">&nbsp; </span>database<span style="mso-spacerun: yes">&nbsp; </span>อัตโนมัติ เมิ่อมีการ<span style="mso-spacerun: yes">&nbsp; </span>key รห้ส หรือ ชื่อ สินค้า</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td align="left" class="xl65">ต้องสร้าง ให้มีการ search จากการ key รหัสหรือขื่อสินค้าตัวแรก</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td class="xl65"></td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl69" height="19">3 )</td>
+                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span>Entry by user<span style="mso-spacerun: yes">&nbsp; </span>:<span style="mso-spacerun: yes">&nbsp; </span>ดลังสินค้า<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>เลขที่เอกสาร/วันที่<span style="mso-spacerun: yes">&nbsp; </span>ใบเบิก สืนค้า<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>ปรืมาณ จ่าย</td>
+                    </tr>
+                    <tr height="19">
+                        <td class="xl68" height="19">&nbsp;</td>
+                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span>แผนกที่เบิก /<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>Job (กรณีอุปกรณ์ช่าง)</td>
+                    </tr>
+                    <tr height="19">
+                        <td height="19"></td>
+                        <td></td>
+                    </tr>
+                    <tr height="19">
+                        <td align="left" class="xl70" height="19">4)</td>
+                        <td align="left" class="xl70">ส่วนที่เครื่องคำนวณให้<span style="mso-spacerun: yes">&nbsp; </span>โดย นำราคา จาก database X จำนวนรับ-จ่าย</td>
+                    </tr>
+                </table>
+            </p>
+            <p></p>
+            <p></p>
+
+        </div>
+        <!-- /content -->
+
+        <div data-role="panel" data-display="reveal" data-theme="b" class="menu-panel">
+            <h2><a href="index.html" data-transition="flow">HOME</a></h2>
+
+            <ul data-role="listview">
+                <li>
+                    <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                </li>
+                <li>
+                    <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                </li>
+                <li>
+                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                </li>
+                <li>
+                    <a href="Report.html" data-transition="flow">รายงาน</a>
+                </li>
+            </ul>
+
+        </div>
+        <!-- /panel -->
+
+        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
+
+            <form class="userform">
+
+                <h2>Login</h2>
+
+                <label for="name">Username:</label>
+                <input type="text" name="name" id="userNameInput" value="" data-clear-btn="true" data-mini="true">
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
+
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Cancel</a></div>
+                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
+                </div>
+            </form>
+
+        </div>
+        <!-- /panel -->
+
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                    </li>
+                    <li>
+                        <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                    </li>
+                    <li>
+                        <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow">รายงาน</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page -->
+
+
+    <div data-role="page" id="p1">
+
+        <div data-role="header">
+            <h1>Landing page</h1>
+        </div>
+        <!-- /header -->
+
+        <div role="main" class="ui-content jqm-content">
+
+            <p>This is just a landing page.</p>
+
+            <a href="#panel-responsive-page1" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left">Back</a>
+
+        </div>
+        <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+
+</body>
+</html>

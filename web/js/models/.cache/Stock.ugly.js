@@ -1,0 +1,1 @@
+var app=app||{models:{},collections:{},views:{}};(function(e){"use strict";app.models.Stock=Backbone.Model.extend({defaults:{stock:[],stock_selected:""},update:function(e){var t=this;app.stockMethod.getAllStockName(function(r){t.set("stock",r),e&&e(r)})}})})(jQuery)

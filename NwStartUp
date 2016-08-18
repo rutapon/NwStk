@@ -1,0 +1,52 @@
+﻿#!/bin/sh
+
+
+APP_PATH="/root/andamania_stock/server/app.js"
+APP_NAME="NwActorService"
+
+### BEGIN INIT INFO
+# Provides: NwStartUp
+# Required-Start: $all
+# Required-Stop: $all
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Short script description
+# Description: Longer script description.
+### END INIT INFO
+
+# result of whereis forever or whereis node
+export PATH=$PATH:/usr/local/bin  
+# result of whereis node_modules
+export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+export HOME=/root
+
+start(){  
+        forever start $APP_PATH
+}
+
+stop(){  
+        forever stop $APP_PATH
+}
+
+restart(){  
+        forever restart $APP_PATH
+}
+
+case "$1" in  
+        start)
+                echo "Start service $APP_NAME"
+                start
+                ;;
+        stop)
+                echo "Stop service $APP_NAME"
+                stop
+                ;;
+        restart)
+                echo "Restart service $APP_NAME"
+                restart
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|restart}"
+                exit 1
+                ;;
+esac  

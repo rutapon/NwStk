@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+       <script src="lib/xdr.js"></script>
+
+    <link href="lib/jquery/jquery.mobile-1.4.3.min.css" rel="stylesheet" />
+    <script src="lib/jquery/jquery.mobile-1.4.3.js"></script>
+
+    <script src="lib/socket.io-1.2.1.js"></script>
+
+    <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/step/step.js"></script>
+    
+    <script src="NwLib/NwLib.js"></script>
+    <script src="NwUtil/NwDataMsgObj.js"></script>
+
+    <script src="NwConn/NwSocket.js"></script>
+    <script src="NwConn/NwWsClient/NwWsClient.js"></script>
+    <script src="NwConn/NwConn.js"></script>
+
+    <script src="NwActor/NwActorRemote.js"></script>
+
+    <script src="index.js"></script>
+</head>
+<body>
+    <div class="ui-body ui-body-a ui-corner-all" style="margin-top: 1em; margin-bottom: 1em;">
+
+        <label>Switch 4</label>
+        <input type="checkbox" class="SwitchInput" data-role="flipswitch" name="4" id="s{0}">
+
+        <!--  <input type="checkbox" class="SwitchIsAuto" data-role="flipswitch" name="isAutoName_{0}" id="isAuto{0}" data-wrapper-class="custom-size-flipswitch"
+            data-on-text="Time" data-off-text="User">-->
+    </div>
+
+    <div class="ui-body ui-body-a ui-corner-all" style="margin-top: 1em; margin-bottom: 1em;">
+        <label>Switch 5</label>
+        <input type="checkbox" class="SwitchInput" data-role="flipswitch" name="5" id="Checkbox1">
+    </div>
+
+    <button id="test">test</button>
+</body>
+</html>

@@ -1,0 +1,123 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "andamania_stock‏", ".", "{0536B06F-0EE7-4ADB-8652-F6B61275D832}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/andamania_stock‏"
+		Debug.AspNetCompiler.PhysicalPath = "..\andamania_stock‏\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\andamania_stock‏\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/andamania_stock‏"
+		Release.AspNetCompiler.PhysicalPath = "..\andamania_stock‏\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\andamania_stock‏\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "7133"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "andamania_app", "..\andamania_app\", "{7063B0A0-2430-4255-BDEE-98415C2984AC}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/andamania_app"
+		Debug.AspNetCompiler.PhysicalPath = "..\andamania_app\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\andamania_app\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/andamania_app"
+		Release.AspNetCompiler.PhysicalPath = "..\andamania_app\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\andamania_app\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "16230"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "NeuronProject", "..\NeuronProject\", "{B53A1E7B-2305-4E7A-9719-384A505F4EB6}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/NeuronProject"
+		Debug.AspNetCompiler.PhysicalPath = "..\NeuronProject\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\NeuronProject\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/NeuronProject"
+		Release.AspNetCompiler.PhysicalPath = "..\NeuronProject\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\NeuronProject\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "16816"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "mqttProject", "..\mqttProject\", "{7A787F02-A368-479D-A664-86E0CB08A77E}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/mqttProject"
+		Debug.AspNetCompiler.PhysicalPath = "..\mqttProject\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\mqttProject\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/mqttProject"
+		Release.AspNetCompiler.PhysicalPath = "..\mqttProject\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\mqttProject\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "9231"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "node-js-sample", "..\..\testHeroku\node-js-sample\", "{0DFDE1AF-D114-431D-9029-F9D80209001D}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/node-js-sample"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\testHeroku\node-js-sample\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\node-js-sample\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/node-js-sample"
+		Release.AspNetCompiler.PhysicalPath = "..\..\testHeroku\node-js-sample\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\node-js-sample\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "42300"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0536B06F-0EE7-4ADB-8652-F6B61275D832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0536B06F-0EE7-4ADB-8652-F6B61275D832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7063B0A0-2430-4255-BDEE-98415C2984AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7063B0A0-2430-4255-BDEE-98415C2984AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53A1E7B-2305-4E7A-9719-384A505F4EB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53A1E7B-2305-4E7A-9719-384A505F4EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A787F02-A368-479D-A664-86E0CB08A77E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A787F02-A368-479D-A664-86E0CB08A77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DFDE1AF-D114-431D-9029-F9D80209001D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DFDE1AF-D114-431D-9029-F9D80209001D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

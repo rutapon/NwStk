@@ -1,0 +1,88 @@
+﻿table.StockTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    vertical-align: top;
+    margin-bottom: 15px;
+    border: 1px solid #999999;
+}
+
+    table.StockTable th {
+        /*font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;*/
+        color: #F2EDEB;
+        border-right: 1px solid #C1DAD7;
+        border-bottom: 1px solid #C1DAD7;
+        border-top: 1px solid #C1DAD7;
+        /*letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: left;*/
+        padding: 6px 6px 6px 12px;
+        background: #e9e9e9 no-repeat;
+        text-align: center;
+        color: #38c;
+        font-weight: 700;
+    }
+
+    table.StockTable .ui-mini {
+        margin: 0px;
+    }
+
+    table.StockTable .ui-input-text {
+        margin: 0px;
+    }
+
+    table.StockTable td {
+        border: 1px solid #ddd;
+        padding: 0px;
+        /*padding: 6px 6px 6px 12px;*/
+    }
+
+/*tr {
+            background: #fff;
+            color: #261F1D;
+        }
+
+            tr:hover, tr.alt:hover {
+                color: #261F1D;
+                background-color: #E5C37E;
+            }
+
+        .highlighted {
+            color: #261F1D;
+            background-color: #E5C37E;
+        }
+
+        tr.alt {
+            background: #F5FAFA;
+            color: #B4AA9D;
+        }*/
+
+#dropFileInput {
+    border: 2px dashed #bbb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    color: #bbb;
+    margin: 10px;
+}
+
+.dragging {
+    font: 130% bold;
+}
+/*.ui-panel-animate-slow{
+    transition: transform 1000ms ease 0s !important;
+}  
+
+.ui-panel-animate{
+    transition: transform 500ms ease 0s !important;
+}*/
+
+
+.ui-btn-active-allway {
+    background-color: #38c;
+    border-color: #38c;
+    color: #fff;
+    text-shadow: 0 1px 0 #059;
+}

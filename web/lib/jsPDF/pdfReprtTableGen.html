@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<!-- xlsx.js (C) 2013-2015 SheetJS http://sheetjs.com -->
+<!-- vim: set ts=2: -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!--<script src="http://cburgmer.github.io/rasterizeHTML.js/rasterizeHTML.allinone.js"></script>-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    <script src="html2canvas.js"></script>
+    <!--<script src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.138/jspdf.min.js"></script>-->
+    <script src="jspdf.min.js"></script>
+
+
+    
+    <link rel="stylesheet" media="screen" href="../handsontable/handsontable.css">
+    <link rel="stylesheet" media="screen" href="../handsontable/pikaday/pikaday.css">
+    <script src="../handsontable/pikaday/pikaday.js"></script>
+    <script src="../handsontable/moment/moment.js"></script>
+    <script src="../handsontable/zeroclipboard/ZeroClipboard.js"></script>
+    <script src="../handsontable/handsontable.js"></script>
+
+    <link rel="stylesheet" href="../handsontable/css/samples.css?20140331">
+    <link rel="stylesheet" href="../handsontable/css/font-awesome/css/font-awesome.min.css">
+
+
+    <script>
+
+        var pdf = new jsPDF('p', 'pt', 'a4');
+        function doit() { export_table_to_excel('table'); }
+
+        var firstAdd = true;
+
+
+        function genPdf(cb) {
+            var options = {
+                //pagesplit: true
+            };
+
+            if (firstAdd) { firstAdd = false; } else { pdf.addPage(); }
+
+            pdf.addHTML(document.body, options, function () {
+                if (cb) cb();
+            });
+        }
+
+        function showPdf() {
+            window.location = pdf.output('datauristring');
+        }
+        function savePdf(name) {
+            pdf.save(name);
+        }
+
+        function clear() {
+            $('body').html('');
+        }
+
+        function set(htmlStr) {
+
+            $('body').html(htmlStr);
+        }
+
+        $(function () {
+            function getCarData() {
+                return [
+                     ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                   ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                  ["Nissan", 2009, "black", "black"],
+                  ["Nissan", 2006, "blue", "blue"],
+                  ["Chrysler", 2004, "yellow", "black"],
+                  ["Volvo", 2012, "white", "gray"]
+                ];
+            }
+            var container = document.getElementById('table'),
+              hot;
+
+            hot = new Handsontable(container, {
+                data: getCarData(),
+                startRows: 7,
+                startCols: 4,
+                stretchH: 'none',
+                colHeaders: ['Car', 'Year', 'Chassis color', 'Bumper color'],
+                columns: [
+                  { readOnly: true },
+                  {
+                      type: 'numeric',
+                      strict: true
+                  },
+                  {
+                      type: 'dropdown',
+                      source: function () {
+                          console.log('call source');
+                          return ['yellow', 'red', 'orange', 'green', 'blue', 'gray', 'black', 'white'];
+                      },
+                      //editor: false
+                  },
+                  {
+                      type: 'autocomplete',
+                      source: ['yellow', 'red', 'orange', 'green', 'blue', 'gray', 'black', 'white'],
+                      filter: false
+                  }
+                ]
+            });
+
+        });
+
+</script>
+    <style type="text/css">
+    </style>
+</head>
+<body style="text-align: justify; width: 595px; height: 842px">
+    <div id="table">
+      
+    </div>
+
+</body>
+</html>
