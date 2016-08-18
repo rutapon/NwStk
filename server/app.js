@@ -139,10 +139,10 @@
 
     listenCommand(process.env.PORT || 8088);
 
-    var url = "andamania";
-    var token = "563f471d-5950-459c-9461-2424eae03e37";
-    //var url = "wts";
-    //var token = "1c7c011a-c53e-40db-bd12-df8e74a4a326";
+    //var url = "andamania";
+    //var token = "563f471d-5950-459c-9461-2424eae03e37";
+    var url = "wts";
+    var token = "1c7c011a-c53e-40db-bd12-df8e74a4a326";
 
     function updateDns(url, token) {
         var url = "https://www.duckdns.org/update/" + url + "/" + token;
