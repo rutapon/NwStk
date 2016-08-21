@@ -10,11 +10,11 @@
     if (typeof module !== "undefined") {
         process.chdir(__dirname);
 
+        _ = require('../lib/underscore/underscore.js');
+        async = require("async");
 
         NwLib = require('../lib/NwLib.js');
-        _ = require('../lib/underscore/underscore.js');
         Class = NwLib.Nwjsface.Class;
-
 
         NwServiceProcess = require('./NwServiceProcess.js');
         NwStockServiceMethod = require('./service_method/NwStockServiceMethod.js');
@@ -44,12 +44,9 @@
             next();
         });
 
-        app.use(minify());
-    
+        app.use(minify()); 
 
         app.use(function (req, res) {
-            //res.send('Hello World! by newww นิว');
-            //res.sendfile('index.html');
             file.serve(req, res);
         });
 
@@ -63,8 +60,6 @@
     } else {
 
     }
-
-
 
     NwServiceProcess.addServiceMethod(NwStockServiceMethod);
 
@@ -134,8 +129,6 @@
         appServer.listen(commandPort);
 
     }
-
-    //app.use(express.static(__dirname + '/../web'))
 
     listenCommand(process.env.PORT || 8088);
 
