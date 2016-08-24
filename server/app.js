@@ -31,7 +31,7 @@
         var minify = require('express-minify');
 
         var nodestatic = require('node-static');
-        file = new nodestatic.Server(__dirname + '/../web');
+        file = new nodestatic.Server(__dirname + '/../public');
 
         var app = express();
 

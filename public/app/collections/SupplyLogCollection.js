@@ -22,13 +22,13 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         find: function (code, stockSelected, cb) {//product_id
             var self = this;
-            app.stockMethod.findeSupplyLog({ stockName: stockSelected, code: code }, function (result) {
+            app.serviceMethod.findeSupplyLog({ stockName: stockSelected, code: code }, function (result) {
                 if (result.length) {
                     self.reset(result);
                     if (cb) cb(result);
                 } 
                 else {
-                    app.stockMethod.getAllSupplyLog({ stockName: stockSelected }, function (result) {
+                    app.serviceMethod.getAllSupplyLog({ stockName: stockSelected }, function (result) {
                         console.log('getAllSupplyLog');
                         self.reset(result);
                         if (cb) cb(result);
@@ -38,14 +38,14 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         findeSupplyLog: function (code, stockSelected, cb) {
             var self = this;
-            app.stockMethod.findeSupplyLog({ stockName: stockSelected, code: code }, function (result) {
+            app.serviceMethod.findeSupplyLog({ stockName: stockSelected, code: code }, function (result) {
                 self.reset(result);
                 if (cb) cb(result);
             });
         },
         getAll: function (stockSelected, cb) {
             var self = this;
-            app.stockMethod.getAllSupplyLog({ stockName: stockSelected }, function (result) {
+            app.serviceMethod.getAllSupplyLog({ stockName: stockSelected }, function (result) {
                 console.log('getAllSupplyLog');
                 self.reset(result);
                 if (cb) cb(result);
@@ -53,7 +53,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         checkForInsert: function (dataObj, stockSelected, cb) {
             dataObj.stockName = stockSelected;
-            app.stockMethod.checkForInsertSupplyLog(dataObj, function (result) {
+            app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
                 if (cb) cb(result);
             })
         }

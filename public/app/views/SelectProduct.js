@@ -110,7 +110,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             showAllProduct: function () {
                 var self = this;
                 var stockSelected = this.stockSelected.get('stock_selected'); //$('.select-stock  option:selected').select().text();
-                app.stockMethod.getAllProducts(stockSelected, function (result) {
+                app.serviceMethod.getAllProducts(stockSelected, function (result) {
                     self.resetFromService(result, stockSelected);
                 });
             },

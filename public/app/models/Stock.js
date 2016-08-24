@@ -23,7 +23,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         
         update: function (cb) {
             var self = this;
-            app.stockMethod.getAllStockName(function myfunction(result) {
+            app.serviceMethod.getAllStockName(function myfunction(result) {
                 self.set('stock', result);
 
                 if (cb) cb(result);

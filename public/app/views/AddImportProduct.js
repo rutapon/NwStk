@@ -268,7 +268,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         //        var stockSelected = this.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
         //        console.log(searchText + ' product ' + stockSelected);
 
-        //        app.stockMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+        //        app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
         //            self.resetFromService(result, stockSelected);
         //        });
         //    } else {

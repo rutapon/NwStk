@@ -39,7 +39,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             showAllProduct: function () {
                 var self = this;
                 var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
-                app.stockMethod.getAllProducts(stockSelected, function (result) {
+                app.serviceMethod.getAllProducts(stockSelected, function (result) {
                     _.each(result, function (item) {
                         item['stock_name'] = stockSelected;
                     });
@@ -56,7 +56,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 if (searchText) {
                     var self = this;
                     var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
-                    app.stockMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+                    app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
 
                         _.each(result, function (item) {
                             item['stock_name'] = stockSelected;

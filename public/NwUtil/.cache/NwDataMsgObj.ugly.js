@@ -1,1 +1,0 @@
-(function(e,t){typeof module!="undefined"&&(NwLib=require("../NwLib/NwLib.js"),Class=NwLib.Nwjsface.Class,NwJsonSerializable=NwLib.NwJsonSerializable);var n=Class(NwJsonSerializable,function(){return{msg:"",cat:"",type:"",data:{},constructor:function(){n.$super[0].call(this)}}});typeof module!="undefined"&&module.exports?module.exports=n:e.NwDataMsgObj=n})(this)

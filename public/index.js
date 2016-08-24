@@ -131,7 +131,11 @@ $(function () {
 
             $('.ui-page-active').attr('inited', true);
 
-            if (current == 'ชนิดสินค้า') {
+      
+            if (current == 'ผู้ขาย') {
+                //app.initSupplier();
+            }
+            else if (current == 'ชนิดสินค้า') {
                 app.initProduct();
 
                 //$.mobile.pageContainer.pagecontainer("change", "Report.html", {

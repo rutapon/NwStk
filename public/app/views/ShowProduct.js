@@ -114,7 +114,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             showAllProduct: function () {
                 var self = this;
                 var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
-                app.stockMethod.getAllProducts(stockSelected, function (result) {
+                app.serviceMethod.getAllProducts(stockSelected, function (result) {
                     self.resetFromService(result, stockSelected);
                 });
             },
@@ -138,7 +138,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                     console.log(searchText + ' product ' + stockSelected);
 
-                    app.stockMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+                    app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
                         self.resetFromService(result, stockSelected);
                     });
                 } else {

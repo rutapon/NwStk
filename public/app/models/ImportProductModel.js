@@ -14,13 +14,19 @@ var app = app || { models: {}, collections: {}, views: {} };
             code: '',
             //name: '', unit_type: '', unit_size: '', description: '',
             //product_id: '',
-            invoid_id: '', supplier_name: '', unit: 1, unit_price: '', in_date: '', sum: 0,
-            create_by: 'admin', stock_name: ''
+            invoid_id: '',
+            supplier_name: '',
+            unit: 1,
+            unit_price: '',
+            in_date: '',
+            sum: 0,
+            create_by: 'admin',
+            stock_name: ''
         },
 
         initialize: function () {
             this.on('change:unit', this.calSum, this).on('change:unit_price', this.calSum, this);
-          
+
             //this.on('change:supplier_name', this.supplierNameChange, this);
             //alert('initialize');
             //this.set('in_date', new Date().toISOString().slice(0, 10));
@@ -63,7 +69,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             var dataObj = _.extend(this.attributes, { stockName: stockName });
 
-            app.stockMethod.insertImportProduct(dataObj, function (result) {
+            app.serviceMethod.insertImportProduct(dataObj, function (result) {
 
                 var supplyLogObj = {
                     stockName: stockName,
@@ -74,20 +80,20 @@ var app = app || { models: {}, collections: {}, views: {} };
                     create_by: 'admin'
                 }
 
-                app.stockMethod.checkForInsertSupplyLog(supplyLogObj, function (result) {
+                app.serviceMethod.checkForInsertSupplyLog(supplyLogObj, function (result) {
                     if (cb) cb(result);
                 })
             });
         },
         update: function (cb) {
 
-            //app.stockMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
+            //app.serviceMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
             //    if (cb) cb(result);
             //});
         },
         destroy: function (cb) {
 
-            //app.stockMethod.deleteProduct(this.attributes.stock_name, this.id, function (result) {
+            //app.serviceMethod.deleteProduct(this.attributes.stock_name, this.id, function (result) {
             //    if (cb) cb(result);
             //});
         },

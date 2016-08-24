@@ -11,9 +11,15 @@ var app = app || { models: {}, collections: {}, views: {} };
     // Person Model
     app.models.product = Backbone.Model.extend({
         defaults: {
-            code: '', name: '', unit_type: '', unit_size: '', description: '',
-            create_by: 'admin', stock_name: '',
-            supplier_name_default: '', unit_price_default: 0
+            code: '',
+            name: '',
+            unit_type: '',
+            unit_size: '',
+            description: '',
+            create_by: 'admin',
+            stock_name: '',
+            supplier_name_default: '',
+            unit_price_default: 0
         },
 
         //initialize: function () {
@@ -32,7 +38,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         save: function (stockName, cb) {
 
             var self = this;
-            app.stockMethod.insertProduct(stockName, this.attributes, function (result) {
+            app.serviceMethod.insertProduct(stockName, this.attributes, function (result) {
 
                 var dataObj = {
                     stockName: stockName,
@@ -43,7 +49,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     create_by: 'admin'
                 }
 
-                app.stockMethod.checkForInsertSupplyLog(dataObj, function (result) {
+                app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
                     if (cb) cb(result);
                 })
             });
@@ -51,7 +57,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         update: function (cb) {
             var self = this;
             var stockName = this.attributes.stock_name;
-            app.stockMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
+            app.serviceMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
                 var dataObj = {
                     stockName: stockName,
                     code: self.attributes.code,
@@ -60,14 +66,14 @@ var app = app || { models: {}, collections: {}, views: {} };
                     create_by: 'admin'
                 }
 
-                app.stockMethod.checkForInsertSupplyLog(dataObj, function (result) {
+                app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
                     if (cb) cb(result);
                 })
             });
         },
         destroy: function (cb) {
 
-            app.stockMethod.deleteProduct(this.attributes.stock_name, this.attributes.code, function (result) {
+            app.serviceMethod.deleteProduct(this.attributes.stock_name, this.attributes.code, function (result) {
                 if (cb) cb(result);
             });
 

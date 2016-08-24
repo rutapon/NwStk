@@ -29,7 +29,7 @@
     }
 
     //#endregion
-    var NwStockServiceConn = Class(function () {
+    var NwServiceConn = Class(function () {
 
         return {
             //$singleton: true,
@@ -43,10 +43,11 @@
                 this.wsClient.callService('getAllStockName', {}, cb);
             },
 
+
+            //#region Products
             getAllProducts: function (stockName, cb) {
                 this.wsClient.callService('getAllProducts', { stockName: stockName }, cb);
             },
-
             findeProductStartWith: function (stockName, findWord, limit, cb) {
                 this.wsClient.callService('findeProductStartWith', { stockName: stockName, findWord: findWord, limit: limit }, cb);
             },
@@ -61,6 +62,9 @@
             deleteProduct: function (stockName, code, cb) {
                 this.wsClient.callService('deleteProduct', { stockName: stockName, code: code }, cb);
             },
+            //#endregion
+
+            //#region SupplyLog
             insertSupplyLog: function (dataObj, cb) {
                 this.wsClient.callService('insertSupplyLog', dataObj, cb);
             },
@@ -76,20 +80,40 @@
             getAllSupplyLog: function (dataObj, cb) {
                 this.wsClient.callService('getAllSupplyLog', dataObj, cb);
             },
+            //#endregion
+
+            //#region ImportProduct
             insertImportProduct: function (dataObj, cb) {
                 this.wsClient.callService('insertImportProduct', dataObj, cb);
             },
             getImportProductInPeriod: function (dataObj, cb) {
                 this.wsClient.callService('getImportProductInPeriod', dataObj, cb);
             },
+            //#endregion
+
+            //#region Supplier
+            getAllSupplier: function (cb) {
+                this.wsClient.callService('getAllSupplier', {}, cb);
+            },
+
+            insertSupplier: function (dataObj, cb) {
+                this.wsClient.callService('insertSupplier', dataObj, cb);
+            },
+            updateSupplier: function (dataObj, cb) {
+                this.wsClient.callService('updateSupplier', dataObj, cb);
+            },
+            deleteSupplier: function (code, cb) {
+                this.wsClient.callService('deleteSupplier', { code: code }, cb);
+            },
+            //#endregion
         };
     });
 
     if (typeof module !== "undefined" && module.exports) {                       // NodeJS/CommonJS
-        module.exports = NwStockServiceConn;
+        module.exports = NwServiceConn;
     } else {
 
-        context.NwStockServiceConn = NwStockServiceConn;
+        context.NwServiceConn = NwServiceConn;
     }
 
 })(this);

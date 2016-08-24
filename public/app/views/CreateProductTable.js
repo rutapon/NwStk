@@ -20,7 +20,6 @@ var app = app || { models: {}, collections: {}, views: {} };
         // of the app doesn't change.
         render: function () {
 
-
             this.$el.find('.CreateProductTableTr').remove();
             this.collection.each(this.addOne, this);
             return this;

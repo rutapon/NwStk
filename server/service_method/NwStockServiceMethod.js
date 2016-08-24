@@ -38,17 +38,19 @@
 
     var productTableName = 'products';
     var supplyLogTableName = 'supply_log';
-
     var importProductTableName = 'product_in';
+
+    var importSupplierTableName = 'supplier';
+
 
     var stocks = {};
 
-    var socksName = ['Store-ใหญ่', 'Store-ช่าง', 'Store-ทดสอบ'];
+    var socksName = ['all', 'Store-ใหญ่', 'Store-ช่าง', 'Store-ทดสอบ'];
     var dbPath = __dirname + '/../../Database/linvodb/';
 
-    _.each(socksName, function (sn) {
+    //_.each(socksName, function (sn) {
 
-    });
+    //});
 
     async.eachSeries(socksName, function (sn, callback) {
 
@@ -74,7 +76,7 @@
             if (cb) { cb(_.keys(stocks)) };
         },
         getAllProducts: function (data, cb) {
-            console.log('getAllProducts',data);
+            console.log('getAllProducts', data);
             var stockName = data.stockName;
             var stock = getStock(stockName);
             if (stockName) {
@@ -224,7 +226,7 @@
             })
         },
         findeSupplyLog: function (data, cb) {
-           
+
             var stockName = data.stockName;
             delete data.stockName;
             console.log('findeSupplyLog', data);
@@ -293,8 +295,70 @@
             stock.findInPeriod(productTableName, {}, 'create_datetime', timeStart, timeEnd, function () {
                 if (cb) { cb(result) }
             });
-        }
+        },
 
+        //#region Supplier
+        getAllSupplier: function (data, cb) {
+
+            //console.log('getAllSupplier', data);
+            var stockName = 'all';
+            var stock = getStock(stockName);
+            if (stockName) {
+                stock.getAll(importSupplierTableName, function (result) {
+
+                    if (cb) { cb(result) }
+                });
+            }
+        },
+
+        insertSupplier: function (data, cb) {
+            //console.log('getAllSupplier', data);
+            var stockName = 'all';
+
+            var dataObj = {
+                //product_id: data.product_id,
+                code: data.code,
+                name: data.name,
+                credit: data.credit
+            };
+
+            var stock = getStock(stockName);
+            if (stockName) {
+                stock.insert(importSupplierTableName, dataObj, function (result) {
+
+                    if (cb) { cb(result) }
+                });
+            }
+        },
+        updateSupplier: function (data, cb) {
+            var stockName = 'all';
+
+            var dataObj = {
+                //product_id: data.product_id,
+                code: data.code,
+                name: data.name,
+                credit: data.credit
+            };
+
+            var stock = getStock(stockName);
+            if (stockName) {
+                stock.update(importSupplierTableName, dataObj, function (result) {
+
+                    if (cb) { cb(result) }
+                });
+            }
+
+        },
+        deleteSupplier: function (data, cb) {
+            var code = data.code;
+            var stockName = 'all';
+
+            var stock = getStock(stockName);
+            stock.destroy(importSupplierTableName, { code: code }, function (result) {
+                if (cb) { cb(result) }
+            })
+        },
+        //#endregion
     };
 
 

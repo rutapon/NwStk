@@ -22,7 +22,7 @@
     } else {
         var wsClient = app.wsClient = new NwWsClient(protocol + '//' + host + ":" + port);
     }
-    var stockMethod = app.stockMethod = new NwStockServiceConn(wsClient);
+    var serviceMethod = app.serviceMethod = new NwServiceConn(wsClient);
     wsClient.setOnConnectEventListener(function (socket) {
         var id = wsClient.getId();
         console.log('onConnect ' + id);
@@ -38,6 +38,10 @@
 
     var stockModel = new app.models.Stock();
 
+    app.initSupplier = function () {
+        console.log('initSupplier');
+    };
+
     app.initProduct = function () {
 
         //var productsClass = app.Class.Products;
@@ -47,7 +51,7 @@
         //app.hasCalledProdut = true;
         console.log('initProduct');
 
-        var newProductsCollection = new app.collections.products([{ code: '', name: '', unit_type: '', description: '' }]);
+        var newProductsCollection = new app.collections.products([new app.models.product()]);
 
         var CreateProduct = new app.views.CreateProduct({ collection: newProductsCollection, model: { stockModel: stockModel } });
 

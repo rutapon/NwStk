@@ -1,1 +1,0 @@
-var app=app||{models:{},collections:{},views:{}};(function(e){"use strict";app.collections.SupplyLogCollection=Backbone.Collection.extend({})})(jQuery)

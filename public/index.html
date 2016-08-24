@@ -50,36 +50,36 @@
     <script src="NwUtil/NwDataMsgObj.js"></script>
 
     <script src="NwConn/NwWsClient.js"></script>
-    <script src="service_conn/NwStockServiceConn.js"></script>
+    <script src="service_conn/NwServiceConn.js"></script>
 
     <script src="lib/xlsx/xlsx.core.min.js"></script>
     <script src="lib/xlsx/Blob.js"></script>
     <script src="lib/xlsx/FileSaver.js"></script>
     <script src="lib/xlsx/NwXlsx.js"></script>
 
-    <script src="js/models/product.js"></script>
-    <script src="js/models/Stock.js"></script>
-    <script src="js/models/ImportProductModel.js"></script>
+    <script src="app/models/product.js"></script>
+    <script src="app/models/Stock.js"></script>
+    <script src="app/models/ImportProductModel.js"></script>
 
-    <script src="js/collections/products.js"></script>
-    <script src="js/collections/ImportProductCollection.js"></script>
-    <script src="js/collections/SupplyLogCollection.js"></script>
+    <script src="app/collections/products.js"></script>
+    <script src="app/collections/ImportProductCollection.js"></script>
+    <script src="app/collections/SupplyLogCollection.js"></script>
 
-    <script src="js/models/AddImportProductModel.js"></script>
+    <script src="app/models/AddImportProductModel.js"></script>
 
-    <script src="js/views/CreateProductTableTr.js"></script>
-    <script src="js/views/CreateProductTable.js"></script>
-    <script src="js/views/CreateProduct.js"></script>
-    <script src="js/views/ShowProduct.js"></script>
-    <script src="js/views/EditProductTableTr.js"></script>
-    <script src="js/views/EditProduct.js"></script>
+    <script src="app/views/CreateProductTableTr.js"></script>
+    <script src="app/views/CreateProductTable.js"></script>
+    <script src="app/views/CreateProduct.js"></script>
+    <script src="app/views/ShowProduct.js"></script>
+    <script src="app/views/EditProductTableTr.js"></script>
+    <script src="app/views/EditProduct.js"></script>
 
-    <script src="js/views/SelectProduct.js"></script>
-    <script src="js/views/AddImportProduct.js"></script>
+    <script src="app/views/SelectProduct.js"></script>
+    <script src="app/views/AddImportProduct.js"></script>
     <!--   
     <script src="js/views/ImportProduct.js"></script>-->
 
-    <script src="js/app.js"></script>
+    <script src="app/app.js"></script>
 
     <link href="css/index.css" rel="stylesheet" />
     <script src="index.js"></script>
@@ -163,6 +163,8 @@
             padding-right: 1px;
             padding-top: 1px;
         }
+
+
     </style>
 </head>
 <body>
@@ -403,6 +405,9 @@
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+                 <li>
+                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                </li>
                 <li>
                     <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
                 </li>

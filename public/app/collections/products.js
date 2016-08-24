@@ -63,7 +63,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         search: function (searchText, stockSelected, cb) {
             var self = this;
-            app.stockMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+            app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
                 self.reset(result);
                 if (cb) cb(result);
             });

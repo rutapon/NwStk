@@ -210,6 +210,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                                     eachModel.save(stockSelectedName, function (result) {
                                         self.collection.remove(eachModel);
                                         numSave++;
+                                        console.log('remove', numSave);
                                         callback();
                                     });
                                 } else {
@@ -217,14 +218,17 @@ var app = app || { models: {}, collections: {}, views: {} };
                                 }
 
                         }, function (err) {
-
+                            console.log('end');
                             if (err) {
                                 //alert(err);
                             } else {
                                 self.ClearNewProductRow();
                             }
 
-                            alert('Data has save to stock "' + stockSelectedName + '" ' + numSave + ' row');
+                            setTimeout(function () {
+                                alert('Data has save to stock "' + stockSelectedName + '" ' + numSave + ' row');
+                            },1);
+                          
                         });
 
                     });
