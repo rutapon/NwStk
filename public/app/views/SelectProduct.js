@@ -66,12 +66,12 @@ var app = app || { models: {}, collections: {}, views: {} };
                         cell: "string",
                         editable: false
                     },
-                    {
-                        name: "unit_size",
-                        label: "ขนาด",
-                        cell: "string",
-                        editable: false
-                    },
+                    //{
+                    //    name: "unit_size",
+                    //    label: "ขนาด",
+                    //    cell: "string",
+                    //    editable: false
+                    //},
                     //{
                     //    name: "description",
                     //    label: "รายละเอียด",

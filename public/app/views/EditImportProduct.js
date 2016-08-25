@@ -40,7 +40,6 @@ var app = app || { models: {}, collections: {}, views: {} };
         initialize: function () {
 
             var self = this;
-
          
             // selectImportProductTable = $(".select-result");
             this.select_product_search = this.$el.find('.select_product_search');

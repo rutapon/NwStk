@@ -17,18 +17,17 @@ var app = app || { models: {}, collections: {}, views: {} };
     }
 
     $(function () {
-        app.views.EditProductTableTr = Backbone.View.extend({
+        app.views.SupplierEditTableTr = Backbone.View.extend({
 
             tagName: 'tr',
-            className: 'EditProductTableTr',
+            className: 'EditTableTr',
 
             events: {
                 'change  input': 'inputChange',
                 'click .editButton': 'editClick',
                 'click .cancelEditButton': 'cancelEditClick',
                 'click .saveButton': 'saveClick',
-                'click .deleteButton': 'deleteEditClick',
-                'change select': 'supplierChange'
+                'click .deleteButton': 'deleteEditClick'
             },
 
             initialize: function () {
@@ -36,10 +35,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                 this.model.on('destroy', this.remove, this);
                 //this.model.on('removeUi', this.remove, this);
                 this.model.on('remove', this.remove, this);
-                //this.collection.on('reset', this.render, this);
 
                 this.ShowStockTableTrTemplate = _.template($('#ShowStockTable-tr-template').html());
                 this.EditStockTableTrTemplate = _.template($('#EditStockTable-tr-template').html());
+
             },
 
             // Re-rendering the App just means refreshing the statistics -- the rest
@@ -64,19 +63,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             editClick: function () {
                 this.editingModel = this.model.clone();
 
-                var tempObj = { p: this.model.toJSON(), s: this.collection.pluck("code") };
-                console.log(tempObj);
-                this.$el.html(this.EditStockTableTrTemplate(tempObj));
-
-                //this.$el.enhanceWithin();
-
-                //this.$el.find('input').textinput();
-                this.$el.find('input.input').textinput();
-                this.$el.find('input.button').button();
-              
-                if (this.model.get('supplier_default')) {
-                    this.$el.find('select').removeClass('not_chosen');
-                }
+                this.$el.html(this.EditStockTableTrTemplate(this.model.toJSON()));
+                this.$el.enhanceWithin();
             },
             cancelEditClick: function () {
                 this.render();
@@ -86,13 +74,15 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 areYouSure("Are you sure?", "Save data to server?", "Ok", function () {
 
+                    self.editingModel.attributes.credit = parseInt(self.editingModel.attributes.credit);
+                    //self.set('credit', credit);
                     if (self.editingModel.isValid()) {
                         self.editingModel.update(function (result) {
                             self.model.set(self.editingModel.toJSON());
                             self.render();
                         });
                     } else {
-
+                       
                     }
                 });
             },
@@ -105,26 +95,16 @@ var app = app || { models: {}, collections: {}, views: {} };
                     else {
                         alert('errror result=' + result)
                     }
+
                 });
             },
             inputChange: function (ev) {
+                console.log('inputChange');
                 var targetElem = $(ev.target);
                 var dataType = targetElem.attr('data-type');
                 var value = targetElem.val();
 
                 this.editingModel.set(dataType, value);
-            },
-            supplierChange: function (ev) {
-                var $el = $(ev.target);
-                var value = $el.val();
-
-                if (value) {
-                    $el.removeClass('not_chosen');
-                } else {
-                    $el.addClass('not_chosen');
-                }
-
-                this.editingModel.set('supplier_default', value);
             }
         });
     });

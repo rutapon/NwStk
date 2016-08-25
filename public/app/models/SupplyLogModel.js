@@ -9,11 +9,12 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     // Person Model
-    app.models.SupplierModel = Backbone.Model.extend({
+    app.models.SupplyLogModel = Backbone.Model.extend({
         defaults: {
-            code: '',
-            name: '',
-            credit: 0
+            //product_id: '',
+            product_code: '',
+            supplier_code: '',
+            unit_price: 0
         },
 
         //initialize: function () {
@@ -22,42 +23,38 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         validate: function (attrs, options) {
 
-            if (!attrs.code || !attrs.name || isNaN(attrs.credit)) {
+            if (!attrs.product_code || !attrs.supplier_code || isNaN(attrs.unit_price)) {
 
                 alert(" ข้อมูลไม่ครบหรือผิดพลาด \n To err is human, but so, too, is to repent for those mistakes and learn from them.");
                 //alert("validate false -> (!attrs.code || !attrs.name) ");
-
                 return "false";
             }
         },
+
+        checkAndUpdate: function (cb) {
+            app.serviceMethod.checkForInsertSupplyLog(this.attributes, function (result) {
+                if (cb) cb(result);
+            })
+        },
+  
         save: function (cb) {
 
             //var self = this;
-            app.serviceMethod.insertSupplier(this.attributes, function (result) {
 
-                if (cb) cb(result);
-
-            });
         },
         update: function (cb) {
             //var self = this;
 
-            app.serviceMethod.updateSupplier(this.attributes, function (result) {
 
-                if (cb) cb(result);
-            });
         },
         destroy: function (cb) {
 
-            app.serviceMethod.deleteSupplier(this.attributes.code, function (result) {
-                if (cb) cb(result);
-            });
 
         },
 
         isEmty: function () {
             var attrs = this.attributes;
-            return !(attrs.code || attrs.name || attrs.unit_type || attrs.description);
+            return !(attrs.product_code || attrs.supplier_code || attrs.unit_price);
         }
         //,
         //removeUi: function () {

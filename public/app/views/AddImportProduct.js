@@ -17,7 +17,6 @@ var app = app || { models: {}, collections: {}, views: {} };
         $("#sure").popup('open');
     }
 
-
     app.views.AddImportProduct = Backbone.View.extend({
 
         // Instead of generating a new element, bind to the existing skeleton of
@@ -85,10 +84,11 @@ var app = app || { models: {}, collections: {}, views: {} };
                  { readOnly: true, data: attr('code') },
                  { readOnly: true, data: attr('name') },
                  { readOnly: true, data: attr('unit_type') },
-                 { readOnly: true, data: attr('unit_size') },
+                 //{ readOnly: true, data: attr('unit_size') },
                  {
-                     data: attr('supplier_name'),
+                     data: attr('supplier_code'),
                      type: 'autocomplete',
+                     editor: false,
                      source: function (query, process) {
 
                          var ImportProductModel = importProductCollection.at(this.row);
@@ -113,13 +113,13 @@ var app = app || { models: {}, collections: {}, views: {} };
                              var otherSupplier_nameArry = _.chain(ModelObjArray).
                                  filter(function myfunction(modelObj) {
                                      return modelObj['code'] != code;
-                                 }).pluck('supplier_name').unique().value();
+                                 }).pluck('supplier_code').unique().value();
 
 
                              var supplier_nameArry = _.chain(ModelObjArray).
                                  filter(function myfunction(modelObj) {
                                      return modelObj['code'] == code;
-                                 }).pluck('supplier_name').unique()
+                                 }).pluck('supplier_code').unique()
                                  .union(otherSupplier_nameArry)
                                  .first(5)
                                  .value();
@@ -180,7 +180,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     'code',
                     'ชื่อ',
                     'หน่วย',
-                    'ขนาด',
+                    //'ขนาด',
                     'ชื่อผู้ขาย',
                     'ราคา/หน่วย',
                     'เลขที่ใบส่งของ',

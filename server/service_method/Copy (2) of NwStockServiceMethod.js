@@ -88,13 +88,13 @@
             var create_by = data.create_by;
             var create_datetime = new Date().toISOString().replace('T', ' ').substr(0, 19);
 
-            var supplier_name_default = data.supplier_name_default;
+            var supplier_default = data.supplier_default;
             var unit_price_default = data.unit_price_default;
 
             var insertObj = {
                 code: code, name: name, unit_type: unit_type, unit_size: unit_size, description: description,
                 create_by: create_by, create_datetime: create_datetime,
-                supplier_name_default: supplier_name_default, unit_price_default: unit_price_default
+                supplier_default: supplier_default, unit_price_default: unit_price_default
             };
 
             var stock = getStock(stockName);

@@ -8,18 +8,14 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     // Person Model
-    app.collections.products = Backbone.Collection.extend({
-        model: app.models.product,
-        ws_name: 'Products',
+    app.collections.SupplierCollection = Backbone.Collection.extend({
+        model: app.models.SupplierModel,
+        ws_name: 'Supplier',
 
         saveObjKeyPare: {
             code: 'code',
             name: 'ชื่อ',
-            unit_type: 'หน่วย',
-            //unit_size: 'ขนาด',
-            supplier_default: 'ผู้ขาย',
-            unit_price_default:'ราคา',
-            description: 'รายละเอียด'
+            credit: 'เครดิต'
         },
 
         importXlsxObj: function (xlsxObj) {
@@ -63,11 +59,19 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         search: function (searchText, stockSelected, cb) {
             var self = this;
-            app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+            console.log('SupplierCollection:search');
+            //app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+            //    self.reset(result);
+            //    if (cb) cb(result);
+            //});
+        },
+        getAll: function (cb) {
+            var self = this;
+            app.serviceMethod.getAllSupplier(function (result) {
                 self.reset(result);
                 if (cb) cb(result);
             });
-        }
+        },
     });
 
 })(jQuery);

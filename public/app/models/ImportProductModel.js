@@ -15,7 +15,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             //name: '', unit_type: '', unit_size: '', description: '',
             //product_id: '',
             invoid_id: '',
-            supplier_name: '',
+            supplier_code: '',
             unit: 1,
             unit_price: '',
             in_date: '',
@@ -35,10 +35,10 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             delete this.attributes.id;
 
-            this.attributes.supplier_name = this.attributes.supplier_name_default;
+            this.attributes.supplier_code = this.attributes.supplier_default;
             this.attributes.unit_price = this.attributes.unit_price_default;
 
-            delete this.attributes.supplier_name_default;
+            delete this.attributes.supplier_default;
             delete this.attributes.unit_price_default;
 
             //console.log(this.attributes);

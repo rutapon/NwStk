@@ -20,9 +20,8 @@
 
             <div data-role="navbar">
                 <ul>
-                    <li><a data-value="createProdutNav" class="ui-btn-active">สร้าง</a></li>
-                    <!--<li><a data-value="showProductNav">แสดงรายการสินค้า</a></li>-->
-                    <li><a data-value="editProductNav">แก้ใข</a></li>
+                    <li><a data-value="createNav" class="ui-btn-active">สร้าง</a></li>
+                    <li><a data-value="editNav">แก้ใข</a></li>
 
                 </ul>
             </div>
@@ -38,18 +37,15 @@
         <!-- /header -->
         <div role="main" id="main" class="ui-content jqm-content jqm-fullwidth">
 
-            <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
-            </select>
+            <!--     <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+            </select>-->
 
-            <div id="createProdutNav" class="productNav">
+            <div id="createNav" class="Nav">
                 <br />
                 <div class="ui-grid-a ui-responsive">
                     <div class="ui-block-a">
-
                         <div>
-
                             <input type="text" id="chooseFileName" disabled="disabled" data-mini="true" value="No file select" />
-                            <!--<input type="button" id="chooseFileButton" data-mini="true"  value="Upload File">-->
                             <button class="ui-btn ui-icon-arrow-u ui-btn-icon-left  ui-corner-all" id="chooseFileButton" data-mini="true">Upload File</button>
 
                             <input id="chooseFileInput" type="file" style="display: none;" />
@@ -62,8 +58,8 @@
                     </div>
 
                 </div>
-                <table id="CreateStockTable" class="StockTable" border="0">
-                    <col width="150px" />
+                <table id="CreateTable" class="StockTable" border="0">
+                    <col width="80px" />
                     <col />
                     <col width="150px" />
                     <tbody>
@@ -71,19 +67,20 @@
                             <th>Code</th>
                             <th>ชื่อ</th>
                             <th>เครดิต</th>
-    
+
                         </tr>
-                        <script type="text/template" id="CreateStockTable-tr-template">
-                         
-                            <td><input placeholder="Code" data-type="code" value="<%- code %>" /></td>
-                            <td><input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
-                            <td><input placeholder="หน่วยนับ" data-type="unit_type" value="<%- unit_type %>" /></td>
-                          
-                            
-                            <td><input placeholder="รายละเอียด" data-type="description" value="<%- description %>" /></td>
+                        <script type="text/template" id="CreateTable-tr-template">
+
+                            <td>
+                                <input placeholder="Code" data-type="code" value="<%- code %>" /></td>
+                            <td>
+                                <input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
+                            <td>
+                                <input placeholder="เครดิต" data-type="credit" value="<%- credit %>" /></td>
+
                         </script>
 
-                        <!--  <td><input placeholder="ชื่อผู้ขาย" data-type="supplier_name_default" value="<%- supplier_name_default %>" /></td>
+                        <!--  <td><input placeholder="ชื่อผู้ขาย" data-type="supplier_default" value="<%- supplier_name_default %>" /></td>
                             <td><input placeholder="ขนาด" data-type="unit_type" value="<%- unit_size %>" /></td>
                               <td><input placeholder="ราคา" data-type="unit_price_default" value="<%- unit_price_default %>" /></td>-->
 
@@ -107,68 +104,59 @@
                 <!-- <input type="button" class="ClearNewProductRow" value="Clear Table">
                     <input type="button" class="SaveNewProductRows" value="บันทึกรายการสินค้า">-->
 
-                <button class="ClearNewProductRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" id="Button2" data-mini="true">Clear Table</button>
-                <button class="SaveNewProductRows ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">บันทึก</button>
-
-            </div>
-            <div id="showProductNav" style="display: none" class="productNav">
-
-                <br />
-
-                <input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
-
-                <!--<input type="button" data-mini="true" id="downLoadProductFile" value="Download File Exel">-->
-                <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadProductFile">Download File Exel</button>
-
-                <div id="select-all-result"></div>
+                <button class="ClearNewCreateRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" id="Button2" data-mini="true">Clear Table</button>
+                <button class="SaveNewCreateRows ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">บันทึก</button>
 
             </div>
 
-            <div id="editProductNav" style="display: none" class="productNav">
+            <div id="editNav" style="display: none" class="Nav">
                 <br />
-                <input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
+                <!--<input type="search" data-theme="a" name="searchbar" class="show_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
+                <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadFile">Download File Exel</button>
+
                 <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
-                    <tr>
-                        <th>Code</th>
-                        <th>ชื่อ</th>
-                        <th>หน่วย</th>
-                        <th>ขนาด</th>
-                        <th>ชื่อผู้ขาย</th>
-                        <th>ราคา</th>
-                        <th>รายละเอียด</th>
-                        <th></th>
-                        <th></th>
+                    <col width="80px" />
+                    <col />
+                    <col width="150px" />
+                    <tbody>
+                        <tr>
+                            <th>Code</th>
+                            <th>ชื่อ</th>
+                            <th>เครดิต</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <script type="text/template" id="ShowStockTable-tr-template">
 
-                    </tr>
-                    <script type="text/template" id="ShowStockTable-tr-template">
-                         
                             <td style="padding: 9px 4px;"><%- code %></td>
                             <td style="padding: 9px 4px;"><%- name %></td>
-                            <td style="padding: 9px 4px;"><%- unit_type %></td>
-                            <td style="padding: 9px 4px;"><%- unit_size %></td>
-                            <td style="padding: 9px 4px;"><%- supplier_name_default %></td>
-                            <td style="padding: 9px 4px;"><%- unit_price_default %></td>
-                            <td style="padding: 9px 4px;"><%- description %></td>
-                            <td><input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
-                            <td><input type="button" class="deleteButton" data-mini="true"  value="ลบ"> </td>
-                    </script>
-                    <script type="text/template" id="EditStockTable-tr-template">
-                         
-                            <td><input placeholder="Code" data-type="code" value="<%- code %>" /></td>
-                            <td><input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
-                            <td><input placeholder="หน่วย" data-type="unit_type" value="<%- unit_type %>" /></td>
-                            <td><input placeholder="ขนาด" data-type="unit_size" value="<%- unit_type %>" /></td>
-                            <td><input placeholder="ชื่อผู้ขาย" data-type="supplier_name_default" value="<%- supplier_name_default %>" /></td>
-                            <td><input placeholder="ราคา" data-type="unit_price_default" value="<%- unit_price_default %>" /></td> 
-                            <td><input placeholder="รายละเอียด" data-type="description" value="<%- description %>" /></td>
-                            <td><input type="button" class="cancelEditButton" data-mini="true" value="ยกเลิก"></td>
-                            <td><input type="button" class="saveButton" data-mini="true" value="บันทึก"> </td>
+                            <td style="padding: 9px 4px;"><%- credit %></td>
 
-                    </script>
+                            <td>
+                                <input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
+                            <td>
+                                <input type="button" class="deleteButton" data-mini="true" value="ลบ">
+                            </td>
+                        </script>
+                        <script type="text/template" id="EditStockTable-tr-template">
+
+                            <td style="padding: 9px 4px;"><%- code %></td>
+                            <td>
+                                <input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
+                            <td>
+                                <input placeholder="เครดิต" data-type="credit" value="<%- credit %>" /></td>
+
+                            <td>
+                                <input type="button" class="cancelEditButton" data-mini="true" value="ยกเลิก"></td>
+                            <td>
+                                <input type="button" class="saveButton" data-mini="true" value="บันทึก">
+                            </td>
+
+                        </script>
+
+                    </tbody>
                 </table>
             </div>
-
-
 
         </div>
         <!-- /content -->

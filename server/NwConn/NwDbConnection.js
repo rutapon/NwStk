@@ -142,6 +142,21 @@
                 });
 
             },
+
+            findLastOne: function (tableName, findObj, sortObj, callback) {
+                var db = this._getDB(tableName);
+
+                //console.log(findObj);
+                db.find(findObj).sort(sortObj).limit(1).exec(function (err, docs) {
+                    if (docs.lenght == 0) {
+                        if (callback) callback(null);
+                    }
+                    else {
+                        if (callback) callback(docs[0]);
+                    }
+                });
+
+            },
             findLimit: function (tableName, findObj, limit, callback) {
                 var db = this._getDB(tableName);
 

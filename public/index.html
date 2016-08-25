@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="TIS-620">
-  <!--  <meta charset="Windows-874">-->
-   <!-- <meta http-equiv="content-type" content="text/html; charset=TIS-620" />-->
+    <!--  <meta charset="Windows-874">-->
+    <!-- <meta http-equiv="content-type" content="text/html; charset=TIS-620" />-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Anda-Stock</title>
@@ -27,7 +27,7 @@
 
     <link href="lib/backgrid/lib/backgrid.css" rel="stylesheet" />
     <script src="lib/backgrid/lib/backgrid.min.js"></script>
-    <link href="lib/backgrid-select-all-master/backgrid-select-all.min.css" rel="stylesheet" />
+    <link href="lib/backgrid-select-all-master/backgrid-select-all.css" rel="stylesheet" />
     <script src="lib/backgrid-select-all-master/backgrid-select-all.min.js"></script>
 
     <link rel="stylesheet" media="screen" href="lib/handsontable/handsontable.css">
@@ -60,12 +60,14 @@
     <script src="app/models/product.js"></script>
     <script src="app/models/Stock.js"></script>
     <script src="app/models/ImportProductModel.js"></script>
+    <script src="app/models/AddImportProductModel.js"></script>
+    <script src="app/models/SupplierModel.js"></script>
+    <script src="app/models/SupplyLogModel.js"></script>
 
     <script src="app/collections/products.js"></script>
     <script src="app/collections/ImportProductCollection.js"></script>
     <script src="app/collections/SupplyLogCollection.js"></script>
-
-    <script src="app/models/AddImportProductModel.js"></script>
+    <script src="app/collections/SupplierCollection.js"></script>
 
     <script src="app/views/CreateProductTableTr.js"></script>
     <script src="app/views/CreateProductTable.js"></script>
@@ -76,8 +78,15 @@
 
     <script src="app/views/SelectProduct.js"></script>
     <script src="app/views/AddImportProduct.js"></script>
-    <!--   
-    <script src="js/views/ImportProduct.js"></script>-->
+
+    <script src="app/views/SupplierCreateTableTr.js"></script>
+    <script src="app/views/SupplierCreateTable.js"></script>
+    <script src="app/views/SupplierCreate.js"></script>
+    <script src="app/views/SupplierEditTableTr.js"></script>
+    <script src="app/views/SupplierEdit.js"></script>
+
+
+    <!--<script src="js/views/ImportProduct.js"></script>-->
 
     <script src="app/app.js"></script>
 
@@ -106,66 +115,7 @@
             white-space: nowrap;
         }
 
-        .auto-style1 {
-            height: 20.1pt;
-            width: 39pt;
-            color: black;
-            font-size: 11.0pt;
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            font-family: Tahoma, sans-serif;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-            border-style: none;
-            border-color: inherit;
-            border-width: medium;
-            padding-left: 1px;
-            padding-right: 1px;
-            padding-top: 1px;
-        }
-
-        .auto-style2 {
-            height: 20.1pt;
-            color: black;
-            font-size: 11.0pt;
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            font-family: Tahoma, sans-serif;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-            border-style: none;
-            border-color: inherit;
-            border-width: medium;
-            padding-left: 1px;
-            padding-right: 1px;
-            padding-top: 1px;
-        }
-
-        .auto-style3 {
-            height: 14.25pt;
-            color: black;
-            font-size: 11.0pt;
-            font-weight: 400;
-            font-style: normal;
-            text-decoration: none;
-            font-family: Tahoma, sans-serif;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-            border-style: none;
-            border-color: inherit;
-            border-width: medium;
-            padding-left: 1px;
-            padding-right: 1px;
-            padding-top: 1px;
-        }
-
-
-    </style>
+        </style>
 </head>
 <body>
 
@@ -188,96 +138,88 @@
         <!-- /header -->
         <div role="main" id="main" class="ui-content jqm-content jqm-fullwidth">
             <h1>Andamania Stock</h1>
-            <h2>Activity: Database</h2>
+              <h2>Supplier Code (4 Letters)</h2>
 
-            <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 631pt"
-                width="839">
-                <colgroup>
-                    <col style="mso-width-source: userset; mso-width-alt: 1664; width: 39pt" width="52" />
-                    <col style="mso-width-source: userset; mso-width-alt: 2944; width: 69pt" width="92" />
-                    <col style="mso-width-source: userset; mso-width-alt: 5952; width: 140pt" width="186" />
-                    <col style="mso-width-source: userset; mso-width-alt: 4512; width: 106pt" width="141" />
-                    <col style="mso-width-source: userset; mso-width-alt: 3136; width: 74pt" width="98" />
-                    <col style="mso-width-source: userset; mso-width-alt: 2368; width: 56pt" width="74" />
-                    <col style="width: 54pt" width="72" />
-                    <col style="mso-width-source: userset; mso-width-alt: 1664; width: 39pt" width="52" />
-                    <col style="width: 54pt" width="72" />
-                </colgroup>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td class="auto-style1" height="26" width="52">1 )</td>
-                    <td align="left" colspan="8" style="mso-ignore: colspan; width: 592pt" width="787">เขียน<span style="mso-spacerun: yes">&nbsp; </span>Database ที่เก็บข้อมูลทั้งหมดของ สินค้าแต่ละตัว<span style="mso-spacerun: yes">&nbsp; </span>โดยแยกเก็บเป็น<span style="mso-spacerun: yes">&nbsp; </span>2 คลีงสินค้า คือ<span style="mso-spacerun: yes">&nbsp; </span>Store-ใหญ่ และ Store-ช่าง</td>
+            <table border="0" cellpadding="0" cellspacing="0" width="581" style='border-collapse: collapse; table-layout: fixed; width: 436pt'>
+                <col width="72" style='width: 54pt'>
+                <col width="130" style='mso-width-source: userset; mso-width-alt: 4160; width: 98pt'>
+                <col width="91" style='mso-width-source: userset; mso-width-alt: 2912; width: 68pt'>
+                <col width="72" span="1" style='width: 54pt'>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl78">ชื่อผู้ขาย</td>
+                    <td class="xl78">รห้ส </td>
+                    <td class="xl78">เครดิต</td>
                 </tr>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td height="26" style="height: 20.1pt"></td>
-                    <td align="left" colspan="2" style="mso-ignore: colspan">ตาม ตัวอย่าง<span style="mso-spacerun: yes">&nbsp; </span>Form-1 and Form-2</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" colspan="4" style='height: 14.25pt; mso-ignore: colspan'></td>
                 </tr>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td height="26" style="height: 20.1pt"></td>
-                    <td align="left" colspan="3" style="mso-ignore: colspan">ต้อง<span style="mso-spacerun: yes">&nbsp; </span>set ให้ สามารถ<span style="mso-spacerun: yes">&nbsp; </span>add/ deleate<span style="mso-spacerun: yes">&nbsp; </span>รายการสินค้าได้<span style="mso-spacerun: yes">&nbsp;</span></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl80">เงินสด</td>
+                    <td align="left">CASH</td>
+                    <td class="xl79">&nbsp;</td>
                 </tr>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td height="26" style="height: 20.1pt"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl80">รีฟันเจิน</td>
+                    <td align="left">REFG</td>
+                    <td align="right">30</td>
                 </tr>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td class="auto-style2" height="26">2 )</td>
-                    <td align="left" colspan="7" style="mso-ignore: colspan">รวบรวม<span style="mso-spacerun: yes">&nbsp; </span>Stock liist<span style="mso-spacerun: yes">&nbsp; </span>ที่มีอยู่ทั้งสิ้น ทั้ง<span style="mso-spacerun: yes">&nbsp; </span>Store ใหญ่ และ Store ช่าง ตามแบบ ฟอร์มข้างต้น ( Form 1 &amp; 2)- Excel Files</td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl80"><span style='mso-spacerun: yes'>&nbsp;</span>Super cheap</td>
+                    <td align="left">SCHP</td>
+                    <td align="right">30</td>
                 </tr>
-                <tr height="26" style="mso-height-source: userset; height: 20.1pt">
-                    <td height="26" style="height: 20.1pt"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl80">โฟร์โมสต์</td>
+                    <td align="left">FORM</td>
+                    <td align="right">30</td>
                 </tr>
-                <tr height="19" style="height: 14.25pt">
-                    <td class="auto-style3" height="19">3 )</td>
-                    <td align="left" colspan="5" style="mso-ignore: colspan">กำหนด รห้สสินค้า ให้สืนค้าแต่ละรายการ โดย แยกแป็น กลุ่ม ประเภท ตามความเหมาะสม</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl80">วอลล์</td>
+                    <td align="left">WALL</td>
+                    <td align="right">30</td>
                 </tr>
-                <tr height="19" style="height: 14.25pt">
-                    <td height="19" style="height: 14.25pt"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl81">เขาหลัก โกลเด็น</td>
+                    <td align="left">GOLD</td>
+                    <td align="right">15</td>
                 </tr>
-                <tr height="19" style="height: 14.25pt">
-                    <td class="auto-style3" height="19">4 )</td>
-                    <td align="left" colspan="6" style="mso-ignore: colspan">Upload<span style="mso-spacerun: yes">&nbsp; </span>ข้อมูล stock lists, รหัสสินค้า และ ข้อมูลอื่น จาก<span style="mso-spacerun: yes">&nbsp; </span>Excel file<span style="mso-spacerun: yes">&nbsp; </span>เข้า database ของโปรแกรม<span style="mso-spacerun: yes">&nbsp;</span></td>
-                    <td></td>
-                    <td></td>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl81">เขาหลักการไฟฟ้า</td>
+                    <td align="left">ELEC</td>
+                    <td align="right">15</td>
                 </tr>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl81">Home pro</td>
+                    <td align="left">HOME</td>
+                    <td align="right">7</td>
+                </tr>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl81">สาธิต</td>
+                    <td align="left">SATT</td>
+                    <td align="right">7</td>
+                </tr>
+                <tr height="19" style='height: 14.25pt'>
+                    <td height="19" style='height: 14.25pt'></td>
+                    <td class="xl81">Bon Caf&eacute;</td>
+                    <td align="left">BONC</td>
+                    <td align="right">15</td>
+                </tr>
+                <![if supportMisalignedColumns]>
+                <![endif]>
             </table>
+
+
+            
 
 
             <br />
@@ -405,7 +347,7 @@
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
-                 <li>
+                <li>
                     <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
                 </li>
                 <li>
@@ -449,6 +391,9 @@
         <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
             <div data-role="navbar">
                 <ul>
+                    <li>
+                        <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                    </li>
                     <li>
                         <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
                     </li>

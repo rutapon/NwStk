@@ -23,6 +23,7 @@
         var wsClient = app.wsClient = new NwWsClient(protocol + '//' + host + ":" + port);
     }
     var serviceMethod = app.serviceMethod = new NwServiceConn(wsClient);
+
     wsClient.setOnConnectEventListener(function (socket) {
         var id = wsClient.getId();
         console.log('onConnect ' + id);
@@ -33,13 +34,41 @@
     });
 
     //if (!app.Class) app.Class = {};
-
     //app.Control.Products = {};
 
     var stockModel = new app.models.Stock();
 
     app.initSupplier = function () {
         console.log('initSupplier');
+
+        var supplierCollection = new app.collections.SupplierCollection([new app.models.SupplierModel()]);
+        var CreateProduct = new app.views.SupplierCreate({ collection: supplierCollection });
+
+        var editSupplierCollection = new app.collections.SupplierCollection();
+        var supplierEditView = new app.views.SupplierEdit({ collection: editSupplierCollection });
+
+
+
+        var curTab = 'createNav';
+        var updateView = function () {
+
+            console.log('updateView');
+
+            if (curTab == 'editNav') {
+                supplierEditView.search();
+            }
+        }
+
+        $(".ui-page-active [data-role='header'] li a").click(function () {
+            //curTab = $(this).text();//.text();
+            curTab = $(this).jqmData('value');
+
+            $('.Nav').hide();
+            $('#' + curTab).show();
+
+            updateView();
+        });
+
     };
 
     app.initProduct = function () {

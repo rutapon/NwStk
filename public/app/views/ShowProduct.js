@@ -59,15 +59,15 @@ var app = app || { models: {}, collections: {}, views: {} };
                         cell: "string",
                         editable: false
                     },
-                    {
-                        name: "unit_size",
-                        label: "ขนาด",
-                        cell: "string",
-                        editable: false
-                    },
+                    //{
+                    //    name: "unit_size",
+                    //    label: "ขนาด",
+                    //    cell: "string",
+                    //    editable: false
+                    //},
                      {
-                         name: "supplier_name_default",
-                         label: "ชื่อผู้ขาย",
+                         name: "supplier_default",
+                         label: "ชื่อผู้ขายล่าสุด",
                          cell: "string",
                          editable: false
                      },
@@ -77,12 +77,12 @@ var app = app || { models: {}, collections: {}, views: {} };
                          cell: "string",
                          editable: false
                      },
-                    {
-                        name: "description",
-                        label: "รายละเอียด",
-                        cell: "string",
-                        editable: false
-                    },
+                     {
+                         name: "description",
+                         label: "รายละเอียด",
+                         cell: "string",
+                         editable: false
+                     },
                      //{
                      //    name: "edit",
                      //    label: "edit",

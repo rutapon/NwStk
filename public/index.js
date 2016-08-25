@@ -133,7 +133,7 @@ $(function () {
 
       
             if (current == 'ผู้ขาย') {
-                //app.initSupplier();
+                app.initSupplier();
             }
             else if (current == 'ชนิดสินค้า') {
                 app.initProduct();

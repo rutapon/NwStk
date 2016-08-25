@@ -6,39 +6,43 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     $(function () {
-    app.views.CreateProductTable = Backbone.View.extend({
+        app.views.CreateProductTable = Backbone.View.extend({
 
-        el: '#CreateStockTable',
+            el: '#CreateStockTable',
 
-        initialize: function () {
-            //this.el = $(this.el);
-            this.collection.on('add', this.addOne, this);
-            this.collection.on('reset', this.resetProduct, this);
-        },
+            initialize: function () {
+                //this.el = $(this.el);
 
-        // Re-rendering the App just means refreshing the statistics -- the rest
-        // of the app doesn't change.
-        render: function () {
+                this.supplierCollection = new app.collections.SupplierCollection();
+                this.supplierCollection.getAll();
 
-            this.$el.find('.CreateProductTableTr').remove();
-            this.collection.each(this.addOne, this);
-            return this;
-        },
+                this.collection.on('add', this.addOne, this);
+                this.collection.on('reset', this.resetProduct, this);
+            },
 
-        addOne: function (product) {
-            var productView = new app.views.CreateProductTableTr({ model: product });
-            var productEl = productView.render().el;
+            // Re-rendering the App just means refreshing the statistics -- the rest
+            // of the app doesn't change.
+            render: function () {
 
-            this.$el.find('.lastTr').removeClass('lastTr');
+                this.$el.find('.CreateProductTableTr').remove();
+                this.collection.each(this.addOne, this);
+                return this;
+            },
 
-            $(productEl).addClass('lastTr');
+            addOne: function (product) {
+                var productView = new app.views.CreateProductTableTr({ model: product, collection: this.supplierCollection });
+                var productEl = productView.render().el;
 
-            this.$el.find('tbody').append(productEl);
-        },
-        resetProduct: function (product) {
+                this.$el.find('.lastTr').removeClass('lastTr');
 
-            this.render();
-        }
+                $(productEl).addClass('lastTr');
+
+                this.$el.find('tbody').append(productEl);
+            },
+            resetProduct: function (product) {
+
+                this.render();
+            }
+        });
     });
-});
 })(jQuery);

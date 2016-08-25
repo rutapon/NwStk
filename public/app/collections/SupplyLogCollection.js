@@ -10,15 +10,16 @@ var app = app || { models: {}, collections: {}, views: {} };
     // Person Model
     app.collections.SupplyLogCollection = Backbone.Collection.extend({
 
-        model: Backbone.Model.extend({
-            defaults: {
-                //product_id: '',
-                code:'',
-                supplier_name: '',
-                unit_price: '',
-                create_by: 'admin', stock_name: ''
-            }
-        }),
+        //model: Backbone.Model.extend({
+        //    defaults: {
+        //        //product_id: '',
+        //        code:'',
+        //        supplier_code: '',
+        //        unit_price: '',
+        //        create_by: 'admin', stock_name: ''
+        //    }
+        //}),
+        model: app.models.SupplyLogModel,
 
         find: function (code, stockSelected, cb) {//product_id
             var self = this;
@@ -26,7 +27,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 if (result.length) {
                     self.reset(result);
                     if (cb) cb(result);
-                } 
+                }
                 else {
                     app.serviceMethod.getAllSupplyLog({ stockName: stockSelected }, function (result) {
                         console.log('getAllSupplyLog');
@@ -50,6 +51,9 @@ var app = app || { models: {}, collections: {}, views: {} };
                 self.reset(result);
                 if (cb) cb(result);
             });
+        },
+        getLastLog: function (productCode) {
+
         },
         checkForInsert: function (dataObj, stockSelected, cb) {
             dataObj.stockName = stockSelected;

@@ -44,7 +44,7 @@
             next();
         });
 
-        app.use(minify()); 
+        //app.use(minify()); 
 
         app.use(function (req, res) {
             file.serve(req, res);

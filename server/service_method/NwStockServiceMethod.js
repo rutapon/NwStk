@@ -45,12 +45,14 @@
 
     var stocks = {};
 
-    var socksName = ['all', 'Store-ใหญ่', 'Store-ช่าง', 'Store-ทดสอบ'];
+    var socksName = ['Store-ใหญ่', 'Store-ช่าง', 'Store-ทดสอบ'];
     var dbPath = __dirname + '/../../Database/linvodb/';
 
     //_.each(socksName, function (sn) {
 
     //});
+
+    var globalDB = new NwDbConnection(dbPath + 'globalDB');
 
     async.eachSeries(socksName, function (sn, callback) {
 
@@ -77,7 +79,7 @@
         },
         getAllProducts: function (data, cb) {
             console.log('getAllProducts', data);
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
             var stock = getStock(stockName);
             if (stockName) {
                 stock.getAll(productTableName, function (result) {
@@ -88,7 +90,7 @@
         },
         findeProductStartWith: function (data, cb) {
 
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
             var findWord = data.findWord;
             var limit = data.limit ? data.limit : 20;
             //var stock = new NwDbConnection(__dirname + '/../Database/stock/stock1.s3db'); //getStock(stockName);
@@ -98,25 +100,33 @@
             });
         },
         insertProduct: function (data, cb) {
-            var stockName = data.stockName;
 
-            var code = data.code;
-            var name = data.name;
-            var unit_type = data.unit_type;
-            var unit_size = data.unit_size;
+            console.log('insertProduct', data);
+            var stockName = data.stock_name;
 
-            var description = data.description;
+            //var code = data.code;
+            //var name = data.name;
+            //var unit_type = data.unit_type;
+            //var unit_size = data.unit_size;
 
-            var create_by = data.create_by;
-            var create_datetime = new Date().toISOString().replace('T', ' ').substr(0, 19);
+            //var description = data.description;
 
-            var supplier_name_default = data.supplier_name_default;
-            var unit_price_default = data.unit_price_default;
+            //var create_by = data.create_by;
+            //var create_datetime = new Date().toISOString().replace('T', ' ').substr(0, 19);
+
+            //var supplier_default = data.supplier_default;
+            //var unit_price_default = data.unit_price_default;
 
             var insertObj = {
-                code: code, name: name, unit_type: unit_type, unit_size: unit_size, description: description,
-                create_by: create_by, create_datetime: create_datetime,
-                supplier_name_default: supplier_name_default, unit_price_default: unit_price_default
+                code: data.code,
+                name: data.name,
+                unit_type: data.unit_type,
+                //unit_size: unit_size,
+                description: data.description,
+                stock_name: data.stock_name,
+                supplier_default: data.supplier_default,
+                unit_price_default: data.unit_price_default,
+                createingLog: { creator: 'admin', 'createDate': new Date() }
             };
 
             var stock = getStock(stockName);
@@ -126,25 +136,29 @@
         },
 
         updateProduct: function (data, cb) {
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
             var code = data.code;
 
-            var code = data.code;
-            var name = data.name;
-            var unit_type = data.unit_type;
-            var unit_size = data.unit_size;
-            var description = data.description;
+            //var code = data.code;
+            //var name = data.name;
+            //var unit_type = data.unit_type;
+            //var unit_size = data.unit_size;
+            //var description = data.description;
 
-            var create_by = data.create_by;
-            var create_datetime = data.create_datetime;
+            //var create_by = data.create_by;
+            //var create_datetime = data.create_datetime;
 
-            var supplier_name_default = data.supplier_name_default;
-            var unit_price_default = data.unit_price_default;
+            //var supplier_default = data.supplier_default;
+            //var unit_price_default = data.unit_price_default;
 
             var dataObj = {
-                code: code, name: name, unit_type: unit_type, unit_size: unit_size, description: description,
-                create_by: create_by, create_datetime: create_datetime,
-                supplier_name_default: supplier_name_default, unit_price_default: unit_price_default
+                code: data.code,
+                name: data.name,
+                unit_type: data.unit_type,
+                description: data.description,
+                stock_name: data.stock_name,
+                supplier_default: data.supplier_default,
+                unit_price_default: data.unit_price_default,
             };
 
             var stock = getStock(stockName);
@@ -154,7 +168,7 @@
         },
 
         deleteProduct: function (data, cb) {
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
             var code = data.code;
             console.log('deleteProduct', data);
 
@@ -166,15 +180,22 @@
 
         insertSupplyLog: function (data, cb) {
             console.log('insertSupplyLog', data);
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
+
+            //var dataObj = {
+            //    //product_id: data.product_id,
+            //    code: data.code,
+            //    supplier_name: data.supplier_name,
+            //    unit_price: data.unit_price,
+            //    create_by: data.create_by,
+            //    create_datetime: new Date().toISOString().replace('T', ' ').substr(0, 19)
+            //};
 
             var dataObj = {
-                //product_id: data.product_id,
-                code: data.code,
-                supplier_name: data.supplier_name,
+                product_code: data.product_code,
+                supplier_code: data.supplier_code,
                 unit_price: data.unit_price,
-                create_by: data.create_by,
-                create_datetime: new Date().toISOString().replace('T', ' ').substr(0, 19)
+                createingLog: { creator: 'admin', 'createDate': new Date() }
             };
 
             var stock = getStock(stockName);
@@ -184,21 +205,31 @@
         },
 
         checkForInsertSupplyLog: function (data, cb) {
+            console.log('checkForInsertSupplyLog', data);
             var self = this;
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
 
             var findObj = {
                 //product_id: data.product_id,
                 code: data.code,
-
                 supplier_name: data.supplier_name,
-                unit_price: data.unit_price
+                //unit_price: data.unit_price
             }
 
             var stock = getStock(stockName);
-            stock.findOne(supplyLogTableName, findObj, function (result) {
+            //stock.findOne(supplyLogTableName, findObj, function (result) {
 
-                if (result) {
+            //    if (result) {
+            //        if (cb) { cb(false) }
+            //    } else {
+            //        self.insertSupplyLog(data, cb);
+            //    }
+            //});
+
+
+            stock.findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
+
+                if (result && result.unit_price == data.unit_price) {
                     if (cb) { cb(false) }
                 } else {
                     self.insertSupplyLog(data, cb);
@@ -207,7 +238,7 @@
         },
 
         updateSupplyLog: function (data, cb) {
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
             var _id = data._id;
 
             var dataObj = {
@@ -227,8 +258,8 @@
         },
         findeSupplyLog: function (data, cb) {
 
-            var stockName = data.stockName;
-            delete data.stockName;
+            var stockName = data.stock_name;
+            delete data.stock_name;
             console.log('findeSupplyLog', data);
             //var product_id = data.product_id;{ product_id: product_id }
             var db = getStock(stockName);
@@ -242,8 +273,24 @@
                 });
             }
         },
+
+        getLastSupplyLog: function (data, cb) {
+            //console.log('getLastSupplyLog', data);
+            var stockName = data.stock_name;
+
+            var findObj = {
+                //product_id: data.product_id,
+                code: data.code,
+                supplier_name: data.supplier_name,
+                //unit_price: data.unit_price
+            }
+            getStock(stockName).findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
+                cb(result);
+            });
+        },
+
         getAllSupplyLog: function (data, cb) {
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
 
             console.log('getAllSupplyLog', data);
 
@@ -255,7 +302,7 @@
         },
 
         insertImportProduct: function (data, cb) {
-            var stockName = data.stockName;
+            var stockName = data.stock_name;
 
             //var dataObj = {
             //    product_id: data.product_id,
@@ -278,10 +325,10 @@
             var stock = getStock(stockName);
             stock.insert(importProductTableName, dataObj, function (result) {
 
-                var supplier_name_default = data.supplier_name;
+                var supplier_default = data.supplier_name;
                 var unit_price_default = data.unit_price;
 
-                stock.update(productTableName, { code: data.code }, { supplier_name_default: supplier_name_default, unit_price_default: unit_price_default }, function (result) {
+                stock.update(productTableName, { code: data.code }, { supplier_default: supplier_default, unit_price_default: unit_price_default }, function (result) {
                     if (cb) { cb(result) }
                 })
 
@@ -301,60 +348,47 @@
         getAllSupplier: function (data, cb) {
 
             //console.log('getAllSupplier', data);
-            var stockName = 'all';
-            var stock = getStock(stockName);
-            if (stockName) {
-                stock.getAll(importSupplierTableName, function (result) {
 
-                    if (cb) { cb(result) }
-                });
-            }
+            globalDB.getAll(importSupplierTableName, function (result) {
+
+                if (cb) { cb(result) }
+            });
+
         },
 
         insertSupplier: function (data, cb) {
-            //console.log('getAllSupplier', data);
-            var stockName = 'all';
 
             var dataObj = {
                 //product_id: data.product_id,
                 code: data.code,
                 name: data.name,
-                credit: data.credit
+                credit: data.credit,
+                createingLog: { creator: 'admin', 'createDate': new Date() }
             };
 
-            var stock = getStock(stockName);
-            if (stockName) {
-                stock.insert(importSupplierTableName, dataObj, function (result) {
+            globalDB.insert(importSupplierTableName, dataObj, function (result) {
 
-                    if (cb) { cb(result) }
-                });
-            }
+                if (cb) { cb(result) }
+            });
         },
         updateSupplier: function (data, cb) {
-            var stockName = 'all';
-
+            console.log('updateSupplier', data);
             var dataObj = {
                 //product_id: data.product_id,
                 code: data.code,
                 name: data.name,
-                credit: data.credit
+                credit: data.credit,
+                createingLog: { creator: 'admin', 'createDate': new Date() }
             };
+            globalDB.update(importSupplierTableName, { code: data.code }, dataObj, function (result) {
 
-            var stock = getStock(stockName);
-            if (stockName) {
-                stock.update(importSupplierTableName, dataObj, function (result) {
-
-                    if (cb) { cb(result) }
-                });
-            }
-
+                if (cb) { cb(result) }
+            });
         },
         deleteSupplier: function (data, cb) {
             var code = data.code;
-            var stockName = 'all';
 
-            var stock = getStock(stockName);
-            stock.destroy(importSupplierTableName, { code: code }, function (result) {
+            globalDB.destroy(importSupplierTableName, { code: code }, function (result) {
                 if (cb) { cb(result) }
             })
         },

@@ -14,12 +14,12 @@ var app = app || { models: {}, collections: {}, views: {} };
             code: '',
             name: '',
             unit_type: '',
-            unit_size: '',
+            //unit_size: '',
             description: '',
-            create_by: 'admin',
+            //create_by: 'admin',
             stock_name: '',
-            supplier_name_default: '',
-            unit_price_default: 0
+            supplier_default: '',
+            unit_price_default: undefined
         },
 
         //initialize: function () {
@@ -38,37 +38,54 @@ var app = app || { models: {}, collections: {}, views: {} };
         save: function (stockName, cb) {
 
             var self = this;
-            app.serviceMethod.insertProduct(stockName, this.attributes, function (result) {
+            this.attributes.stock_name = stockName;
+            app.serviceMethod.insertProduct(this.attributes, function (result) {
 
-                var dataObj = {
-                    stockName: stockName,
-                    //product_id: result,
-                    code: self.attributes.code,
-                    supplier_name: self.attributes.supplier_name_default,
-                    unit_price: self.attributes.unit_price_default,
-                    create_by: 'admin'
+                if (self.attributes.unit_price_default && self.attributes.supplier_default) {
+                    var dataObj = {
+                        product_code: self.attributes.code,
+                        supplier_code: self.attributes.supplier_default,
+                        unit_price: self.attributes.unit_price_default,
+                        stock_name:stockName
+                    }
+
+                    var supplyLogModel = new app.models.SupplyLogModel(dataObj);
+                    supplyLogModel.checkAndUpdate(function () {
+                        if (cb) cb();
+                    });
+                } else {
+                    if (cb) cb();
                 }
 
-                app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
-                    if (cb) cb(result);
-                })
+                //app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
+                //if (cb) cb(result);
+                //})
             });
         },
         update: function (cb) {
             var self = this;
             var stockName = this.attributes.stock_name;
-            app.serviceMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
-                var dataObj = {
-                    stockName: stockName,
-                    code: self.attributes.code,
-                    supplier_name: self.attributes.supplier_name_default,
-                    unit_price: self.attributes.unit_price_default,
-                    create_by: 'admin'
+            app.serviceMethod.updateProduct(this.attributes, function (result) {
+
+                if (self.attributes.unit_price_default && self.attributes.supplier_default) {
+                    var dataObj = {
+                        product_code: self.attributes.code,
+                        supplier_code: self.attributes.supplier_default,
+                        unit_price: self.attributes.unit_price_default,
+                        stock_name: stockName
+                    }
+
+                    var supplyLogModel = new app.models.SupplyLogModel(dataObj);
+                    supplyLogModel.checkAndUpdate(function () {
+                        if (cb) cb();
+                    });
+                } else {
+                    if (cb) cb();
                 }
 
-                app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
-                    if (cb) cb(result);
-                })
+                //app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
+                if (cb) cb(result);
+                //})
             });
         },
         destroy: function (cb) {

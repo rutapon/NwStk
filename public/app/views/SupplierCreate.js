@@ -17,11 +17,11 @@ var app = app || { models: {}, collections: {}, views: {} };
     }
 
     $(function () {
-        app.views.CreateProduct = Backbone.View.extend({
+        app.views.SupplierCreate = Backbone.View.extend({
 
             // Instead of generating a new element, bind to the existing skeleton of
             // the App already present in the HTML.
-            el: '#createProdutNav',
+            el: '#createNav',
 
             // Delegated events for creating new items, and clearing completed ones.
             events: {
@@ -37,16 +37,16 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 'keyup .lastTr input': 'selectInput',
 
-                'click .CreateNewProductRow': 'CreateNewProduct',
-                'click .SaveNewProductRows': 'SaveNewProducts',
-                'click .ClearNewProductRow': 'ClearNewProductRow',
+                //'click .CreateNewProductRow': 'CreateNewProduct',
+                'click .SaveNewCreateRows': 'SaveNew',
+                'click .ClearNewCreateRow': 'ClearNewCreateRow',
             },
 
 
             initialize: function () {
                 //this.el = $(this.el);
                 var self = this;
-                this.CreateProductTable = new app.views.CreateProductTable({ collection: this.collection }).render();
+                this.SupplierCreateTable = new app.views.SupplierCreateTable({ collection: this.collection }).render();
 
                 var dropEl = this.$el.find("#dropFileInput").on("dragover", function (event) {
                     event.originalEvent.preventDefault();
@@ -87,7 +87,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             AddProduct: function (productObj) {
-                var product = new app.models.product(productObj);
+                var product = new app.models.SupplierModel(productObj);
 
                 //this.el.find('tbody').append(this.CreateStockTableTrTemplate(rowObj));
                 this.collection.add(product);
@@ -151,6 +151,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             selectInput: function (ev) {
+
                 if ($(ev.target).val()) {
                     this.CreateNewProduct();
                 }
@@ -159,17 +160,18 @@ var app = app || { models: {}, collections: {}, views: {} };
             CreateNewProduct: function () {
                 //event.preventDefault();
                 //alert('CreateNewProductRow');
-                var rowObj = { code: '', name: '', unit_type: '', unit_size: '', description: '' };
+                //console.log('CreateNewProduct');
+                var rowObj = {};// new app.models.SupplierModel();  //{ code: '', name: '', unit_type: '', unit_size: '', description: '' };
                 this.AddProduct(rowObj);
             },
-            ClearNewProductRow: function () {
+            ClearNewCreateRow: function () {
                 this.collection.reset();
                 this.CreateNewProduct();
                 this.$el.find('#chooseFileName').val("No file select");
             },
-            SaveNewProducts: function () {
+            SaveNew: function () {
 
-
+                console.log('SaveNew');
                 //console.log($('.CreateStockTable-tr').length);
                 //var dataElem = $('.CreateStockTable-tr');
                 //for (var i in dataElem) {
@@ -186,57 +188,51 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //    this.collection.remove(item);
                 //},this)
 
-
                 //_.invoke(this.collection.toArray(), 'remove');
 
-                var stockSelectedName = this.model.stockModel.get('stock_selected');
-                if (stockSelectedName) {
+                areYouSure("Are you sure?", "Save data to server?", "Ok", function () {
 
-                    areYouSure("Are you sure?", "Save data to server?", "Ok", function () {
+                    var numSave = 0;
+                    async.eachSeries(self.collection.toArray(), function (eachModel, callback) {
 
-                        var numSave = 0;
-                        async.eachSeries(self.collection.toArray(), function (eachModel, callback) {
+                        var jsonObj = eachModel.toJSON();
 
-                            var jsonObj = eachModel.toJSON();
+                        //jsonObj.create_by = 'admin';
 
-                            //jsonObj.create_by = 'admin';
+                        if (eachModel.isEmty()) {
+                            self.collection.remove(eachModel);
+                            callback();
+                        }
+                        else {
+                            eachModel.attributes.credit = parseInt(eachModel.attributes.credit);
 
-                            if (eachModel.isEmty()) {
-                                self.collection.remove(eachModel);
-                                callback();
-                            }
-                            else
-                                if (eachModel.isValid()) {
-                                    eachModel.save(stockSelectedName, function (result) {
-                                        self.collection.remove(eachModel);
-                                        numSave++;
-                                        //console.log('remove', numSave);
-                                        callback();
-                                    });
-                                } else {
-                                    callback('invalid');
-                                }
-
-                        }, function (err) {
-                          
-                            if (err) {
-                                //alert(err);
+                            if (eachModel.isValid()) {
+                                eachModel.save(function (result) {
+                                    self.collection.remove(eachModel);
+                                    numSave++;
+                                    console.log('remove', numSave);
+                                    callback();
+                                });
                             } else {
-                                self.ClearNewProductRow();
+                                callback('invalid');
                             }
+                        }
 
-                            setTimeout(function () {
-                                alert('Data has save to stock "' + stockSelectedName + '" ' + numSave + ' row');
-                            },1);
-                          
-                        });
+                    }, function (err) {
+                        //console.log('end');
+                        if (err) {
+                            //alert(err);
+                        } else {
+                            self.ClearNewCreateRow();
+                        }
+
+                        setTimeout(function () {
+                            alert('Data has save ' + numSave + ' row');
+                        }, 1);
 
                     });
-                }
-                else {
-                    alert("Don't select stock yet!");
-                    return;
-                }
+
+                });
             }
 
         });

@@ -21,6 +21,11 @@ var app = app || { models: {}, collections: {}, views: {} };
             initialize: function () {
                 this.collection.on('add', this.addOne, this);
                 this.collection.on('reset', this.resetProduct, this);
+
+
+                this.supplierCollection = new app.collections.SupplierCollection();
+                this.supplierCollection.getAll();
+
                 this.render();
             },
 
@@ -40,6 +45,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var self = this;
                 var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
                 app.serviceMethod.getAllProducts(stockSelected, function (result) {
+                    //console.log(result);
                     _.each(result, function (item) {
                         item['stock_name'] = stockSelected;
                     });
@@ -71,7 +77,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             addOne: function (product) {
-                var productView = new app.views.EditProductTableTr({ model: product });
+                var productView = new app.views.EditProductTableTr({ model: product, collection: this.supplierCollection });
                 var productEl = productView.render().el;
                 this.$el.find('tbody').append(productEl);
             },

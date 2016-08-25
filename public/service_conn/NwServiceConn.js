@@ -43,24 +43,23 @@
                 this.wsClient.callService('getAllStockName', {}, cb);
             },
 
-
             //#region Products
             getAllProducts: function (stockName, cb) {
-                this.wsClient.callService('getAllProducts', { stockName: stockName }, cb);
+                this.wsClient.callService('getAllProducts', { stock_name: stockName }, cb);
             },
             findeProductStartWith: function (stockName, findWord, limit, cb) {
-                this.wsClient.callService('findeProductStartWith', { stockName: stockName, findWord: findWord, limit: limit }, cb);
+                this.wsClient.callService('findeProductStartWith', { stock_name: stockName, findWord: findWord, limit: limit }, cb);
             },
-            insertProduct: function (stockName, insertObj, cb) {
-                insertObj.stockName = stockName;
+            insertProduct: function (insertObj, cb) {
+
                 this.wsClient.callService('insertProduct', insertObj, cb);
             },
-            updateProduct: function (stockName, updateObj, cb) {
-                updateObj.stockName = stockName;
+            updateProduct: function (updateObj, cb) {
+             
                 this.wsClient.callService('updateProduct', updateObj, cb);
             },
             deleteProduct: function (stockName, code, cb) {
-                this.wsClient.callService('deleteProduct', { stockName: stockName, code: code }, cb);
+                this.wsClient.callService('deleteProduct', { stock_name: stockName, code: code }, cb);
             },
             //#endregion
 
@@ -79,6 +78,9 @@
             },
             getAllSupplyLog: function (dataObj, cb) {
                 this.wsClient.callService('getAllSupplyLog', dataObj, cb);
+            },
+            getLastSupplyLog: function (dataObj, cb) {
+                this.wsClient.callService('getLastSupplyLog', dataObj, cb);
             },
             //#endregion
 

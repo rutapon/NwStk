@@ -86,3 +86,20 @@
     color: #fff;
     text-shadow: 0 1px 0 #059;
 }
+
+
+td select {
+    border: none;
+}
+
+
+select.not_chosen {
+    color: #808080;
+}
+
+select option {
+    color: #080808;
+}
+    select option:first-child {
+        color: #808080;
+    }
