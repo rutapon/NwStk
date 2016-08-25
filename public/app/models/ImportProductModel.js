@@ -14,13 +14,12 @@ var app = app || { models: {}, collections: {}, views: {} };
             code: '',
             //name: '', unit_type: '', unit_size: '', description: '',
             //product_id: '',
-            invoid_id: '',
             supplier_code: '',
-            unit: 1,
             unit_price: '',
+            unit: 1,
+            invoid_id: '',
             in_date: '',
             sum: 0,
-            create_by: 'admin',
             stock_name: ''
         },
 

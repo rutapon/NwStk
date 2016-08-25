@@ -73,6 +73,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             //    //viewSelectProduct.clear();
             //});
 
+            var supplierCollection = new app.collections.SupplierCollection();
+            supplierCollection.getAll();
+
             var importDataTable = new Handsontable(importProductTable, {
                 data: importProductCollection,
                 //stretchH: 'all',
@@ -87,74 +90,77 @@ var app = app || { models: {}, collections: {}, views: {} };
                  //{ readOnly: true, data: attr('unit_size') },
                  {
                      data: attr('supplier_code'),
-                     type: 'autocomplete',
-                     editor: false,
+                     //type: 'autocomplete',
+                     type: 'dropdown',
+                     strict: true,
+                     allowInvalid: false,
                      source: function (query, process) {
+                         process(supplierCollection.pluck("code"));
 
-                         var ImportProductModel = importProductCollection.at(this.row);
+                         //console.log(this.row);
+                         //var ImportProductModel = importProductCollection.at(this.row);
 
-                         console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
+                         //console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
 
-                         var code = ImportProductModel.get('code');
-                         supplyLogCollection.find(code, stockModel.get('stock_selected'), function () {
+                         //var code = ImportProductModel.get('code');
 
-                         //    process(_.uniq(supplyLogCollection.pluck('supplier_name')).reverse().splice(0,6));
+                         //supplyLogCollection.find(code, stockModel.get('stock_selected'), function () {
+
+                         //    //    process(_.uniq(supplyLogCollection.pluck('supplier_name')).reverse().splice(0,6));
+                         //    //});
+
+                         //    //supplyLogCollection.getAll(stockModel.get('stock_selected'), function () {
+                         //    //var supplier_nameArry = _.pluck(_.filter(supplyLogCollection.toArray(), function (model) {
+                         //    //    return model.get('product_id') == product_id;
+                         //    //}), 'supplier_name');
+
+                         //    var ModelObjArray = _.map(supplyLogCollection.toArray().reverse(), function (model) {
+                         //        return model.toJSON();
+                         //    });
+
+                         //    var otherSupplier_nameArry = _.chain(ModelObjArray).
+                         //        filter(function myfunction(modelObj) {
+                         //            return modelObj['code'] != code;
+                         //        }).pluck('supplier_code').unique().value();
+
+
+                         //    var supplier_nameArry = _.chain(ModelObjArray).
+                         //        filter(function myfunction(modelObj) {
+                         //            return modelObj['code'] == code;
+                         //        }).pluck('supplier_code').unique()
+                         //        .union(otherSupplier_nameArry)
+                         //        .first(5)
+                         //        .value();
+
+                         //    process(supplier_nameArry);
                          //});
-
-                         //supplyLogCollection.getAll(stockModel.get('stock_selected'), function () {
-                             //var supplier_nameArry = _.pluck(_.filter(supplyLogCollection.toArray(), function (model) {
-                             //    return model.get('product_id') == product_id;
-                             //}), 'supplier_name');
-
-                             var ModelObjArray = _.map(supplyLogCollection.toArray().reverse(), function (model) {
-                                 return model.toJSON();
-                             });
-
-                             var otherSupplier_nameArry = _.chain(ModelObjArray).
-                                 filter(function myfunction(modelObj) {
-                                     return modelObj['code'] != code;
-                                 }).pluck('supplier_code').unique().value();
-
-
-                             var supplier_nameArry = _.chain(ModelObjArray).
-                                 filter(function myfunction(modelObj) {
-                                     return modelObj['code'] == code;
-                                 }).pluck('supplier_code').unique()
-                                 .union(otherSupplier_nameArry)
-                                 .first(5)
-                                 .value();
-
-                             process(supplier_nameArry);
-                         });
 
                          //process(['ร้าน a', 'ร้าน b', 'ร้าน c']);
                      },
-
                      filter: false
-
                  },
                   {
                       data: attr('unit_price'),
-                      type: 'autocomplete',
-                      source: function (query, process) {
-                          //console.log(this.row);
+                      //type: 'autocomplete',
+                      //source: function (query, process) {
+                      //    //console.log(this.row);
 
-                          var ImportProductModel = importProductCollection.at(this.row);
+                      //    var ImportProductModel = importProductCollection.at(this.row);
 
-                          console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
+                      //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
 
-                          var code = ImportProductModel.get('code')
-                          supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
+                      //    var code = ImportProductModel.get('code')
+                      //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
 
-                              process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
-                          });
+                      //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
+                      //    });
 
-                          //process([10, 50, 100]);
-                      },
-                      filter: false
+                      //    //process([10, 50, 100]);
+                      //},
+                      //filter: false
                   },
                   {
-                      data: attr('receiveId'),
+                      data: attr('invoid_id'),
                   },
 
                   {
@@ -181,7 +187,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     'ชื่อ',
                     'หน่วย',
                     //'ขนาด',
-                    'ชื่อผู้ขาย',
+                    'ผู้ขาย',
                     'ราคา/หน่วย',
                     'เลขที่ใบส่งของ',
                     'วันที่เอกสาร',
@@ -196,22 +202,35 @@ var app = app || { models: {}, collections: {}, views: {} };
             });
 
 
-            importProductCollection.on('change:supplier_name', function (model) {
+            importProductCollection.on('change:supplier_code', function (model) {
                 //console.log('afterChange', JSON.stringify(e));
-                supplyLogCollection.findeSupplyLog(model.get('code'), stockModel.get('stock_selected'), function (result) {
+                //supplyLogCollection.findeSupplyLog(model.get('code'), stockModel.get('stock_selected'), function (result) {
 
-                    if (result.length) {
-                        var supplier = model.get('supplier_name');
-                        result = result.reverse();
-                        var findObj = _.find(result, function (obj) {
-                            return supplier == obj.supplier_name;
-                        });
+                //    if (result.length) {
+                //        var supplier = model.get('supplier_name');
+                //        result = result.reverse();
+                //        var findObj = _.find(result, function (obj) {
+                //            return supplier == obj.supplier_name;
+                //        });
 
-                        if (findObj) {
-                            model.set('unit_price', findObj.unit_price);
-                        }
+                //        if (findObj) {
+                //            model.set('unit_price', findObj.unit_price);
+                //        }
+                //    }
+
+                //});
+
+                //console.log(model.get('code'), model.get('supplier_code'), stockModel.get('stock_selected'));
+                var code = model.get('code');
+                var supplier_code = model.get('supplier_code');
+                var stock_selected = stockModel.get('stock_selected');
+
+                supplyLogCollection.getLastSupplyLog(code, supplier_code, stock_selected, function (supplyLogModel) {
+                    var unit_price = '';
+                    if (supplyLogModel) {
+                        unit_price =  supplyLogModel.get('unit_price');
                     }
-
+                    model.set('unit_price', unit_price);
                 });
 
             });

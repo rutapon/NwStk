@@ -178,6 +178,7 @@
             })
         },
 
+        //#region SupplyLog
         insertSupplyLog: function (data, cb) {
             console.log('insertSupplyLog', data);
             var stockName = data.stock_name;
@@ -211,8 +212,8 @@
 
             var findObj = {
                 //product_id: data.product_id,
-                code: data.code,
-                supplier_name: data.supplier_name,
+                product_code: data.product_code,
+                supplier_code: data.supplier_code,
                 //unit_price: data.unit_price
             }
 
@@ -225,7 +226,6 @@
             //        self.insertSupplyLog(data, cb);
             //    }
             //});
-
 
             stock.findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
 
@@ -243,12 +243,9 @@
 
             var dataObj = {
                 //product_id: data.product_id,
-                code: data.code,
-
-                supplier_name: data.supplier_name,
-                unit_price: data.unit_price,
-                create_by: data.create_by,
-                create_datetime: data.create_datetime
+                product_code: data.product_code,
+                supplier_code: data.supplier_code,
+                unit_price: data.unit_price
             };
 
             var stock = getStock(stockName);
@@ -275,19 +272,31 @@
         },
 
         getLastSupplyLog: function (data, cb) {
-            //console.log('getLastSupplyLog', data);
+            console.log('getLastSupplyLog', data);
             var stockName = data.stock_name;
 
             var findObj = {
                 //product_id: data.product_id,
-                code: data.code,
-                supplier_name: data.supplier_name,
+                product_code: data.product_code,
+                supplier_code: data.supplier_code,
                 //unit_price: data.unit_price
             }
             getStock(stockName).findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
                 cb(result);
             });
         },
+
+        //getLastSupplyLogByCode: function (data, cb) {
+        //    //console.log('getLastSupplyLog', data);
+        //    var stockName = data.stock_name;
+
+        //    var findObj = {
+        //        code: data.code,
+        //    }
+        //    getStock(stockName).find(supplyLogTableName, findObj, function (result) {
+        //        cb(result);
+        //    });
+        //},
 
         getAllSupplyLog: function (data, cb) {
             var stockName = data.stock_name;
@@ -300,6 +309,8 @@
             });
 
         },
+
+        //#endregion
 
         insertImportProduct: function (data, cb) {
             var stockName = data.stock_name;
