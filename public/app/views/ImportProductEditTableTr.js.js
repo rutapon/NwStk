@@ -17,7 +17,7 @@ var app = app || { models: {}, collections: {}, views: {} };
     }
 
     $(function () {
-        app.views.SupplierEditTableTr = Backbone.View.extend({
+        app.views.ImportProductEditTableTr = Backbone.View.extend({
 
             tagName: 'tr',
             className: 'EditTableTr',
@@ -82,7 +82,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                             self.render();
                         });
                     } else {
-                       
+
                     }
                 });
             },

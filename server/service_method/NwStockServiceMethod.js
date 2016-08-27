@@ -275,12 +275,14 @@
             console.log('getLastSupplyLog', data);
             var stockName = data.stock_name;
 
-            var findObj = {
-                //product_id: data.product_id,
-                product_code: data.product_code,
-                supplier_code: data.supplier_code,
-                //unit_price: data.unit_price
-            }
+            //var findObj = {
+            //    //product_id: data.product_id,
+            //    product_code: data.product_code,
+            //    supplier_code: data.supplier_code,
+            //    //unit_price: data.unit_price
+            //}
+            var findObj = _.pick(data, ['product_code', 'supplier_code']);
+
             getStock(stockName).findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
                 cb(result);
             });
@@ -326,12 +328,19 @@
             //    create_datetime: new Date().toISOString().replace('T', ' ').substr(0, 19)
             //};
             console.log('insertImportProduct', data);
-            //'product_id'
-            var dataObj = _.pick(data, ['code',
-                'invoid_id', 'supplier_name', 'unit_price', 'unit', 'in_date',
-                'create_by']);
-            dataObj.create_datetime = new Date();//.toISOString().replace('T', ' ').substr(0, 19);
 
+            var dataObj = _.pick(data, [
+                'code',
+                'supplier_code',
+                'unit_price',
+                'unit',
+                'in_date',
+                'invoid_id',
+                'sum',
+                'stock_name'
+            ]);
+
+            dataObj.createingLog = { creator: 'admin', 'createDate': new Date() };
 
             var stock = getStock(stockName);
             stock.insert(importProductTableName, dataObj, function (result) {
@@ -354,7 +363,16 @@
                 if (cb) { cb(result) }
             });
         },
+        getAllImportProduct: function (data, cb) {
+            var stockName = data.stock_name;
+            //console.log('getAllSupplier', data);
+            var stock = getStock(stockName);
+            stock.getAll(importProductTableName, function (result) {
 
+                if (cb) { cb(result) }
+            });
+
+        },
         //#region Supplier
         getAllSupplier: function (data, cb) {
 

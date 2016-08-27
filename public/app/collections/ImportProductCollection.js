@@ -24,6 +24,14 @@ var app = app || { models: {}, collections: {}, views: {} };
             }, function (err) {
                 if (cb) cb(err, numSave);
             });
+        },
+        getAll: function () {
+           
+            var self = this;
+            app.serviceMethod.getAllImportProduct(function (result) {
+                self.reset(result);
+                if (cb) cb(result);
+            });
         }
     });
 

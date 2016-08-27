@@ -47,8 +47,6 @@
         var editSupplierCollection = new app.collections.SupplierCollection();
         var supplierEditView = new app.views.SupplierEdit({ collection: editSupplierCollection });
 
-
-
         var curTab = 'createNav';
         var updateView = function () {
 
@@ -141,23 +139,12 @@
     };
 
     app.initImportProduct = function () {
-
-        var curTab = 'importProduct';
-        $(".ui-page-active [data-role='header'] li a").click(function () {
-            //curTab = $(this).text();//.text();
-            curTab = $(this).jqmData('value');
-
-            $('.importProductNav').hide();
-            $('.' + curTab).show();
-
-            //updateProductView();
-        });
-
+ 
         stockModel.set('stock', []);
         stockModel.update();
 
         var selectProductCollection = new app.collections.products();
-        var importProductCollection = new app.collections.ImportProductCollection();
+        var importProductCollection = new app.collections.importProductCollection();
 
         var addImportProductModel = new app.models.AddImportProductModel({
             stockModel: stockModel,
@@ -165,7 +152,7 @@
             importProductCollection: importProductCollection
         });
 
-        var addImportProduct = new app.views.AddImportProduct({
+        var addImportProduct = new app.views.ImportProductCreate({
             el: '.importProduct',
             model: addImportProductModel
         });
@@ -174,6 +161,10 @@
             el: '#popupSelectProduct',
             model: addImportProductModel
         });
+
+        var importProductCollection = new app.collections.importProductCollection();
+        var importProductEdit = new app.views.ImportProductEdit({ collection: editSupplierCollection });
+
 
         //var viewImportProduct = new app.views.ImportProduct({ el: '#popupImportProduct', model: { stockModel: stockModel } });
 
@@ -187,6 +178,22 @@
         //    //}
         //});
 
+        var updateView = function () {
+            if (curTab == 'editNav') {
+                importProductEdit.search();
+            }
+        };
+
+        var curTab = 'importProduct';
+        $(".ui-page-active [data-role='header'] li a").click(function () {
+            //curTab = $(this).text();//.text();
+            curTab = $(this).jqmData('value');
+
+            $('.importProductNav').hide();
+            $('.' + curTab).show();
+            updateView();
+            //updateProductView();
+        });
     };
 
 })();

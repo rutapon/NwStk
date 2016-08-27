@@ -17,7 +17,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         $("#sure").popup('open');
     }
 
-    app.views.AddImportProduct = Backbone.View.extend({
+    app.views.ImportProductCreate = Backbone.View.extend({
 
         // Instead of generating a new element, bind to the existing skeleton of
         // the App already present in the HTML.
@@ -33,8 +33,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             //'click .selectClick': 'selectClick',
             //'click .cancelClick': 'cancelClick',
 
-            'click .ClearNewProductRow': 'clearNewProductRowClick',
-            'click .SaveImportProduct': 'saveImportProductClick'
+            'click .ClearNewProductRow': 'clearNewProductRow',
+            'click .SaveImportProduct': 'saveImportProduct'
         },
         initialize: function () {
 
@@ -228,7 +228,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 supplyLogCollection.getLastSupplyLog(code, supplier_code, stock_selected, function (supplyLogModel) {
                     var unit_price = '';
                     if (supplyLogModel) {
-                        unit_price =  supplyLogModel.get('unit_price');
+                        unit_price = supplyLogModel.get('unit_price');
                     }
                     model.set('unit_price', unit_price);
                 });
@@ -294,34 +294,27 @@ var app = app || { models: {}, collections: {}, views: {} };
         //        this.collection.reset();
         //    }
         //},
-        clearNewProductRowClick: function () {
+        clearNewProductRow: function () {
             this.importProductCollection.reset();
         },
-        saveImportProductClick: function () {
+        saveImportProduct: function () {
             var self = this;
-            var stockModel = this.model.get('stockModel');
-            var numSave = 0;
-            areYouSure("Are you sure?", "Save data to server?", "Ok", function () {
-                //console.log(self.importProductCollection.toArray());
-                var numSave = 0;
-                async.eachSeries(self.importProductCollection.toArray(), function (model, callback) {
-                    model.save(stockModel.get('stock_selected'), function () {
-                        numSave++;
-                        self.importProductCollection.remove(model);
-                        callback();
-                    });
-                },
-                function (err) {
 
+            areYouSure("Are you sure?", "Save data to server?", "Ok", function () {
+                var stockModel = self.model.get('stockModel');
+                var stock_selected = stockModel.get('stock_selected');
+                //console.log(self.importProductCollection.toArray());
+                self.importProductCollection.saveToServer(stock_selected, function (err, numSave) {
                     if (err) {
                         //alert(err);
                     } else {
-                        self.ClearNewProductRow();
+                        self.clearNewProductRow();
                     }
 
-                    alert('Data has save to stock "' + stockSelectedName + '" ' + numSave + ' row');
+                    alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
                 });
 
+       
                 //self.importProductCollection.forEach(function (model) {
                 //    //console.log(model.toJSON());
 

@@ -55,7 +55,7 @@
                 this.wsClient.callService('insertProduct', insertObj, cb);
             },
             updateProduct: function (updateObj, cb) {
-             
+
                 this.wsClient.callService('updateProduct', updateObj, cb);
             },
             deleteProduct: function (stockName, code, cb) {
@@ -90,6 +90,9 @@
             },
             getImportProductInPeriod: function (dataObj, cb) {
                 this.wsClient.callService('getImportProductInPeriod', dataObj, cb);
+            },
+            getAllImportProduct: function (dataObj, cb) {
+                this.wsClient.callService('getAllImportProduct', dataObj, cb);
             },
             //#endregion
 

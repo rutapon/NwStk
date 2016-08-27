@@ -30,15 +30,15 @@ var app = app || { models: {}, collections: {}, views: {} };
             //alert('initialize');
             //this.set('in_date', new Date().toISOString().slice(0, 10));
             //this.attributes.product_id = this.attributes.id;
-            this.attributes.code = this.attributes.code;
+            //this.attributes.code = this.attributes.code;
 
-            delete this.attributes.id;
+            delete this.attributes._id;
 
             this.attributes.supplier_code = this.attributes.supplier_default;
             this.attributes.unit_price = this.attributes.unit_price_default;
 
-            delete this.attributes.supplier_default;
-            delete this.attributes.unit_price_default;
+            //delete this.attributes.supplier_default;
+            //delete this.attributes.unit_price_default;
 
             //console.log(this.attributes);
             this.attributes.in_date = new Date().toISOString().slice(0, 10);
@@ -70,18 +70,23 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             app.serviceMethod.insertImportProduct(dataObj, function (result) {
 
-                var supplyLogObj = {
-                    stockName: stockName,
-                    //product_id: self.attributes.product_id,
-                    code: self.attributes.code,
-                    supplier_name: self.attributes.supplier_name,
-                    unit_price: self.attributes.unit_price,
-                    create_by: 'admin'
+                if (self.supplier_default != self.attributes.supplier_code ||
+                    self.unit_price_default != self.attributes.unit_price) {
+
+                    var productModel = self.getProductModel();
+                    productModel.updateOnly();
                 }
 
-                app.serviceMethod.checkForInsertSupplyLog(supplyLogObj, function (result) {
-                    if (cb) cb(result);
-                })
+                var dataObj = {
+                    product_code: self.attributes.code,
+                    supplier_code: self.attributes.supplier_code,
+                    unit_price: self.attributes.unit_price,
+                    stock_name: stockName
+                }
+                var supplyLogModel = new app.models.SupplyLogModel(dataObj);
+                supplyLogModel.checkAndUpdate(function () {
+                    if (cb) cb();
+                });
             });
         },
         update: function (cb) {
@@ -100,7 +105,21 @@ var app = app || { models: {}, collections: {}, views: {} };
         isEmty: function () {
             var attrs = this.attributes;
             return !(attrs.code || attrs.name || attrs.unit_type || attrs.description);
+        },
+        getProductModel: function () {
+            var obj = {
+                code: this.attributes.code,
+                name: this.attributes.name,
+                unit_type: this.attributes.unit_type,
+                description: this.attributes.description,
+                stock_name: this.attributes.stock_name,
+                supplier_default: this.attributes.supplier_code,
+                unit_price_default: this.attributes.unit_price
+            };
+            //console.log('getProductModel', this.attributes, obj);
+            return new app.models.product(obj);
         }
+
         //,
         //removeUi: function () {
         //    alert('trigger remove');

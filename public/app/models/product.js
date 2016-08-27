@@ -46,7 +46,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                         product_code: self.attributes.code,
                         supplier_code: self.attributes.supplier_default,
                         unit_price: self.attributes.unit_price_default,
-                        stock_name:stockName
+                        stock_name: stockName
                     }
 
                     var supplyLogModel = new app.models.SupplyLogModel(dataObj);
@@ -77,15 +77,22 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                     var supplyLogModel = new app.models.SupplyLogModel(dataObj);
                     supplyLogModel.checkAndUpdate(function () {
-                        if (cb) cb();
+                        if (cb) cb(result);
                     });
                 } else {
-                    if (cb) cb();
+                    if (cb) cb(result);
                 }
 
                 //app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
-                if (cb) cb(result);
+                //if (cb) cb(result);
                 //})
+            });
+        },
+        updateOnly: function (cb) {
+            var self = this;
+
+            app.serviceMethod.updateProduct(this.attributes, function (result) {
+                if (cb) cb(result);
             });
         },
         destroy: function (cb) {
