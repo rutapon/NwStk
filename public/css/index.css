@@ -100,6 +100,15 @@ select.not_chosen {
 select option {
     color: #080808;
 }
+
     select option:first-child {
         color: #808080;
     }
+
+
+.backgrid .select-row-cell input,
+.backgrid .select-all-header-cell input {
+    transform: scale(1.8);
+    /*width: 30px;
+	height: 30px;*/
+}

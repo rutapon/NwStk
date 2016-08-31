@@ -27,7 +27,8 @@ var app = app || { models: {}, collections: {}, views: {} };
                 'click .editButton': 'editClick',
                 'click .cancelEditButton': 'cancelEditClick',
                 'click .saveButton': 'saveClick',
-                'click .deleteButton': 'deleteEditClick'
+                'click .deleteButton': 'deleteEditClick',
+                'change select': 'supplierChange'
             },
 
             initialize: function () {
@@ -36,14 +37,15 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //this.model.on('removeUi', this.remove, this);
                 this.model.on('remove', this.remove, this);
 
-                this.ShowStockTableTrTemplate = _.template($('#ShowStockTable-tr-template').html());
-                this.EditStockTableTrTemplate = _.template($('#EditStockTable-tr-template').html());
+                this.ShowStockTableTrTemplate = _.template($('#ShowTable-tr-template').html());
+                this.EditStockTableTrTemplate = _.template($('#EditTable-tr-template').html());
 
             },
 
             // Re-rendering the App just means refreshing the statistics -- the rest
             // of the app doesn't change.
             render: function () {
+                //console.log(this.model);
                 this.$el.html(this.ShowStockTableTrTemplate(this.model.toJSON()));
                 this.$el.enhanceWithin();
                 //this.$el.find('input').button();
@@ -63,8 +65,17 @@ var app = app || { models: {}, collections: {}, views: {} };
             editClick: function () {
                 this.editingModel = this.model.clone();
 
-                this.$el.html(this.EditStockTableTrTemplate(this.model.toJSON()));
-                this.$el.enhanceWithin();
+                var tempObj = { p: this.model.toJSON(), s: this.collection.pluck("code") };
+
+                this.$el.html(this.EditStockTableTrTemplate(tempObj));
+
+                this.$el.find('input.input').textinput();
+                this.$el.find('input.button').button();
+
+                if (this.model.get('supplier_code')) {
+                    this.$el.find('select').removeClass('not_chosen');
+                }
+                //this.$el.enhanceWithin();
             },
             cancelEditClick: function () {
                 this.render();
@@ -105,7 +116,19 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var value = targetElem.val();
 
                 this.editingModel.set(dataType, value);
+            },
+            supplierChange: function (ev) {
+            var $el = $(ev.target);
+            var value = $el.val();
+
+            if (value) {
+                $el.removeClass('not_chosen');
+            } else {
+                $el.addClass('not_chosen');
             }
+
+            this.editingModel.set('supplier_code', value);
+        }
         });
     });
 })(jQuery);

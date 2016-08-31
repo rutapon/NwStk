@@ -24,6 +24,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
 
         initialize: function () {
+            //console.log('initialize ImportProductModel');
             this.on('change:unit', this.calSum, this).on('change:unit_price', this.calSum, this);
 
             //this.on('change:supplier_name', this.supplierNameChange, this);
@@ -32,21 +33,28 @@ var app = app || { models: {}, collections: {}, views: {} };
             //this.attributes.product_id = this.attributes.id;
             //this.attributes.code = this.attributes.code;
 
-            delete this.attributes._id;
+            if (this.attributes.supplier_default) {
 
-            this.attributes.supplier_code = this.attributes.supplier_default;
-            this.attributes.unit_price = this.attributes.unit_price_default;
+                delete this.attributes._id;
+
+                this.attributes.supplier_code = this.attributes.supplier_default;
+                this.attributes.unit_price = this.attributes.unit_price_default;
+            }
 
             //delete this.attributes.supplier_default;
             //delete this.attributes.unit_price_default;
 
             //console.log(this.attributes);
-            this.attributes.in_date = new Date().toISOString().slice(0, 10);
+
+            if (_.isEmpty(this.attributes.in_date)) {
+                this.attributes.in_date = new Date().toISOString().slice(0, 10);
+            }
 
             this.calSum();
         },
 
         calSum: function () {
+
             this.attributes.sum = this.attributes.unit * this.attributes.unit_price;
         },
 
@@ -55,7 +63,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         //},
 
         validate: function (attrs, options) {
-            if (!attrs.code || !attrs.name) {
+            if (!attrs.code || !attrs.stock_name || !attrs.unit_price || !attrs.unit || !attrs.sum) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name) ");
                 alert("To err is human, but so, too, is to repent for those mistakes and learn from them. ข้อมูลไม่ครบ");
@@ -91,20 +99,22 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         update: function (cb) {
 
-            //app.serviceMethod.updateProduct(this.attributes.stock_name, this.attributes, function (result) {
-            //    if (cb) cb(result);
-            //});
+            //console.log(this.changedAttributes());
+
+            app.serviceMethod.updateImportProduct(this.attributes, function (result) {
+                if (cb) cb(result);
+            });
         },
         destroy: function (cb) {
 
-            //app.serviceMethod.deleteProduct(this.attributes.stock_name, this.id, function (result) {
-            //    if (cb) cb(result);
-            //});
+            app.serviceMethod.removeImportProduct({ _id: this.attributes._id, stock_name: this.attributes.stock_name }, function (result) {
+                if (cb) cb(result);
+            });
         },
 
         isEmty: function () {
             var attrs = this.attributes;
-            return !(attrs.code || attrs.name || attrs.unit_type || attrs.description);
+            return !(attrs.code);
         },
         getProductModel: function () {
             var obj = {

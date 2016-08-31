@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-      <meta charset="TIS-620">
+    <meta charset="TIS-620">
     <!--<meta charset="Windows-874">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,8 +38,7 @@
         <!-- /header -->
         <div role="main" class="ui-content jqm-content jqm-fullwidth">
 
-
-
+ 
             <div class="importProduct importProductNav">
 
                 <div class="ui-grid-a ui-responsive">
@@ -107,7 +106,7 @@
 
                     <div class="ui-block-b">
 
-                        <select name="select-stock" class="select-time" data-mini="true" data-native-menu="true">
+                        <select name="select-time" class="select-time" data-mini="true" data-native-menu="true">
                             <option value="oneDay">ย้อนหลังหนึ่งวัน</option>
                             <option value="sevenDay">ย้อนหลังหนึ่งสัปดาห์</option>
                             <option value="oneMonth">ย้อนหลังหนึ่งเดื่อน</option>
@@ -117,7 +116,92 @@
                     </div>
 
                 </div>
-                <input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
+                <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
+                <br />
+                <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
+
+                    <col width="80px" />
+                    <col width="100px" />
+                    <col width="110px" />
+                    <col />
+                    <col width="120px" />
+                    <col width="80px" />
+                    <col width="110px" />
+
+                    <tbody>
+                        <tr>
+                            <th>Code</th>
+                            <!--<th>ชื่อ</th>
+                            <th>หน่วย</th>-->
+                            <th>ผู้ขาย</th>
+                            <th>ราคา/หน่วย</th>
+                            <th>เลขที่ใบส่งของ</th>
+                            <th>วันที่เอกสาร</th>
+                            <th>รับ</th>
+                            <th>จำนวนเงิน</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <!-- <td style="padding: 9px 4px;"><%- unit_type %></td>
+                                      <td style="padding: 9px 4px;"><%- name %></td>            
+                             -->
+                        <script type="text/template" id="ShowTable-tr-template">
+
+                            <td style="padding: 9px 4px;"><%- code %></td>
+
+
+                            <td style="padding: 9px 4px;"><%- supplier_code %></td>
+                            <td style="padding: 9px 4px;"><%- unit_price %></td>
+                            <td style="padding: 9px 4px;"><%- invoid_id %></td>
+                            <td style="padding: 9px 4px;"><%- in_date %></td>
+                            <td style="padding: 9px 4px;"><%- unit %></td>
+                            <td style="padding: 9px 4px;"><%- sum %></td>
+
+                            <td>
+                                <input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
+                            <td>
+                                <input type="button" class="deleteButton" data-mini="true" value="ลบ">
+                            </td>
+                        </script>
+                        <script type="text/template" id="EditTable-tr-template">
+
+
+                            <td style="padding: 9px 4px;"><%- p.code %></td>
+
+
+                            <td>
+                                <select name="select-supplier" class="not_chosen" style="height: 100%; width: 100%; text-align: center;">
+
+                                    <option value="">undefined</option>
+                                    <% _(s).each(function(op) { 
+                                      if(op==p.supplier_code){  %>
+                                        <option value="<%= op %>" selected><%= op %></option>
+                                    <%}else{%>
+                                           <option value="<%= op %>"><%= op %></option>
+                                    <%}}); %>
+                                </select>
+                            </td>
+
+                            <td>
+                                <input class="input" placeholder="ราคา" data-type="unit_price" value="<%- p.unit_price %>" /></td>
+                            <td>
+                                <input class="input" placeholder="เลขที่ใบส่งของ" data-type="invoid_id" value="<%- p.invoid_id %>" /></td>
+                            <td>
+                                <input class="input" placeholder="วันที่เอกสาร" data-type="in_date" value="<%- p.in_date %>" /></td>
+                            <td>
+                                <input class="input" placeholder="รับ" data-type="unit" value="<%- p.unit %>" /></td>
+                            <td>
+                                <input class="input" placeholder="จำนวนเงิน" data-type="sum" value="<%- p.sum %>" /></td>
+                            <td>
+                                <input type="button" class="cancelEditButton button" data-mini="true" value="ยกเลิก"></td>
+                            <td>
+                                <input type="button" class="saveButton button" data-mini="true" value="บันทึก">
+                            </td>
+
+                        </script>
+
+                    </tbody>
+                </table>
             </div>
 
         </div>
@@ -127,6 +211,9 @@
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+                    <li>
+                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                </li>
                 <li>
                     <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
                 </li>
@@ -134,7 +221,7 @@
                     <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
                 </li>
                 <li>
-                    <a href="ExportProducts.html" data-transition="flow">นำสินค้าออก</a>
+                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
                 </li>
                 <li>
                     <a href="Report.html" data-transition="flow">รายงาน</a>

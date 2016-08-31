@@ -10,11 +10,3 @@
 .backgrid .select-all-header-cell {
   text-align: center;
 }
-
-.backgrid .select-row-cell input,
-.backgrid .select-all-header-cell input{
-    transform: scale(1.5);
-  
-	/*width: 30px;
-	height: 30px;*/
-}

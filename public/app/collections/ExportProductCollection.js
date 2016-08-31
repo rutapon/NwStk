@@ -8,8 +8,8 @@ var app = app || { models: {}, collections: {}, views: {} };
 (function ($) {
     'use strict';
 
-    app.collections.ImportProductCollection = Backbone.Collection.extend({
-        model: app.models.ImportProductModel,
+    app.collections.ExportProductCollection = Backbone.Collection.extend({
+        model: app.models.ExportProductModel,
 
         saveToServer: function (stock_selected, cb) {
             var self = this;
@@ -27,7 +27,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         getAll: function (stock_selected, cb) {
 
             var self = this;
-            app.serviceMethod.getAllImportProduct({ stock_name: stock_selected }, function (result) {
+            app.serviceMethod.getAllExportProduct({ stock_name: stock_selected }, function (result) {
                 //console.log(result);
                 self.reset(result);
                 if (cb) cb(result);
@@ -36,7 +36,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         getInPeriod: function (stock_selected, timeStart, timeEnd, cb) {
 
             var self = this;
-            app.serviceMethod.getImportProductInPeriod({ stock_name: stock_selected, timeStart: timeStart }, function (result) {
+            app.serviceMethod.getExportProductInPeriod({ stock_name: stock_selected, timeStart: timeStart }, function (result) {
                 //console.log(result);
                 self.reset(result);
                 if (cb) cb(result);

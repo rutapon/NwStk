@@ -39,7 +39,7 @@
     var productTableName = 'products';
     var supplyLogTableName = 'supply_log';
     var importProductTableName = 'product_in';
-
+    var exportProductTableName = 'product_out';
     var importSupplierTableName = 'supplier';
 
 
@@ -314,6 +314,7 @@
 
         //#endregion
 
+        //#region ImportProduct
         insertImportProduct: function (data, cb) {
             var stockName = data.stock_name;
 
@@ -356,10 +357,15 @@
             })
         },
         getImportProductInPeriod: function (data, cb) {
-            var timeStart = data.timeStart;
-            var timeEnd = data.timeEnd;
+           
+            var stockName = data.stock_name;
+            var timeStart = new Date(data.timeStart);
+            var timeEnd = new Date(data.timeEnd);
+
+            //console.log('getImportProductInPeriod', data);
+
             var stock = getStock(stockName);
-            stock.findInPeriod(productTableName, {}, 'create_datetime', timeStart, timeEnd, function () {
+            stock.findInPeriod(importProductTableName, {}, 'createingLog.createDate', timeStart, timeEnd, function (result) {
                 if (cb) { cb(result) }
             });
         },
@@ -372,7 +378,117 @@
                 if (cb) { cb(result) }
             });
 
+        },  
+        removeImportProduct: function (data, cb) {
+            //console.log('removeImportProduct',data);
+            var stockName = data.stock_name;
+            var _id = data._id;
+
+            var stock = getStock(stockName);
+            stock.destroy(importProductTableName, { _id: _id }, function (result) {
+                if (cb) { cb(result) }
+            })
         },
+        updateImportProduct: function (data, cb) {
+            var stockName = data.stock_name;
+            var _id = data._id;
+
+            var dataObj = _.pick(data, [
+               'supplier_code',
+               'unit_price',
+               'unit',
+               'in_date',
+               'invoid_id',
+               'sum'
+               //'stock_name'
+            ]);
+
+            console.log('updateImportProduct', dataObj);
+
+            var stock = getStock(stockName);
+            stock.update(importProductTableName, { _id: _id }, dataObj, function (result) {
+                if (cb) { cb(result) }
+            })
+        },
+        //#endregion
+
+        //#region ExportProduct
+        insertExportProduct: function (data, cb) {
+            var stockName = data.stock_name;
+
+            var dataObj = _.pick(data, [
+                'code',
+                //'supplier_code',
+                //'unit_price',
+                'unit',
+                'out_date',
+                'requisition_id',
+                //'sum',
+                'job',
+                'stock_name'
+            ]);
+
+            dataObj.createingLog = { creator: 'admin', 'createDate': new Date() };
+
+            var stock = getStock(stockName);
+            stock.insert(exportProductTableName, dataObj, function (result) {
+               if (cb) { cb(result) }
+            })
+        },
+        getAllExportProduct: function (data, cb) {
+            var stockName = data.stock_name;
+            //console.log('getAllSupplier', data);
+            var stock = getStock(stockName);
+            stock.getAll(exportProductTableName, function (result) {
+
+                if (cb) { cb(result) }
+            });
+
+        },
+        getExportProductInPeriod: function (data, cb) {
+
+            var stockName = data.stock_name;
+            var timeStart = new Date(data.timeStart);
+            var timeEnd = new Date(data.timeEnd);
+
+            //console.log('getImportProductInPeriod', data);
+
+            var stock = getStock(stockName);
+            stock.findInPeriod(exportProductTableName, {}, 'createingLog.createDate', timeStart, timeEnd, function (result) {
+                if (cb) { cb(result) }
+            });
+        },
+        removeExportProduct: function (data, cb) {
+            //console.log('removeImportProduct',data);
+            var stockName = data.stock_name;
+            var _id = data._id;
+
+            var stock = getStock(stockName);
+            stock.destroy(exportProductTableName, { _id: _id }, function (result) {
+                if (cb) { cb(result) }
+            })
+        },
+        updateExportProduct: function (data, cb) {
+            var stockName = data.stock_name;
+            var _id = data._id;
+
+            var dataObj = _.pick(data, [
+               //'supplier_code',
+               //'unit_price',
+               'unit',
+               'out_date',
+               'requisition_id',
+               'job'
+               //'stock_name'
+            ]);
+ 
+            var stock = getStock(stockName);
+            stock.update(exportProductTableName, { _id: _id }, dataObj, function (result) {
+                if (cb) { cb(result) }
+            })
+        },
+        //#endregion
+
         //#region Supplier
         getAllSupplier: function (data, cb) {
 

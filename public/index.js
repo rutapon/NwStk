@@ -157,6 +157,9 @@ $(function () {
             else if (current == 'สินค้าเข้า') {
                 app.initImportProduct();
             }
+            else if (current == 'สินค้าออก') {
+                app.initExportProduct();
+            }
 
         }
     });

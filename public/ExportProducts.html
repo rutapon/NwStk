@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <meta charset="TIS-620">
+    <meta charset="TIS-620">
     <!--<meta charset="Windows-874">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
 
-     <script>
+    <script>
 
-         window.location.href = "index.html";
+        window.location.href = "index.html";
 
     </script>
 </head>
 <body>
     <div data-role="page" data-title="สินค้าออก" class="jqm-demos ui-responsive-panel">
-        
+
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
@@ -23,24 +23,167 @@
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
             <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
 
-            <!--  <form> 
-            <label for="searchbar" class="ui-hidden-accessible">Search:</label>
-            <input type="search" name="searchbar" id="search1" value="" data-theme="d" data-mini="true" />
-        </form>-->
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-value="exportProduct" class="ui-btn-active">เพิ่มข้อมูล</a></li>
+
+                    <li><a data-value="editExportProduct">แก้ใข</a></li>
+
+                </ul>
+            </div>
 
         </div>
 
         <!-- /header -->
         <div role="main" class="ui-content jqm-content jqm-fullwidth">
+            <div class="exportProduct exportProductNav">
 
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+
+                    <div class="ui-block-b">
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
+
+                    </div>
+
+                </div>
+                <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">เลือกสินค้า</button>-->
+
+
+                <div id="popupExportProduct"></div>
+
+                <button class="ClearNewProductRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all">Clear Table</button>
+                <button class="SaveExportProduct ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">บันทึกรายการสินค้านำเข้า</button>
+
+            </div>
+
+            <div data-role="popup" id="popupSelectProduct" data-theme="a" class="ui-corner-all" data-overlay-theme="b">
+                <form>
+                    <div style="padding: 10px 20px; width: auto">
+
+                        <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+
+                        <h3>Select Product</h3>
+                        <input type="search" data-theme="a" name="searchbar" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
+                        <!-- <label for="un" class="ui-hidden-accessible">Username:</label>
+                            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+                            <label for="pw" class="ui-hidden-accessible">Password:</label>
+                            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">-->
+                        <!--<button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>-->
+                        <div class="select-result" style="height: 350px; width: 600px; overflow: auto;"></div>
+
+                        <div class="ui-grid-a ui-responsive">
+                            <div class="ui-block-a">
+                                <a href="#" class="cancelClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back">Cancel</a>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a href="#" class="selectClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back" data-transition="flow">Select</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="editExportProduct exportProductNav" style="display: none">
+
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <div>
+                            <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="ui-block-b">
+
+                        <select name="select-time" class="select-time" data-mini="true" data-native-menu="true">
+                            <option value="oneDay">ย้อนหลังหนึ่งวัน</option>
+                            <option value="sevenDay">ย้อนหลังหนึ่งสัปดาห์</option>
+                            <option value="oneMonth">ย้อนหลังหนึ่งเดื่อน</option>
+                            <option value="oneYear">ย้อนหลังหนึ่งปี</option>
+                            <!--<option value="">กำหนดเอง</option>-->
+                        </select>
+                    </div>
+
+                </div>
+                <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
+                <br />
+                <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
+
+                    <col width="80px" />
+                    <col />
+                    <col width="120px" />
+
+                    <col width="80px" />
+
+
+                    <tbody>
+                        <tr>
+                            <th>Code</th>
+                            <th>เลขที่ใบเบิกชอง</th>
+                            <th>วันที่เอกสาร</th>
+                            <th>จ่าย</th>
+                            <th>job</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <!-- <td style="padding: 9px 4px;"><%- unit_type %></td>
+                                      <td style="padding: 9px 4px;"><%- name %></td>            
+                             -->
+                        <script type="text/template" id="ShowTable-tr-template">
+
+                            <td style="padding: 9px 4px;"><%- code %></td>
+                            <td style="padding: 9px 4px;"><%- requisition_id %></td>
+                            <td style="padding: 9px 4px;"><%- out_date %></td>
+                            <td style="padding: 9px 4px;"><%- unit %></td>
+                            <td style="padding: 9px 4px;"><%- job %></td>
+
+                            <td>
+                                <input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
+                            <td>
+                                <input type="button" class="deleteButton" data-mini="true" value="ลบ">
+                            </td>
+                        </script>
+                        <script type="text/template" id="EditTable-tr-template">
+
+                            <td style="padding: 9px 4px;"><%- code %></td>
+
+                            <td>
+                                <input class="input" placeholder="เลขที่ใบเบิกชอง" data-type="requisition_id" value="<%- requisition_id %>" /></td>
+                            <td>
+                                <input class="input" placeholder="วันที่เอกสาร" data-type="out_date" value="<%- out_date %>" /></td>
+                            <td>
+                                <input class="input" placeholder="จ่าย" data-type="unit" value="<%- unit %>" /></td>
+                            <td>
+                                <input class="input" placeholder="job" data-type="job" value="<%- job %>" /></td>
+                            <td>
+                                <input type="button" class="cancelEditButton button" data-mini="true" value="ยกเลิก"></td>
+                            <td>
+                                <input type="button" class="saveButton button" data-mini="true" value="บันทึก">
+                            </td>
+
+                        </script>
+
+                    </tbody>
+                </table>
+            </div>
 
         </div>
         <!-- /content -->
 
         <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
-              <h2><a  href="index.html" data-transition="flow">HOME</a></h2>
+            <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+                <li>
+                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                </li>
                 <li>
                     <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
                 </li>
@@ -55,12 +198,13 @@
                 </li>
             </ul>
 
+
         </div>
         <!-- /panel -->
 
         <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
 
-           <!-- <form class="userform">
+            <!-- <form class="userform">
 
                 <h2>Login</h2>
 
@@ -78,6 +222,15 @@
 
         </div>
         <!-- /panel -->
+
+        <div data-role="popup" id="sure" data-title="Are you sure?">
+            <div data-role="content">
+                <h3 class="sure-1">???</h3>
+                <p class="sure-2">???</p>
+                <a href="#" class="sure-do" data-role="button" data-theme="b" data-rel="back">Yes</a>
+                <a href="#" data-role="button" data-theme="c" data-rel="back">Cancel</a>
+            </div>
+        </div>
 
     </div>
     <!-- /page -->

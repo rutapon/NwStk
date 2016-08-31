@@ -94,8 +94,33 @@
             getAllImportProduct: function (dataObj, cb) {
                 this.wsClient.callService('getAllImportProduct', dataObj, cb);
             },
+            removeImportProduct: function (dataObj, cb) {
+                this.wsClient.callService('removeImportProduct', dataObj, cb);
+            },
+            updateImportProduct: function (dataObj, cb) {
+                this.wsClient.callService('updateImportProduct', dataObj, cb);
+            },
+ 
             //#endregion
 
+            //#region ExportProduct
+            insertExportProduct: function (dataObj, cb) {
+                this.wsClient.callService('insertExportProduct', dataObj, cb);
+            },
+            getAllExportProduct: function (dataObj, cb) {
+                this.wsClient.callService('getAllExportProduct', dataObj, cb);
+            },
+            getExportProductInPeriod: function (dataObj, cb) {
+                this.wsClient.callService('getExportProductInPeriod', dataObj, cb);
+            },
+            removeExportProduct: function (dataObj, cb) {
+                this.wsClient.callService('removeExportProduct', dataObj, cb);
+            },
+            updateExportProduct: function (dataObj, cb) {
+                this.wsClient.callService('updateExportProduct', dataObj, cb);
+            },
+           
+            //#endregion
             //#region Supplier
             getAllSupplier: function (cb) {
                 this.wsClient.callService('getAllSupplier', {}, cb);

@@ -25,7 +25,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         }
 
 
-        app.views.ImportProductEdit = Backbone.View.extend({
+        app.views.ExportProductEdit = Backbone.View.extend({
 
             // Instead of generating a new element, bind to the existing skeleton of
             // the App already present in the HTML.
@@ -162,7 +162,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             addOne: function (model) {
                 //console.log('ImportProductEdit:addOne');
 
-                var view = new app.views.ImportProductEditTableTr({ model: model, collection: this.supplierCollection });
+                var view = new app.views.ExportProductEditTableTr({ model: model, collection: this.supplierCollection });
                 var El = view.render().el;
                 this.$el.find('tbody').append(El);
             },
