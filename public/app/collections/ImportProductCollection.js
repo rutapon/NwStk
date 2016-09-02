@@ -36,7 +36,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         getInPeriod: function (stock_selected, timeStart, timeEnd, cb) {
 
             var self = this;
-            app.serviceMethod.getImportProductInPeriod({ stock_name: stock_selected, timeStart: timeStart }, function (result) {
+            app.serviceMethod.getImportProductInPeriod({ stock_name: stock_selected, timeStart: timeStart, timeEnd: timeEnd }, function (result) {
                 //console.log(result);
                 self.reset(result);
                 if (cb) cb(result);

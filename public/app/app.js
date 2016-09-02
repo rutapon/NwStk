@@ -108,15 +108,15 @@
             stockModel.set('stock_selected', stockSelected);
         });
 
-
         stockModel.on('change:stock', function (model, stock) {
 
             if (stock.length > 0) {
                 $('.select-stock option').remove();
                 _.each(stock, function (item) {
                     $('.select-stock').append('<option>' + item + '</option>');
-                    $('.select-stock').trigger("change");
                 });
+
+                $('.select-stock').trigger("change");
             }
         });
 
@@ -140,8 +140,8 @@
     };
 
     app.initImportProduct = function () {
- 
-       var selectProductCollection = new app.collections.products();
+
+        var selectProductCollection = new app.collections.products();
         var importProductCollection = new app.collections.ImportProductCollection();
 
         var addImportProductModel = new app.models.AddImportProductModel({
@@ -302,5 +302,103 @@
         //    updateView();
         //});
     };
+
+    app.initReport = function () {
+        console.log('app.initReport');
+        var selectTimePeriodModel = new Backbone.Model();
+
+        var selectTimePeriodView = new app.views.SelectTimePeriod({
+            el: '.SelectTimePeriod',
+            model: selectTimePeriodModel
+        });
+
+        var reportStockCardView = new app.views.ReportStockCard({
+            el: '.ReportStockCard',
+            model: { stockModel: stockModel, selectTimePeriodModel: selectTimePeriodModel }
+        });
+
+        var reportStockLastingView = new app.views.ReportStockLasting({
+            el: '.ReportStockLasting',
+            model: { stockModel: stockModel }
+        });
+
+        var reportPurchaseSupplierView = new app.views.ReportPurchaseSupplier({
+            el: '.ReportPurchaseSupplier',
+            model: { stockModel: stockModel, selectTimePeriodModel: selectTimePeriodModel }
+        });
+
+        var reportPurchaseProductView = new app.views.ReportPurchaseProduct({
+            el: '.ReportPurchaseProduct',
+            model: { stockModel: stockModel, selectTimePeriodModel: selectTimePeriodModel }
+        });
+        
+
+
+        var viewSelectProduct = new app.views.SelectProduct2({
+            el: '#popupSelectProduct',
+            model: { stockModel: stockModel }
+        });
+
+        viewSelectProduct.on('select', function (selectedModels) {
+            if (selectedModels.length > 0) {
+                $("#popupSelectProduct").popup('close', { transition: 'flow' });
+
+                var selectProduct = selectedModels[0];
+
+                if (curTab == 'ReportStockCard') {
+                    $('.SelectTimePeriod').show();
+                    reportStockCardView.search(selectProduct);
+                    reportStockCardView.render();
+                }
+                else if (curTab == 'ReportPurchaseProduct') {
+                    $('.SelectTimePeriod').show();
+                    reportPurchaseProductView.search(selectProduct);
+                    reportPurchaseProductView.render();
+                }
+            }
+            //for (var i in selectedModels) {
+            //    var product = selectedModels[i];
+            //    //this.model.addImportProduct(product);
+            //    console.log(product.toJSON());
+            //}
+        })
+
+
+
+        var curTab = 'ReportStockCard';
+        var updateView = function () {
+
+            if (curTab == 'ReportStockCard') {
+                $('.SelectTimePeriod').show();
+                reportStockCardView.search();
+            } else if (curTab == 'ReportStockLasting') {
+                $('.SelectTimePeriod').hide();
+                reportStockLastingView.search();
+            } else if (curTab == 'ReportPurchaseSupplier') {
+                $('.SelectTimePeriod').show();
+                reportPurchaseSupplierView.search();
+            }
+            else if (curTab == 'ReportPurchaseProduct') {
+                $('.SelectTimePeriod').show();
+            }
+        };
+
+        $(".ui-page-active [data-role='header'] li a").click(function () {
+            //curTab = $(this).text();//.text();
+            curTab = $(this).jqmData('value');
+
+            $('.reportNav').hide();
+            $('.' + curTab).show();
+            updateView();
+        });
+
+        stockModel.on('change:stock_selected', function (model, stock_selected) {
+            console.log('change:stock_selected');
+            updateView();
+        });
+
+        stockModel.set('stock', []);
+        stockModel.update();
+    }
 
 })();

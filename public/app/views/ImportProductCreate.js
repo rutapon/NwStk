@@ -311,7 +311,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                         self.clearNewProductRow();
                     }
 
-                    alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
+                    setTimeout(function () {
+                        alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
+                    }, 1);
+     
                 });
 
        

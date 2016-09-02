@@ -44,6 +44,12 @@
             },
 
             //#region Products
+            getProduct: function (dataObj, cb) {
+                this.wsClient.callService('getProduct', dataObj, cb);
+            },
+            getProductByCodeArray: function (dataObj, cb) {
+                this.wsClient.callService('getProductByCodeArray', dataObj, cb);
+            },
             getAllProducts: function (stockName, cb) {
                 this.wsClient.callService('getAllProducts', { stock_name: stockName }, cb);
             },
@@ -51,15 +57,24 @@
                 this.wsClient.callService('findeProductStartWith', { stock_name: stockName, findWord: findWord, limit: limit }, cb);
             },
             insertProduct: function (insertObj, cb) {
-
                 this.wsClient.callService('insertProduct', insertObj, cb);
             },
             updateProduct: function (updateObj, cb) {
-
                 this.wsClient.callService('updateProduct', updateObj, cb);
             },
             deleteProduct: function (stockName, code, cb) {
                 this.wsClient.callService('deleteProduct', { stock_name: stockName, code: code }, cb);
+            },
+
+            addProductUnitNumber: function (updateObj, cb) {
+                this.wsClient.callService('addProductUnitNumber', updateObj, cb);
+            },
+
+            unsetProductUnitNumber: function (updateObj, cb) {
+                this.wsClient.callService('unsetProductUnitNumber', updateObj, cb);
+            },
+            updateProductUnitNumber: function (updateObj, cb) {
+                this.wsClient.callService('updateProductUnitNumber', updateObj, cb);
             },
             //#endregion
 
@@ -100,9 +115,8 @@
             updateImportProduct: function (dataObj, cb) {
                 this.wsClient.callService('updateImportProduct', dataObj, cb);
             },
- 
-            //#endregion
 
+            //#endregion
             //#region ExportProduct
             insertExportProduct: function (dataObj, cb) {
                 this.wsClient.callService('insertExportProduct', dataObj, cb);
@@ -119,8 +133,9 @@
             updateExportProduct: function (dataObj, cb) {
                 this.wsClient.callService('updateExportProduct', dataObj, cb);
             },
-           
+
             //#endregion
+
             //#region Supplier
             getAllSupplier: function (cb) {
                 this.wsClient.callService('getAllSupplier', {}, cb);

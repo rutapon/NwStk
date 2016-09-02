@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <meta charset="TIS-620">
+    <meta charset="TIS-620">
     <!--<meta charset="Windows-874">-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-   
-     <script>
 
-         window.location.href = "index.html";
+    <script>
+
+        window.location.href = "index.html";
 
     </script>
 </head>
@@ -17,7 +17,7 @@
 
     <div data-role="page" data-title="รายงาน" class="jqm-demos ui-responsive-panel">
 
-      
+
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
@@ -25,26 +25,186 @@
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
             <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
 
-            <!--  <form> 
-            <label for="searchbar" class="ui-hidden-accessible">Search:</label>
-            <input type="search" name="searchbar" id="search1" value="" data-theme="d" data-mini="true" />
-        </form>-->
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-value="ReportStockCard" class="ui-btn-active">การเคลื่อนไหวของสินค้า</a></li>
+                    <li><a data-value="ReportStockLasting">สินค้าคงเหลือ</a></li>
+                    <li><a data-value="ReportPurchaseSupplier">การซื้อ BY Supplier</a></li>
+                    <li><a data-value="ReportPurchaseProduct">การซื้อ BY Product</a></li>
+                </ul>
+            </div>
 
         </div>
 
         <!-- /header -->
         <div role="main" class="ui-content jqm-content jqm-fullwidth">
 
-         
+            <div class="SelectTimePeriod ui-grid-a ui-responsive">
+                <div class="ui-block-c">
+                    <select name="select-time" class="select-time-type" data-mini="true" data-native-menu="true">
 
+                        <option value="oneMonthPeriod">ช่วงหนี่งเดื่อน</option>
+                        <option value="oneYearPeriod">ช่วงหนี่งปี</option>
+                        <option value="last">ย้อนหลัง</option>
+                        <option value="custom">กำหนดเอง</option>
+                    </select>
+                </div>
+                <div class="ui-block-c select-time-div">
+                    <select name="select-time" class="select-time" data-mini="true" data-native-menu="true"></select>
+                </div>
+                <div class="ui-block-c">
+                    <input id="startTime" type="text" data-type="startTime">
+                </div>
+                <div class="ui-block-c">
+                    <label>&nbsp;&nbsp;to&nbsp;&nbsp; </label>
+                    &nbsp;
+                </div>
+                <div class="ui-block-c">
+                    <input id="endTime" type="text" data-type="endTime">
+                </div>
+
+            </div>
+
+            <div class="ReportStockCard reportNav">
+
+                <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
+                    </div>
+                    <div class="ui-block-c">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockCardFile">Download File Exel</button>
+                    </div>
+                </div>
+                <br />
+
+                <div class="productInfo jqm-content">
+                    <h2>code:undefined</h2>
+                </div>
+
+                <script type="text/template" id="productInfo-template">
+                    <h2>code:<%- code %> - <%- name %> - หน่วยนับ: <%- unit_type %></h2>
+                </script>
+
+                <div id="ReportStockCardTable"></div>
+
+            </div>
+
+            <div class="ReportStockLasting reportNav" style="display: none">
+
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+
+                    <div class="ui-block-b">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockLastingFile">Download File Exel</button>
+                    </div>
+                </div>
+                <br />
+
+                <div id="ReportStockLastingTable"></div>
+
+            </div>
+
+            <div class="ReportPurchaseSupplier reportNav" style="display: none">
+
+                <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+                    <div class="ui-block-b">
+                        <select name="select-supplier2" class="select-supplier" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+
+                    <div class="ui-block-c">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all downLoadReport" >Download File Exel</button>
+                    </div>
+                </div>
+                <br />
+
+                 <div class="productInfo jqm-content">
+                    <h2>supplier:undefined</h2>
+                </div>
+
+                <script type="text/template" class="supplierInfo-template">
+                    <h2><%- code %>: <%- name %> - เครดิต:  <%- credit %> วัน ### รวม:  <%- sum %> บาท</h2>
+                </script>
+
+                <div id="ReportPurchaseSupplierTable"></div>
+            </div>
+
+            <div class="ReportPurchaseProduct reportNav" style="display: none">
+
+                <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
+                        </select>
+                    </div>
+
+                    <div class="ui-block-b">
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
+
+                    </div>
+                    <div class="ui-block-c">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="Button2">Download File Exel</button>
+                    </div>
+                </div>
+                <br />
+                  <div class="productInfo jqm-content">
+                    <h2>code:undefined</h2>
+                </div>
+
+                <script type="text/template" class="productInfo-template">
+                    <h2>code:<%- code %> - <%- name %> - หน่วยนับ: <%- unit_type %>  ### รวม:  <%- sum %> บาท</h2>
+                </script>
+                 <div id="ReportPurchaseProductTable"></div>
+            </div>
+
+            <div data-role="popup" id="popupSelectProduct" data-theme="a" class="ui-corner-all" data-overlay-theme="b">
+                <form>
+                    <div style="padding: 10px 20px; width: auto">
+
+                        <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+
+                        <h3>Select Product</h3>
+                        <input type="search" data-theme="a" name="searchbar" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
+                        <!-- <label for="un" class="ui-hidden-accessible">Username:</label>
+                            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+                            <label for="pw" class="ui-hidden-accessible">Password:</label>
+                            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">-->
+                        <!--<button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>-->
+                        <div class="select-result" style="height: 350px; width: 600px; overflow: auto;"></div>
+
+                        <!--   <div class="ui-grid-a ui-responsive">
+                            <div class="ui-block-a">
+                                <a href="#" class="cancelClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back">Cancel</a>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a href="#" class="selectClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back" data-transition="flow">Select</a>
+                            </div>
+
+                        </div>-->
+
+                    </div>
+                </form>
+            </div>
 
         </div>
-        <!-- /content -->
+        <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">เลือกสินค้า</button>-->
+
 
         <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
-              <h2><a  href="index.html" data-transition="flow">HOME</a></h2>
+            <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
-              <ul data-role="listview">
+            <ul data-role="listview">
                 <li>
                     <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
                 </li>
@@ -66,53 +226,8 @@
         </div>
         <!-- /panel -->
 
-        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
-
-           <!-- <form class="userform">
-
-                <h2>Login</h2>
-
-                <label for="name">Username:</label>
-                <input type="text" name="name" id="name" value="" data-clear-btn="true" data-mini="true">
-
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
-
-                <div class="ui-grid-a">
-                    <div class="ui-block-a"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Cancel</a></div>
-                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
-                </div>
-            </form>-->
-
-        </div>
-        <!-- /panel -->
-
     </div>
-    <!-- /page -->
 
-    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="a">
-
-        <!-- /navbar -->
-    </div>
-    <!-- /footer -->
-
-    <div data-role="page" id="p1">
-
-        <div data-role="header">
-            <h1>Landing page</h1>
-        </div>
-        <!-- /header -->
-
-        <div role="main" class="ui-content jqm-content">
-
-            <p>This is just a landing page.</p>
-
-            <a href="#panel-responsive-page1" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left">Back</a>
-
-        </div>
-        <!-- /content -->
-
-    </div>
     <!-- /page -->
 
 

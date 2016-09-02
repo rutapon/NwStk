@@ -70,7 +70,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 this.supplierCollection = new app.collections.SupplierCollection();
                 this.supplierCollection.getAll();
 
-
                 this.render();
             },
 

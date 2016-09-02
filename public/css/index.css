@@ -88,20 +88,20 @@
 }
 
 
-td select {
+td select[name="select-supplier"] {
     border: none;
 }
 
 
-select.not_chosen {
+select[name="select-supplier"].not_chosen {
     color: #808080;
 }
 
-select option {
+select[name="select-supplier"] option {
     color: #080808;
 }
 
-    select option:first-child {
+    select[name="select-supplier"] option:first-child {
         color: #808080;
     }
 

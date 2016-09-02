@@ -131,7 +131,7 @@ $(function () {
 
             $('.ui-page-active').attr('inited', true);
 
-      
+
             if (current == 'ผู้ขาย') {
                 app.initSupplier();
             }
@@ -160,7 +160,9 @@ $(function () {
             else if (current == 'สินค้าออก') {
                 app.initExportProduct();
             }
-
+            else if (current == 'รายงาน') {
+                app.initReport();
+            }
         }
     });
 

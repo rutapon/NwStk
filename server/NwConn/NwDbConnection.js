@@ -142,7 +142,6 @@
                 });
 
             },
-
             findLastOne: function (tableName, findObj, sortObj, callback) {
                 var db = this._getDB(tableName);
 
@@ -165,7 +164,6 @@
                 });
 
             },
-
             findStartWith: function (tableName, findObj, limit, callback) {
 
                 var db = this._getDB(tableName);
@@ -188,7 +186,6 @@
              });
 
             },
-
             findInPeriod: function (tableName, findObj, timeField, timeStart, timeEnd, callback) {
 
                 var db = this._getDB(tableName);
@@ -203,6 +200,21 @@
 
             },
 
+            sumValue: function (tableName, findObj, sumField, callback) {
+                var db = this._getDB(tableName);
+                findObj[sumField] = { $exists: true };
+                //console.log(findObj);
+                db.find(findObj)
+                    .map(function (x) {
+                        return parseInt(x[sumField])
+                    })
+                    .reduce(function (a, b) { return a + b }, 0)
+                    .exec(function (err, res) {
+                        if (!res) res = 0;          
+                        if (callback) callback(res);
+                    });
+            },
+
             insert: function (tableName, insertObj, callback) {
                 var db = this._getDB(tableName);
 
@@ -215,6 +227,33 @@
                 var db = this._getDB(tableName);
 
                 db.update(findObj, { $set: updateObj }, { upsert: true }, function (err, numReplaced, upsert) {
+
+                    if (callback) callback(numReplaced);
+                    //console.log(numReplaced, upsert);
+                    // numReplaced = 1, upsert = { _id: 'id5', planet: 'Pluton', inhabited: false }
+                    // A new document { _id: 'id5', planet: 'Pluton', inhabited: false } has been added to the collection
+                });
+
+            },
+            updateInc: function (tableName, findObj, updateObj, callback) {
+                var db = this._getDB(tableName);
+
+                db.update(findObj, { $inc: updateObj }, { upsert: true }, function (err, numReplaced, upsert) {
+
+                    if (callback) callback(numReplaced);
+                    //console.log(numReplaced, upsert);
+                    // numReplaced = 1, upsert = { _id: 'id5', planet: 'Pluton', inhabited: false }
+                    // A new document { _id: 'id5', planet: 'Pluton', inhabited: false } has been added to the collection
+                });
+
+            },
+
+            updateUnset: function (tableName, findObj, fieldName, callback) {
+                var db = this._getDB(tableName);
+
+                var unsetObj = {}; unsetObj[fieldName] = true;
+
+                db.update(findObj, { $unset: unsetObj }, { upsert: true }, function (err, numReplaced, upsert) {
 
                     if (callback) callback(numReplaced);
                     //console.log(numReplaced, upsert);

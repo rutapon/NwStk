@@ -6,7 +6,7 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     $(function () {
-        app.views.SelectProduct = Backbone.View.extend({
+        app.views.SelectProduct2 = Backbone.View.extend({
 
             // Instead of generating a new element, bind to the existing skeleton of
             // the App already present in the HTML.
@@ -17,19 +17,17 @@ var app = app || { models: {}, collections: {}, views: {} };
                 'keyup .select_product_search': 'search',
                 'change .select_product_search': 'search',
 
-                'click .selectClick': 'selectClick',
-                'click .cancelClick': 'cancelClick'
+                //'click .selectClick': 'selectClick',
+                //'click .cancelClick': 'cancelClick'
 
             },
 
             initialize: function () {
+                var self = this;
+                this.stockSelected = this.model['stockModel'];
+                var collection = this.collection = new app.collections.products();
 
-                this.stockSelected = this.model.get('stockModel');
-                var selectProductCollection = this.selectProductCollection = this.model.get('selectProductCollection');
-                this.importProductCollection = this.model.get('importProductCollection');
-
-
-                selectProductCollection.comparator = function (model) {
+                collection.comparator = function (model) {
                     return model.get('code');
                 }
 
@@ -82,7 +80,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                         // enable the select-all extension
                         name: "",
                         cell: "select-row",
-                        headerCell: "select-all"
+                        //headerCell: "select-all"
                     }
                      //{
                      //    name: "edit",
@@ -94,9 +92,21 @@ var app = app || { models: {}, collections: {}, views: {} };
                      //    })
                      //}
                     ],
+                    SelectCell: {
+                        multiple: false
+                    },
 
-                    collection: selectProductCollection
+                    collection: collection
                 });
+
+                collection.on('backgrid:selected', function (model, checked) {
+                    //console.log('backgrid:checked', model, checked);
+                    if (checked) {
+                        self.clear();
+                        self.trigger('select', [model]);
+                    }
+
+                })
 
                 this.$el.find(".select-result").append(this.allProductTable.render().el);
             },
@@ -116,13 +126,14 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             clear: function () {
                 this.$el.find('.select_product_search').val('');
+
+                this.collection.reset(null);
                 this.allProductTable.clearSelectedModels();
-                this.selectProductCollection.reset();
             },
             resetFromService: function (result, stockSelected) {
                 //var self = this;
-                this.selectProductCollection.reset(result);
-                if (this.selectProductCollection.length == 1) {
+                this.collection.reset(result);
+                if (this.collection.length == 1) {
                     console.log('lenght');
                     var model = this.collection.at(0);
                     model.trigger("backgrid:select", model, true);
@@ -141,22 +152,17 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //}
             },
 
-
             selectClick: function () {
                 var selectedModels = this.allProductTable.getSelectedModels();
-                selectedModels = _.compact(selectedModels);
-                this.trigger('select', selectedModels);
 
-                for (var i in selectedModels) {
-                    var product = selectedModels[i];
-                    this.model.addImportProduct(product);
-                }
+                this.trigger('select', selectedModels);
 
                 //console.log(selectedModels.length);
                 //this.collection.saveToXlsx(this.model.stockModel.get('stock_selected') + "#" + this.$el.find('.show_product_search').val());
 
                 this.clear();
             },
+
             cancelClick: function () {
                 this.clear();
             },
@@ -171,15 +177,15 @@ var app = app || { models: {}, collections: {}, views: {} };
                     //console.log(searchText + ' product ' + stockSelected);
                     this.allProductTable.clearSelectedModels();
 
-                    this.selectProductCollection.search(searchText, stockSelected, function () {
-                        if (self.selectProductCollection.length == 1) {
-                            var model =   self.selectProductCollection.at(0);
+                    this.collection.search(searchText, stockSelected, function () {
+                        if (self.collection.length == 1) {
+                            var model = self.collection.at(0);
                             model.trigger("backgrid:select", model, true);
                         }
                     });
 
                 } else {
-                    this.selectProductCollection.reset();
+                    this.collection.reset();
                 }
             }
         });
