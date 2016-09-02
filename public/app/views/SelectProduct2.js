@@ -15,7 +15,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             // Delegated events for creating new items, and clearing completed ones.
             events: {
                 'keyup .select_product_search': 'search',
-                'change .select_product_search': 'search',
+                //'change .select_product_search': 'search',
 
                 //'click .selectClick': 'selectClick',
                 //'click .cancelClick': 'cancelClick'
@@ -170,7 +170,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             search: function (ev) {
                 var searchText = this.$el.find('.select_product_search').val();// $(ev.target).val();
                 searchText = searchText.trim()
-                if (searchText) {
+                if (searchText && (!this.lastText || this.lastText != searchText)) {
                     var self = this;
                     var stockSelected = this.stockSelected.get('stock_selected');
                     //var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
@@ -185,6 +185,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     });
 
                 } else {
+                    this.lastText = false;
                     this.collection.reset();
                 }
             }

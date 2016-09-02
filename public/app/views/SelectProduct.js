@@ -15,7 +15,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             // Delegated events for creating new items, and clearing completed ones.
             events: {
                 'keyup .select_product_search': 'search',
-                'change .select_product_search': 'search',
+                //'change .select_product_search': 'search',
 
                 'click .selectClick': 'selectClick',
                 'click .cancelClick': 'cancelClick'
@@ -116,7 +116,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             clear: function () {
                 this.$el.find('.select_product_search').val('');
-                this.allProductTable.clearSelectedModels();
+                //this.allProductTable.clearSelectedModels();
                 this.selectProductCollection.reset();
             },
             resetFromService: function (result, stockSelected) {
@@ -145,6 +145,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             selectClick: function () {
                 var selectedModels = this.allProductTable.getSelectedModels();
                 selectedModels = _.compact(selectedModels);
+
+                this.clear();
+
                 this.trigger('select', selectedModels);
 
                 for (var i in selectedModels) {
@@ -155,30 +158,37 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //console.log(selectedModels.length);
                 //this.collection.saveToXlsx(this.model.stockModel.get('stock_selected') + "#" + this.$el.find('.show_product_search').val());
 
-                this.clear();
             },
             cancelClick: function () {
                 this.clear();
             },
 
             search: function (ev) {
+
                 var searchText = this.$el.find('.select_product_search').val();// $(ev.target).val();
-                searchText = searchText.trim()
-                if (searchText) {
+                searchText = searchText.trim();
+
+                //console.log('search', searchText);
+
+                if (searchText && (!this.lastText || this.lastText != searchText)) {
+                    this.lastText = searchText;
                     var self = this;
                     var stockSelected = this.stockSelected.get('stock_selected');
                     //var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
                     //console.log(searchText + ' product ' + stockSelected);
-                    this.allProductTable.clearSelectedModels();
+                    //this.allProductTable.clearSelectedModels();
 
                     this.selectProductCollection.search(searchText, stockSelected, function () {
                         if (self.selectProductCollection.length == 1) {
-                            var model =   self.selectProductCollection.at(0);
+                            var model = self.selectProductCollection.at(0);
                             model.trigger("backgrid:select", model, true);
+                            self.selectClick();
+                            $("#popupSelectProduct").popup('close', { transition: 'flow' });
                         }
                     });
 
                 } else {
+                    this.lastText = false;
                     this.selectProductCollection.reset();
                 }
             }
