@@ -73,11 +73,21 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             var supplyLogCollection = new app.collections.SupplyLogCollection();
 
-
+            self.currentListType = null;
             self.$el.find(".select-stock").bind("change", function (event, ui) {
                 var stockSelected = self.$el.find('.select-stock option:selected').select().text();
                 console.log('stock_selected', stockSelected);
                 stockModel.set('stock_selected', stockSelected);
+                var listType = stockSelected.split('-')[0];
+
+                if (self.currentListType != listType) {
+                    self.currentListType = listType;
+
+                    self.initTable();
+
+                    importProductCollection.reset();
+                }
+
             });
 
             stockModel.on('change:stock', function (model, stock) {
@@ -90,6 +100,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     });
                 }
             });
+
             stockModel.on('change:stock_selected', function (model, stock_selected) {
 
                 //self.$el.find('.select-stock select').val(stock_selected).trigger("change");
@@ -131,18 +142,88 @@ var app = app || { models: {}, collections: {}, views: {} };
                 });
             }
 
-            this.initTable();
+
+            this.initImportProductCollectionEventHandle();
         },
 
+        initImportProductCollectionEventHandle: function () {
+            var self = this;
+            var importProductCollection = self.importProductCollection;
+
+            importProductCollection.on('change:sum', function (model) {
+
+                var sumAmount = 0;
+                importProductCollection.forEach(function (modelEach, index) {
+                    sumAmount += modelEach.attributes['sum'];
+                });
+
+                if (self.pettyCashModel) {
+                    self.pettyCashModel.set('sum', sumAmount)
+                }
+
+                $('#sum-amount-label').text('All Amount: ' + sumAmount + '฿');
+            });
+
+            self.invoid_id_last = null;
+
+            importProductCollection.on('change:invoid_id', function (model) {
+                self.invoid_id_last = model.get('invoid_id');
+                //console.log('change:invoid_id',invoid_id);
+                importProductCollection.forEach(function (modelEach, index) {
+                    if (!modelEach.attributes['invoid_id'] && model.cid != modelEach.cid) {
+                        modelEach.attributes['invoid_id'] = self.invoid_id_last;
+                    }
+                });
+
+            });
+            importProductCollection.on('change:in_date', function (model) {
+                var in_date = model.get('in_date');
+                //console.log('change:invoid_id',invoid_id);
+                importProductCollection.forEach(function (modelEach, index) {
+                    if (model.cid != modelEach.cid) {
+                        modelEach.attributes['in_date'] = in_date;
+                    }
+                });
+
+            });
+
+            importProductCollection.on('all', function () {
+                self.importDataTable.render();
+            }).on('add', function (model) {
+
+                var supplierSelected = self.$el.find('select.select-supplier-in').val(); // self.supplierSelected;
+
+                //var foundSupplier = false;
+                for (var i = 1; i <= 3; i++) {
+                    if (model.get('supplier' + i) == supplierSelected) {
+                        model.set('unit_price', model.get('unit_price' + i));
+                        break;
+                    }
+                }
+                //if (!foundSupplier) {
+                //    model.set('unit_price', model.get());
+                //}
+
+                if (self.invoid_id_last) {
+                    model.attributes['invoid_id'] = self.invoid_id_last;
+                }
+
+                self.importDataTable.render();
+            }).on('remove', function () {
+                self.importDataTable.render();
+            });
+
+        },
         initTable: function () {
+            console.log('initTable');
             //var importDataTable;
             var self = this;
             var importProductTable = self.importProductTable;
-
+            $(importProductTable).html('');
+            
             var importProductCollection = self.importProductCollection;
             var columns;
             var colHeaders;
-
 
             if (app.userModel.get('type') == 'staff_main') {
 
@@ -358,30 +439,30 @@ var app = app || { models: {}, collections: {}, views: {} };
                 ];
             }
 
-            importProductCollection.on('change:sum', function (model) {
-
-                var sumAmount = 0;
-                importProductCollection.forEach(function (modelEach, index) {
-                    sumAmount += modelEach.attributes['sum'];
-                });
-
-                if (self.pettyCashModel) {
-                    self.pettyCashModel.set('sum', sumAmount)
+            if (self.currentListType == 'OE') {
+                console.log('self.currentListType', self.currentListType);
+                var setCol = function (calName, calObj) {
+                    var calId = colHeaders.indexOf(calName);
+                    columns[calId] = calObj;
+                }
+                var removeCol = function (calName) {
+                    var calId = colHeaders.indexOf(calName);
+                    colHeaders.splice(calId, 1);
+                    columns.splice(calId, 1);
                 }
 
-                $('#sum-amount-label').text('All Amount: ' + sumAmount + '฿');
+                setCol('Amount', {
+                    data: attr('sum'),
 
-            });
+                    type: 'numeric',
+                    format: '0,0.00',
+                    //strict: true
+                })
+                removeCol('Price/Unit');
+                removeCol('Unit-In');
+            }
 
-
-            //columns[4]= {
-            //    data: attr('unit_price'),
-            //    type: 'numeric',
-            //    format: '0,0.00',
-            //    //strict: true
-            //};
-
-            var importDataTable = new Handsontable(importProductTable, {
+            var importDataTable = this.importDataTable = new Handsontable(importProductTable, {
                 data: importProductCollection,
                 //stretchH: 'all',
                 multiSelect: false,
@@ -443,56 +524,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             //    //    model.set('unit_price', unit_price);
             //    //});
 
-            //});
-
-            self.invoid_id_last = null;
-
-            importProductCollection.on('change:invoid_id', function (model) {
-                self.invoid_id_last = model.get('invoid_id');
-                //console.log('change:invoid_id',invoid_id);
-                importProductCollection.forEach(function (modelEach, index) {
-                    if (!modelEach.attributes['invoid_id'] && model.cid != modelEach.cid) {
-                        modelEach.attributes['invoid_id'] = self.invoid_id_last;
-                    }
-                });
-
-            });
-            importProductCollection.on('change:in_date', function (model) {
-                var in_date = model.get('in_date');
-                //console.log('change:invoid_id',invoid_id);
-                importProductCollection.forEach(function (modelEach, index) {
-                    if (model.cid != modelEach.cid) {
-                        modelEach.attributes['in_date'] = in_date;
-                    }
-                });
-
-            });
-
-            importProductCollection.on('all', function () {
-                importDataTable.render();
-            }).on('add', function (model) {
-
-                var supplierSelected = self.$el.find('select.select-supplier-in').val(); // self.supplierSelected;
-
-                //var foundSupplier = false;
-                for (var i = 1; i <= 3; i++) {
-                    if (model.get('supplier' + i) == supplierSelected) {
-                        model.set('unit_price', model.get('unit_price' + i));
-                        break;
-                    }
-                }
-                //if (!foundSupplier) {
-                //    model.set('unit_price', model.get());
-                //}
-
-                if (self.invoid_id_last) {
-                    model.attributes['invoid_id'] = self.invoid_id_last;
-                }
-
-                importDataTable.render();
-            }).on('remove', function () {
-                importDataTable.render();
-            });
+            //});        
         },
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
