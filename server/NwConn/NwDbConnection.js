@@ -44,7 +44,7 @@
     //}
 
     //#endregion
-    var NwSqliteConnection = Class(function () {
+    var NwDbMgConnection = Class(function () {
         var schema = {}; // Non-strict always, can be left empty
 
 
@@ -156,6 +156,43 @@
                 });
 
             },
+            findLastGroup: function (tableName, findObj, groupField, sortField, callback) {
+                var db = this._getDB(tableName);
+
+                //console.log(findObj);
+                db.find(findObj)
+                    //.sort(sortObj)
+                    //.limit(1)
+                    .exec(function (err, docs) {
+                        if (docs.lenght == 0) {
+                            if (callback) callback(null);
+                        }
+                        else {
+                            var result = _.chain(docs).groupBy(function (obj) {
+                                return _.chain(obj).pick(groupField).values().value().join('#');
+                            }).value();
+
+                            result = _.map(result, function (val, key) {
+                                //console.log(val, key);
+
+                                if (val.length > 1) {
+                                    val = _.max(val, function (v) {
+                                        return sortField.split('.').reduce(function (a, b) {
+                                            return a[b];
+                                        }, v);
+                                    });
+                                    console.log(val);
+                                    return val;
+                                } else {
+                                    return val[0];
+                                }
+                            });
+
+                            if (callback) callback(result);
+                        }
+                    });
+            },
+
             findLimit: function (tableName, findObj, limit, callback) {
                 var db = this._getDB(tableName);
 
@@ -199,7 +236,48 @@
                     });
 
             },
+            findInPeriodStartWithOr: function (tableName, findObj, timeField, timeStart, timeEnd, callback) {
 
+                var db = this._getDB(tableName);
+
+                var query = { $or: [] };
+                for (var i in findObj) {
+                    var reg = new RegExp('^' + findObj[i], 'i');
+                    //query[i] = { $regex: reg };
+                    var qObj = {};
+                    qObj[i] = { $regex: reg };
+
+                    query.$or.push(qObj);
+                }
+
+                query[timeField] = { $gte: timeStart, $lte: timeEnd };
+
+                db.find(query)
+                    //.limit(limit)
+                    .exec(function (err, docs) {
+                        callback(docs);
+                    });
+
+            },
+            findInPeriodStartWith: function (tableName, findObj, timeField, timeStart, timeEnd, callback) {
+
+                var db = this._getDB(tableName);
+
+                var query = {};
+                for (var i in findObj) {
+                    var reg = new RegExp('^' + findObj[i], 'i');
+                    query[i] = { $regex: reg };
+                }
+
+                query[timeField] = { $gte: timeStart, $lte: timeEnd };
+
+                db.find(query)
+                    //.limit(limit)
+                    .exec(function (err, docs) {
+                        callback(docs);
+                    });
+
+            },
             sumValue: function (tableName, findObj, sumField, callback) {
                 var db = this._getDB(tableName);
                 findObj[sumField] = { $exists: true };
@@ -210,7 +288,7 @@
                     })
                     .reduce(function (a, b) { return a + b }, 0)
                     .exec(function (err, res) {
-                        if (!res) res = 0;          
+                        if (!res) res = 0;
                         if (callback) callback(res);
                     });
             },
@@ -235,6 +313,18 @@
                 });
 
             },
+            updateAll: function (tableName, findObj, updateObj, callback) {
+                var db = this._getDB(tableName);
+
+                db.update(findObj, { $set: updateObj }, { upsert: true, multi: true }, function (err, numReplaced, upsert) {
+
+                    if (callback) callback(numReplaced);
+                    //console.log(numReplaced, upsert);
+                    // numReplaced = 1, upsert = { _id: 'id5', planet: 'Pluton', inhabited: false }
+                    // A new document { _id: 'id5', planet: 'Pluton', inhabited: false } has been added to the collection
+                });
+
+            },
             updateInc: function (tableName, findObj, updateObj, callback) {
                 var db = this._getDB(tableName);
 
@@ -247,7 +337,6 @@
                 });
 
             },
-
             updateUnset: function (tableName, findObj, fieldName, callback) {
                 var db = this._getDB(tableName);
 
@@ -262,6 +351,7 @@
                 });
 
             },
+
             deleteAll: function (tableName, callback) {
 
                 var db = this._getDB(tableName);
@@ -283,10 +373,10 @@
     });
 
     if (typeof module !== "undefined" && module.exports) {                       // NodeJS/CommonJS
-        module.exports = NwSqliteConnection;
+        module.exports = NwDbMgConnection;
     } else {
 
-        context.NwSqliteConnection = NwSqliteConnection;
+        context.NwDbMgConnection = NwDbMgConnection;
     }
 
 })(this);

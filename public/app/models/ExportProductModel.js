@@ -16,7 +16,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             //product_id: '',
             //supplier_code: '',
             //unit_price: '',
-            unit: 1,
+            unit: null,
             requisition_id: '',
             out_date: '',
             //sum: 0,
@@ -43,7 +43,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 this.attributes.out_date = new Date().toISOString().slice(0, 10);
             }
 
-
         },
 
         //supplierNameChange:function () {
@@ -51,10 +50,11 @@ var app = app || { models: {}, collections: {}, views: {} };
         //},
 
         validate: function (attrs, options) {
-            if (!attrs.code || !attrs.stock_name || !attrs.unit) {
+            if (!attrs.code || !attrs.stock_name || !attrs.requisition_id || !attrs.unit) {
 
-                //alert("validate false -> (!attrs.code || !attrs.name) ");
-                alert("To err is human, but so, too, is to repent for those mistakes and learn from them. ข้อมูลไม่ครบ");
+                //alert("validate false -> (!attrs.code || !attrs.name || !attrs.unit) ");
+                alert("ข้อมูลไม่ครบ");
+                //alert("To err is human, but so, too, is to repent for those mistakes and learn from them. ข้อมูลไม่ครบ");
 
                 return "false";
             }
@@ -62,28 +62,34 @@ var app = app || { models: {}, collections: {}, views: {} };
         save: function (stockName, cb) {
 
             var self = this;
-            var dataObj = _.extend(this.attributes, { stockName: stockName });
+            var dataObj = this.attributes;//_.extend(this.attributes, { stockName: stockName });
 
-            app.serviceMethod.insertExportProduct(dataObj, function (result) {
+            app.serviceMethod.checkDuplicateExportProduct(dataObj, function (result) {
+                if (!result) {
+                    app.serviceMethod.insertExportProduct(dataObj, function (result) {
 
-                //if (self.supplier_default != self.attributes.supplier_code ||
-                //    self.unit_price_default != self.attributes.unit_price) {
+                        //if (self.supplier_default != self.attributes.supplier_code ||
+                        //    self.unit_price_default != self.attributes.unit_price) {
 
-                //    var productModel = self.getProductModel();
-                //    productModel.updateOnly();
-                //}
+                        //    var productModel = self.getProductModel();
+                        //    productModel.updateOnly();
+                        //}
 
-                //var dataObj = {
-                //    product_code: self.attributes.code,
-                //    supplier_code: self.attributes.supplier_code,
-                //    unit_price: self.attributes.unit_price,
-                //    stock_name: stockName
-                //}
-                //var supplyLogModel = new app.models.SupplyLogModel(dataObj);
-                //supplyLogModel.checkAndUpdate(function () {
-                if (cb) cb();
-                //});
-            });
+                        //var dataObj = {
+                        //    product_code: self.attributes.code,
+                        //    supplier_code: self.attributes.supplier_code,
+                        //    unit_price: self.attributes.unit_price,
+                        //    stock_name: stockName
+                        //}
+                        //var supplyLogModel = new app.models.SupplyLogModel(dataObj);
+                        //supplyLogModel.checkAndUpdate(function () {
+                        if (cb) cb(result);
+                        //});
+                    });
+                } else {
+                    if (cb) cb(false, 'Product is duplicate.');//\n\n' + JSON.stringify(checkDuplicateObj)
+                }
+            })  
         },
         update: function (cb) {
 

@@ -2,6 +2,7 @@
 /// <reference path="../../Lib/step/step.js" />
 /// <reference path="../lib/async/async.js" />
 /// <reference path="../../NwLib/NwLib.js" />
+/// <reference path="../lib/underscore/underscore.js" />
 
 
 /// <reference path="../NwConn/NwConn.js" />
@@ -29,6 +30,52 @@
     }
 
     //#endregion
+
+    var objArrCompress = function (objArr) {
+        var fields = [];
+        var data = [];
+
+        _.each(objArr, function (obj) {
+            var dataArray = [];
+
+            _.each(obj, function (value, key) {
+                var idf = fields.indexOf(key);
+                if (idf == -1) {
+                    idf = fields.length;
+                    fields.push(key);
+                }
+                dataArray[idf] = value;
+            });
+
+            data.push(dataArray);
+        });
+
+        var resultData = { fds: fields, dt: data };
+
+        return resultData;
+    }
+
+    var objArrDecompress = function (resultData) {
+        var objArr = [];
+        var fields = resultData.fds;
+
+        _.each(resultData.dt, function (dataArray) {
+
+            var obj = {};
+
+            _.each(dataArray, function (value, id) {
+                if (!_.isUndefined(value)) {
+                    var key = fields[id];
+                    obj[key] = value
+                }
+            });
+
+            objArr.push(obj);
+        });
+
+        return objArr;
+    }
+
     var NwServiceConn = Class(function () {
 
         return {
@@ -39,116 +86,383 @@
                 this.wsClient = wsClient;
             },
 
-            getAllStockName: function (cb) {
-                this.wsClient.callService('getAllStockName', {}, cb);
+            login: function (dataObj, cb) {
+                this.wsClient.callService('login', dataObj, cb);
+            },
+
+            getAllStockName: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('getAllStockName', dataObj, cb);
             },
 
             //#region Products
             getProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
                 this.wsClient.callService('getProduct', dataObj, cb);
             },
             getProductByCodeArray: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
                 this.wsClient.callService('getProductByCodeArray', dataObj, cb);
             },
             getAllProducts: function (stockName, cb) {
-                this.wsClient.callService('getAllProducts', { stock_name: stockName }, cb);
+                var dataObj = { stock_name: stockName };
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getAllProducts', dataObj, function (result) {
+                    if (cb) cb(objArrDecompress(result))
+                });
             },
             findeProductStartWith: function (stockName, findWord, limit, cb) {
-                this.wsClient.callService('findeProductStartWith', { stock_name: stockName, findWord: findWord, limit: limit }, cb);
+                var dataObj = { stock_name: stockName, findWord: findWord, limit: limit };
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('findeProductStartWith', dataObj, function (result) {
+                    if (cb) cb(objArrDecompress(result))
+                });
             },
-            insertProduct: function (insertObj, cb) {
-                this.wsClient.callService('insertProduct', insertObj, cb);
+            insertProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('insertProduct', dataObj, cb);
             },
-            updateProduct: function (updateObj, cb) {
-                this.wsClient.callService('updateProduct', updateObj, cb);
+            updateProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('updateProduct', dataObj, cb);
             },
             deleteProduct: function (stockName, code, cb) {
-                this.wsClient.callService('deleteProduct', { stock_name: stockName, code: code }, cb);
+                var dataObj = { stock_name: stockName, code: code }
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('deleteProduct', dataObj, cb);
             },
 
-            addProductUnitNumber: function (updateObj, cb) {
-                this.wsClient.callService('addProductUnitNumber', updateObj, cb);
+            addProductUnitNumber: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('addProductUnitNumber', dataObj, cb);
             },
 
-            unsetProductUnitNumber: function (updateObj, cb) {
-                this.wsClient.callService('unsetProductUnitNumber', updateObj, cb);
+            unsetProductUnitNumber: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('unsetProductUnitNumber', dataObj, cb);
             },
-            updateProductUnitNumber: function (updateObj, cb) {
-                this.wsClient.callService('updateProductUnitNumber', updateObj, cb);
+            updateProductUnitNumber: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('updateProductUnitNumber', dataObj, cb);
+            },
+            checkDuplicateProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+                this.wsClient.callService('checkDuplicateProduct', dataObj, cb);
             },
             //#endregion
 
             //#region SupplyLog
             insertSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
                 this.wsClient.callService('insertSupplyLog', dataObj, cb);
             },
             updateSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
                 this.wsClient.callService('updateSupplyLog', dataObj, cb);
             },
             findeSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('findeSupplyLog', dataObj, cb);
             },
             checkForInsertSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('checkForInsertSupplyLog', dataObj, cb);
             },
             getAllSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('getAllSupplyLog', dataObj, cb);
             },
             getLastSupplyLog: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('getLastSupplyLog', dataObj, cb);
+            },
+            getLastSupplyLogAll: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getLastSupplyLogAll', dataObj, cb);
             },
             //#endregion
 
             //#region ImportProduct
             insertImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('insertImportProduct', dataObj, cb);
             },
             getImportProductInPeriod: function (dataObj, cb) {
-                this.wsClient.callService('getImportProductInPeriod', dataObj, cb);
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getImportProductInPeriod', dataObj, function (result) {
+                    if (cb) cb(objArrDecompress(result))
+                });
+            },
+            getImportProductInPeriodWithSearch: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getImportProductInPeriodWithSearch', dataObj, function (result) {
+                    if (cb) cb(objArrDecompress(result))
+                });
             },
             getAllImportProduct: function (dataObj, cb) {
-                this.wsClient.callService('getAllImportProduct', dataObj, cb);
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getAllImportProduct', dataObj, function (result) {
+                    if (cb) cb(objArrDecompress(result))
+                });
+            },
+            getLastImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getLastImportProduct', dataObj, cb);
             },
             removeImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('removeImportProduct', dataObj, cb);
             },
             updateImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('updateImportProduct', dataObj, cb);
             },
+            checkDuplicateImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
 
+                this.wsClient.callService('checkDuplicateImportProduct', dataObj, cb);
+            },
             //#endregion
             //#region ExportProduct
             insertExportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('insertExportProduct', dataObj, cb);
             },
             getAllExportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('getAllExportProduct', dataObj, cb);
             },
             getExportProductInPeriod: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('getExportProductInPeriod', dataObj, cb);
             },
+            getExportProductInPeriodWithSearch: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getExportProductInPeriodWithSearch', dataObj, cb);
+            },
             removeExportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('removeExportProduct', dataObj, cb);
             },
             updateExportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('updateExportProduct', dataObj, cb);
             },
 
+            checkDuplicateExportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('checkDuplicateExportProduct', dataObj, cb);
+            },
+            //#endregion
+
+            //#region CheckProduct
+            insertCheckProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('insertCheckProduct', dataObj, cb);
+            },
+            getCheckProductDate: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getCheckProductDate', dataObj, cb);
+            },
+            getCheckProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getCheckProduct', dataObj, cb);
+            },
+            editCheckProductDate: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('editCheckProductDate', dataObj, cb);
+            },
+            deleteCheckProducts: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('deleteCheckProducts', dataObj, cb);
+            },
             //#endregion
 
             //#region Supplier
             getAllSupplier: function (cb) {
-                this.wsClient.callService('getAllSupplier', {}, cb);
-            },
+                var userObj = app.userModel.getUserObj();
 
+                this.wsClient.callService('getAllSupplier', userObj, cb);
+            },
             insertSupplier: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('insertSupplier', dataObj, cb);
             },
             updateSupplier: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
                 this.wsClient.callService('updateSupplier', dataObj, cb);
             },
             deleteSupplier: function (code, cb) {
-                this.wsClient.callService('deleteSupplier', { code: code }, cb);
+                var dataObj = { code: code };
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('deleteSupplier', dataObj, cb);
+            },
+            checkDuplicateSupplier: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('checkDuplicateSupplier', dataObj, cb);
+            },
+            findeSupplierStartWith: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('findeSupplierStartWith', dataObj, cb);
+            },
+            //#endregion
+
+            //#region Account
+            getMenuStructure: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getMenuStructure', dataObj, cb);
+            },
+
+            //#endregion
+
+            //#region list
+            getAllList: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getAllList', dataObj, cb);
+            },
+            insertList: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('insertList', dataObj, cb);
+            },
+            deleteList: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('deleteList', dataObj, cb);
+            },
+            findList: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('findList', dataObj, cb);
+            },
+            //#endregion
+
+            //#region user
+            getAllUser: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getAllUser', dataObj, cb);
+            },
+            insertUser: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('insertUser', dataObj, cb);
+            },
+            updateUser: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('updateUser', dataObj, cb);
+            },
+            deleteUser: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('deleteUser', dataObj, cb);
+            },
+            findUser: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('findUser', dataObj, cb);
+            },
+            //#endregion
+
+            //#region PettyCash
+            getLastPettyCash: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getLastPettyCash', dataObj, cb);
+            },
+            insertPettyCash: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('insertPettyCash', dataObj, cb);
             },
             //#endregion
         };

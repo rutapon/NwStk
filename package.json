@@ -16,6 +16,7 @@
     "linvodb3": "*",
     "medeadown": "*",
     "mkdirp": "^0.5.1",
+    "mongodb": "^2.2.25",
     "node-static": "^0.7.7",
     "node-xlsx": "^0.6.0",
     "request": "^2.74.0",

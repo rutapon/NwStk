@@ -11,15 +11,24 @@ var app = app || { models: {}, collections: {}, views: {} };
     // Person Model
     app.models.product = Backbone.Model.extend({
         defaults: {
-            code: '',
-            name: '',
-            unit_type: '',
+            code: null,
+            name: null,
+            nameTh: null,
+            nameEn: null,
+            unit_type: null,
             //unit_size: '',
-            description: '',
+            description: null,
             //create_by: 'admin',
-            stock_name: '',
-            supplier_default: '',
-            unit_price_default: undefined
+            stock_name: null,
+            supplier_default: null,
+            'supplier1': null,
+            'unit_price1': null,
+            'supplier2': null,
+            'unit_price2': null,
+            'supplier3': null,
+            'unit_price3': null,
+            unit_price_default: null,
+            //current_supplier: [],
         },
 
         //initialize: function () {
@@ -27,44 +36,62 @@ var app = app || { models: {}, collections: {}, views: {} };
         //},
 
         validate: function (attrs, options) {
-            if (!attrs.code || !attrs.name) {
+            if (!attrs.code || !(attrs.nameTh || attrs.nameEn)) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name) ");
-                alert("To err is human, but so, too, is to repent for those mistakes and learn from them. ข้อมูลไม่ครบ");
-
+                //alert("ข้อมูลไม่ครบหรือผิดพลาด \n To err is human, but so, too, is to repent for those mistakes and learn from them.");
+                alert("validate false");
+        
                 return "false";
             }
         },
         save: function (stockName, cb) {
 
             var self = this;
-            this.attributes.stock_name = stockName;
-            app.serviceMethod.insertProduct(this.attributes, function (result) {
+            app.serviceMethod.checkDuplicateProduct({ stock_name: stockName, code: self.attributes.code }, function (result) {
+                console.log();
+                if (!result) {
 
-                if (self.attributes.unit_price_default && self.attributes.supplier_default) {
-                    var dataObj = {
-                        product_code: self.attributes.code,
-                        supplier_code: self.attributes.supplier_default,
-                        unit_price: self.attributes.unit_price_default,
-                        stock_name: stockName
-                    }
+                    self.attributes.stock_name = stockName;
 
-                    var supplyLogModel = new app.models.SupplyLogModel(dataObj);
-                    supplyLogModel.checkAndUpdate(function () {
-                        if (cb) cb();
+                    self.attributes.supplier_default = self.attributes.supplier1;
+                    self.attributes.unit_price_default = self.attributes.unit_price1;
+
+                    app.serviceMethod.insertProduct(self.attributes, function (result) {
+
+                        if (self.attributes.unit_price_default && self.attributes.supplier_default) {
+                            var dataObj = {
+                                product_code: self.attributes.code,
+                                supplier_code: self.attributes.supplier_default,
+                                unit_price: self.attributes.unit_price_default,
+                                stock_name: stockName
+                            }
+
+                            var supplyLogModel = new app.models.SupplyLogModel(dataObj);
+                            supplyLogModel.checkAndUpdate(function () {
+                                if (cb) cb(result);
+                            });
+                        } else {
+                            if (cb) cb(result);
+                        }
+
+                        //app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
+                        //if (cb) cb(result);
+                        //})   
+
                     });
                 } else {
-                    if (cb) cb();
+                    if (cb) cb(false);
                 }
-
-                //app.serviceMethod.checkForInsertSupplyLog(dataObj, function (result) {
-                //if (cb) cb(result);
-                //})
             });
         },
         update: function (cb) {
             var self = this;
             var stockName = this.attributes.stock_name;
+
+            if (!self.attributes.supplier_default) self.attributes.supplier_default = self.attributes.supplier1;
+            if (!self.attributes.unit_price_default) self.attributes.unit_price_default = self.attributes.unit_price1;
+
             app.serviceMethod.updateProduct(this.attributes, function (result) {
 
                 if (self.attributes.unit_price_default && self.attributes.supplier_default) {
@@ -90,8 +117,16 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         updateOnly: function (cb) {
             var self = this;
+            var updateObj = _.clone(this.attributes);
 
-            app.serviceMethod.updateProduct(this.attributes, function (result) {
+
+            for (var i in updateObj) {
+                if (_.isNull(updateObj[i])) {
+                    delete updateObj[i];
+                }
+            }
+
+            app.serviceMethod.updateProduct(updateObj, function (result) {
                 if (cb) cb(result);
             });
         },
@@ -105,8 +140,9 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         isEmty: function () {
             var attrs = this.attributes;
-            return !(attrs.code || attrs.name || attrs.unit_type || attrs.description);
+            return !(attrs.code || attrs.nameTh || attrs.nameEn || attrs.unit_type || attrs.description);
         }
+
         //,
         //removeUi: function () {
         //    alert('trigger remove');

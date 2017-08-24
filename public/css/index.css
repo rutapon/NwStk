@@ -88,7 +88,7 @@
 }
 
 
-td select[name="select-supplier"] {
+/*td select[name="select-supplier"] {
     border: none;
 }
 
@@ -103,6 +103,23 @@ select[name="select-supplier"] option {
 
     select[name="select-supplier"] option:first-child {
         color: #808080;
+    }*/
+
+td select.select-supplier {
+    border: none;
+}
+
+
+select.select-supplier.not_chosen {
+    color: #808080;
+}
+
+select.select-supplier option {
+    color: #080808;
+}
+
+    select.select-supplier option:first-child {
+        color: #808080;
     }
 
 
@@ -111,4 +128,12 @@ select[name="select-supplier"] option {
     transform: scale(1.8);
     /*width: 30px;
 	height: 30px;*/
+}
+
+.moneyAmount {
+    width: 100px !important;
+}
+
+.chqueData{
+    width: 300px !important;
 }

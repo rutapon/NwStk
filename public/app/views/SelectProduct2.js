@@ -17,9 +17,8 @@ var app = app || { models: {}, collections: {}, views: {} };
                 'keyup .select_product_search': 'search',
                 //'change .select_product_search': 'search',
 
-                //'click .selectClick': 'selectClick',
-                //'click .cancelClick': 'cancelClick'
-
+                'click .selectClick': 'selectClick',
+                'click .cancelClick': 'cancelClick'
             },
 
             initialize: function () {
@@ -54,13 +53,13 @@ var app = app || { models: {}, collections: {}, views: {} };
                         editable: false
                     }, {
                         name: "name",
-                        label: "ชื่อ",
+                        label: "Description",
                         cell: "string",
                         editable: false
                     },
                     {
                         name: "unit_type",
-                        label: "หน่วย",
+                        label: "UnitType",
                         cell: "string",
                         editable: false
                     },
@@ -80,7 +79,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                         // enable the select-all extension
                         name: "",
                         cell: "select-row",
-                        //headerCell: "select-all"
+                        headerCell: "select-all"
                     }
                      //{
                      //    name: "edit",
@@ -99,16 +98,21 @@ var app = app || { models: {}, collections: {}, views: {} };
                     collection: collection
                 });
 
-                collection.on('backgrid:selected', function (model, checked) {
-                    //console.log('backgrid:checked', model, checked);
-                    if (checked) {
-                        self.clear();
-                        self.trigger('select', [model]);
-                    }
+                //collection.on('backgrid:selected', function (model, checked) {
+                //    //console.log('backgrid:checked', model, checked);
+                //    if (checked) {
+                //        self.clear();
+                //        self.trigger('select', [model]);
+                //    }
 
-                })
+                //})
 
                 this.$el.find(".select-result").append(this.allProductTable.render().el);
+
+                this.$el.on("popupafteropen", function (event, ui) {
+                    console.log('popupafteropen');
+                    self.search();
+                });
             },
 
             // Re-rendering the App just means refreshing the statistics -- the rest
@@ -125,10 +129,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                 });
             },
             clear: function () {
+                this.lastText = false;
                 this.$el.find('.select_product_search').val('');
-
-                this.collection.reset(null);
                 this.allProductTable.clearSelectedModels();
+                this.collection.reset(null);
             },
             resetFromService: function (result, stockSelected) {
                 //var self = this;
@@ -170,9 +174,10 @@ var app = app || { models: {}, collections: {}, views: {} };
             search: function (ev) {
                 var searchText = this.$el.find('.select_product_search').val();// $(ev.target).val();
                 searchText = searchText.trim()
+                   var stockSelected = this.stockSelected.get('stock_selected');
                 if (searchText && (!this.lastText || this.lastText != searchText)) {
                     var self = this;
-                    var stockSelected = this.stockSelected.get('stock_selected');
+                 
                     //var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
                     //console.log(searchText + ' product ' + stockSelected);
                     this.allProductTable.clearSelectedModels();
@@ -186,7 +191,11 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 } else {
                     this.lastText = false;
-                    this.collection.reset();
+                    this.collection.getAll(stockSelected, function (result) {
+
+                    });
+                 
+                    //this.collection.reset();
                 }
             }
         });

@@ -47,6 +47,11 @@
     }
 
     this.SaveXlsx = function (dataArrayObject, ws_name, fileName) {
+        var data = this.ArrayObjectToDataArray(dataArrayObject);
+        console.log(data);
+        this.SaveXlsxFromDataArray(data, ws_name, fileName);
+    };
+    this.ArrayObjectToDataArray = function (dataArrayObject) {
 
         var data = [];
         if (dataArrayObject.length > 0) {
@@ -55,8 +60,9 @@
                 data.push(_.values(dataObj));
             });
         }
-
-        console.log(data);
+        return data;
+    };
+    this.SaveXlsxFromDataArray = function (data, ws_name, fileName) {
         var wb = new Workbook(), ws = sheet_from_array_of_arrays(data);
 
         /* add worksheet to workbook */
@@ -67,7 +73,6 @@
 
         saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), fileName + '.xlsx');
     };
-
     ///////// for read Xlsx//////////////////////////////
     function fixdata(data) {
         var o = "", l = 0, w = 10240;
@@ -89,10 +94,10 @@
     }
 
     this.readXlsxToJson = function (f, isReadAsBinaryString, cb) {
-        if(isReadAsBinaryString){
-            isReadAsBinaryString = (typeof FileReader.prototype.readAsBinaryString )!== "undefined";
+        if (isReadAsBinaryString) {
+            isReadAsBinaryString = (typeof FileReader.prototype.readAsBinaryString) !== "undefined";
         }
-     
+
         var reader = new FileReader();
         reader.onload = function (e) {
 

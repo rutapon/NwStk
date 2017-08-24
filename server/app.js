@@ -28,7 +28,7 @@
 
         var express = require('express');
         var compression = require('compression');
-        var minify = require('express-minify');
+        //var minify = require('express-minify');
 
         var nodestatic = require('node-static');
         file = new nodestatic.Server(__dirname + '/../public');
@@ -133,8 +133,10 @@
     listenCommand(process.env.PORT || 8088);
 
     //var url = "andamania";
-    //var token = "563f471d-5950-459c-9461-2424eae03e37";
-    var url = "wts";
+    //var token =  "501c6eeb-1d48-429c-a79c-c869624efd3c"
+    ////var token = "563f471d-5950-459c-9461-2424eae03e37";
+
+    var url = "newww";
     var token = "1c7c011a-c53e-40db-bd12-df8e74a4a326";
 
     function updateDns(url, token) {
@@ -147,6 +149,7 @@
             }
         });
     }
+
     updateDns(url, token);
     setInterval(function () {
         updateDns(url, token);

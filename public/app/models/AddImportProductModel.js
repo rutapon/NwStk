@@ -28,7 +28,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 self.trigger(eventName + ':importProductCollection', ev);
             });
 
-
             this.attributes.stockModel.on('change:stock_selected', function (model, stock_selected) {
                 //viewSelectProduct.clear();
             });
@@ -51,6 +50,14 @@ var app = app || { models: {}, collections: {}, views: {} };
             //var ip = new app.models.ImportProductModel(product.toJSON());
             //console.log(ip.toJSON());
             this.attributes.importProductCollection.add(product.toJSON());
+
+            //this.attributes.importProductCollection.each(function (model) {
+            //    if (!model.get('code')) {
+            //        this.attributes.importProductCollection.remove(model);
+            //    }
+            //});
+            //this.attributes.importProductCollection.add({});
+
         },
         clear: function () {
             this.attributes.importProductCollection.reset();

@@ -16,18 +16,15 @@ var app = app || { models: {}, collections: {}, views: {} };
             events: {
                 'keyup .select_product_search': 'search',
                 //'change .select_product_search': 'search',
-
                 'click .selectClick': 'selectClick',
                 'click .cancelClick': 'cancelClick'
-
             },
 
             initialize: function () {
-
+                var self = this;
                 this.stockSelected = this.model.get('stockModel');
                 var selectProductCollection = this.selectProductCollection = this.model.get('selectProductCollection');
                 this.importProductCollection = this.model.get('importProductCollection');
-
 
                 selectProductCollection.comparator = function (model) {
                     return model.get('code');
@@ -56,13 +53,13 @@ var app = app || { models: {}, collections: {}, views: {} };
                         editable: false
                     }, {
                         name: "name",
-                        label: "ชื่อ",
+                        label: "Description",
                         cell: "string",
                         editable: false
                     },
                     {
                         name: "unit_type",
-                        label: "หน่วย",
+                        label: "UnitType",
                         cell: "string",
                         editable: false
                     },
@@ -99,6 +96,17 @@ var app = app || { models: {}, collections: {}, views: {} };
                 });
 
                 this.$el.find(".select-result").append(this.allProductTable.render().el);
+
+                this.$el.on("popupafteropen", function (event, ui) {
+                    console.log('popupafteropen');
+                    self.search();
+                });
+
+                this.$el.on("popupafterclose", function (event, ui) {
+                    console.log('popupafterclose');
+                    self.clear();
+                });
+
             },
 
             // Re-rendering the App just means refreshing the statistics -- the rest
@@ -115,8 +123,9 @@ var app = app || { models: {}, collections: {}, views: {} };
                 });
             },
             clear: function () {
+                this.lastText = null;
                 this.$el.find('.select_product_search').val('');
-                //this.allProductTable.clearSelectedModels();
+                this.allProductTable.clearSelectedModels();
                 this.selectProductCollection.reset();
             },
             resetFromService: function (result, stockSelected) {
@@ -141,7 +150,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //}
             },
 
-
             selectClick: function () {
                 var selectedModels = this.allProductTable.getSelectedModels();
                 selectedModels = _.compact(selectedModels);
@@ -164,32 +172,44 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             search: function (ev) {
+                var self = this;
 
                 var searchText = this.$el.find('.select_product_search').val();// $(ev.target).val();
                 searchText = searchText.trim();
 
-                //console.log('search', searchText);
+                var stockSelected = this.stockSelected.get('stock_selected');
 
+                var supplierSelected = null;
+
+                if (app.userModel.get('type') != 'staff_support') {
+                    supplierSelected = $('select.select-supplier-in').val(); // self.supplierSelected;
+                }
+
+                //console.log('search', searchText);
                 if (searchText && (!this.lastText || this.lastText != searchText)) {
-                    this.lastText = searchText;
-                    var self = this;
-                    var stockSelected = this.stockSelected.get('stock_selected');
+                    self.lastText = searchText;
+                
                     //var stockSelected = this.model.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
                     //console.log(searchText + ' product ' + stockSelected);
                     //this.allProductTable.clearSelectedModels();
 
-                    this.selectProductCollection.search(searchText, stockSelected, function () {
+                    self.selectProductCollection.search(searchText, stockSelected, function () {
+
                         if (self.selectProductCollection.length == 1) {
                             var model = self.selectProductCollection.at(0);
                             model.trigger("backgrid:select", model, true);
                             self.selectClick();
                             $("#popupSelectProduct").popup('close', { transition: 'flow' });
                         }
-                    });
+                    }, supplierSelected);
 
                 } else {
-                    this.lastText = false;
-                    this.selectProductCollection.reset();
+
+                    self.lastText = false;
+                    self.selectProductCollection.getAll(stockSelected, function (result) {
+                        //self.selectProductCollection.setLocalDatabase(stockSelected, result);
+                    }, supplierSelected);
+                    //this.selectProductCollection.reset();
                 }
             }
         });

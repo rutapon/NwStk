@@ -1,6 +1,7 @@
 ﻿/// <reference path="../../lib/underscore/underscore.js" />
 /// <reference path="../../lib/jquery/jquery-2.1.1.js" />
 /// <reference path="../../lib/backbone/backbone.js" />
+/// <reference path="../../lib/lokijs/lokijs.js" />
 
 var app = app || { models: {}, collections: {}, views: {} };
 
@@ -14,14 +15,24 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         saveObjKeyPare: {
             code: 'code',
-            name: 'ชื่อ',
-            unit_type: 'หน่วย',
+            nameTh: 'nameTh',
+            nameEn: 'nameEn',
+            unit_type: 'unit type',
             //unit_size: 'ขนาด',
-            supplier_default: 'ผู้ขาย',
-            unit_price_default:'ราคา',
-            description: 'รายละเอียด'
+            'supplier1': 'supplier 1',
+            'unit_price1': 'price 1',
+            'supplier2': 'supplier 2',
+            'unit_price2': 'price 2',
+            'supplier3': 'supplier 3',
+            'unit_price3': 'price 3',
+
+            description: 'remark'
         },
 
+        initialize: function () {
+            this.localData = null;
+
+        },
         importXlsxObj: function (xlsxObj) {
             var self = this;
             var saveObjKeyPare = this.saveObjKeyPare;
@@ -61,12 +72,133 @@ var app = app || { models: {}, collections: {}, views: {} };
             SaveXlsx(dataObjArray, ws_name, fileName);
         },
 
-        search: function (searchText, stockSelected, cb) {
+        setLocalData: function (stockSelected, cb) {
             var self = this;
-            app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
-                self.reset(result);
+            //console.log('setLocalData');
+            app.serviceMethod.getAllProducts(stockSelected, function (result) {
+                _.each(result, function (item) {
+                    item['stock_name'] = stockSelected;
+                });
+
+                self.setLocalDatabase(stockSelected, result);
+
                 if (cb) cb(result);
             });
+        },
+
+        setLocalDatabase: function (stockSelected, result) {
+            var self = this;
+            if (!self.localData) {
+                self.localData = (new loki('test', { env: 'BROWSER' })).addCollection('localData');
+            } else {
+                self.localData.clear();
+            }
+
+            if (result.length > 0) {
+               
+                self.localData.insert(result);
+            }
+        },
+
+        clearLocalData: function () {
+            this.localData = null;
+        },
+        getAll: function (stockSelected, cb, supplierSelected) {
+            console.log('getAll');
+            var self = this;
+            if (this.localData) {
+                var result = this.localData.find({});
+                //console.log(result);
+
+                if (supplierSelected) {
+                    result = _.filter(result, function (model) {
+                        return model["supplier1"] == supplierSelected ||
+                            model["supplier2"] == supplierSelected ||
+                            model["supplier3"] == supplierSelected;
+                    });
+
+                }
+
+                self.reset(result);
+
+                if (cb) cb(result);
+            }
+            else {
+                app.serviceMethod.getAllProducts(stockSelected, function (result) {
+                    //console.log(result);
+                    _.each(result, function (item) {
+                        item['stock_name'] = stockSelected;
+                    });
+
+                    self.setLocalDatabase(stockSelected, result);
+
+                    if (supplierSelected) {
+                        result = _.filter(result, function (model) {
+                            return model["supplier1"] == supplierSelected ||
+                                model["supplier2"] == supplierSelected ||
+                                model["supplier3"] == supplierSelected;
+                        });
+
+                    }
+                    self.reset(result);
+
+                    if (cb) cb(result);
+                });
+            }
+        },
+        search: function (searchText, stockSelected, cb, supplierSelected) {
+            var self = this;
+
+            if (this.localData) {
+                var findObj = { code: searchText, name: searchText };
+                var query = { $or: [] };
+
+                for (var i in findObj) {
+                    var reg = new RegExp('^' + findObj[i], 'i');
+                    //query[i] = { $regex: reg };
+                    var qObj = {};
+                    qObj[i] = { $regex: reg };
+
+                    query.$or.push(qObj);
+                }
+
+                //var reg = new RegExp('^' + searchText, 'i');
+                //var query = { esearch: { $regex: reg } };
+
+                var result = this.localData.chain()
+                      .find(query)
+                      .simplesort("code")
+                      //.limit(15)
+                      .data();
+
+                if (supplierSelected) {
+                    result = _.filter(result, function (model) {
+                        return model["supplier1"] == supplierSelected ||
+                            model["supplier2"] == supplierSelected ||
+                            model["supplier3"] == supplierSelected;
+                    });
+
+                }
+
+                self.reset(result);
+                if (cb) cb(result);
+
+            }
+            else {
+                app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
+
+                    if (supplierSelected) {
+                        result = _.filter(result, function (model) {
+                            return model["supplier1"] == supplierSelected ||
+                                model["supplier2"] == supplierSelected ||
+                                model["supplier3"] == supplierSelected;
+                        });
+
+                    }
+                    self.reset(result);
+                    if (cb) cb(result);
+                });
+            }
         }
     });
 

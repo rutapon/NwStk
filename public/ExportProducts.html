@@ -14,20 +14,20 @@
     </script>
 </head>
 <body>
-    <div data-role="page" data-title="สินค้าออก" class="jqm-demos ui-responsive-panel">
+    <div data-role="page" data-title="Stock-Out" class="jqm-demos ui-responsive-panel">
 
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
             <h1>Anda-Stock</h1>
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
-            <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
+            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
 
             <div data-role="navbar">
                 <ul>
-                    <li><a data-value="exportProduct" class="ui-btn-active">เพิ่มข้อมูล</a></li>
+                    <li><a data-value="exportProduct" class="ui-btn-active">Create</a></li>
 
-                    <li><a data-value="editExportProduct">แก้ใข</a></li>
+                    <li><a data-value="editExportProduct">Edit</a></li>
 
                 </ul>
             </div>
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="ui-block-b">
-                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">Product Selecting</a>
 
                     </div>
 
@@ -56,7 +56,7 @@
                 <div id="popupExportProduct"></div>
 
                 <button class="ClearNewProductRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all">Clear Table</button>
-                <button class="SaveExportProduct ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">บันทึกรายการสินค้าออก</button>
+                <button class="SaveExportProduct ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">Save</button>
 
             </div>
 
@@ -67,7 +67,7 @@
                         <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 
                         <h3>Select Product</h3>
-                        <input  data-theme="a"  class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
+                        <input data-theme="a" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
                         <!-- <label for="un" class="ui-hidden-accessible">Username:</label>
                             <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
                             <label for="pw" class="ui-hidden-accessible">Password:</label>
@@ -92,7 +92,33 @@
 
             <div class="editExportProduct exportProductNav" style="display: none">
 
-                <div class="ui-grid-a ui-responsive">
+                <div class="SelectTimePeriod ui-grid-a ui-responsive">
+                    <div class="ui-block-c">
+                        <select name="select-time" class="select-time-type" data-mini="true" data-native-menu="true">
+
+                            <option value="oneMonthPeriod">Month</option>
+                            <option value="oneYearPeriod">Year</option>
+                            <option value="last">Back Date</option>
+                            <option value="custom">Define</option>
+                        </select>
+                    </div>
+                    <div class="ui-block-c select-time-div">
+                        <select name="select-time" class="select-time" data-mini="true" data-native-menu="true"></select>
+                    </div>
+                    <div class="ui-block-c">
+                        <input id="startTime" type="text" data-type="startTime">
+                    </div>
+                    <div class="ui-block-c">
+                        <label>&nbsp;&nbsp;to&nbsp;&nbsp; </label>
+                        &nbsp;
+                    </div>
+                    <div class="ui-block-c">
+                        <input id="endTime" type="text" data-type="endTime">
+                    </div>
+
+                </div>
+
+                <div class="ui-grid-b ui-responsive">
                     <div class="ui-block-a">
                         <div>
                             <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
@@ -101,16 +127,11 @@
                     </div>
 
                     <div class="ui-block-b">
-
-                        <select name="select-time" class="select-time" data-mini="true" data-native-menu="true">
-                            <option value="oneDay">ย้อนหลังหนึ่งวัน</option>
-                            <option value="sevenDay">ย้อนหลังหนึ่งสัปดาห์</option>
-                            <option value="oneMonth">ย้อนหลังหนึ่งเดื่อน</option>
-                            <option value="oneYear">ย้อนหลังหนึ่งปี</option>
-                            <!--<option value="">กำหนดเอง</option>-->
-                        </select>
+                        <input type="search" data-theme="a" name="searchbar" class="export_product_search docNumberSearch" data-mini="true" value="" placeholder="search by Doc Number" data-inline="true">
                     </div>
-
+                    <div class="ui-block-c">
+                        <input type="search" data-theme="a" name="searchbar" class="export_product_search deptSaerch" data-mini="true" value="" placeholder="search by Dept." data-inline="true">
+                    </div>
                 </div>
                 <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
                 <br />
@@ -118,18 +139,20 @@
 
                     <col width="80px" />
                     <col />
+                    <col />
                     <col width="120px" />
 
-                    <col width="80px" />
+                    <col width="90px" />
 
 
                     <tbody>
                         <tr>
                             <th>Code</th>
-                            <th>เลขที่ใบเบิกชอง</th>
-                            <th>วันที่เอกสาร</th>
-                            <th>จ่าย</th>
-                            <th>job</th>
+                            <th>Description</th>
+                            <th>Doc Number</th>
+                            <th>Doc Date</th>
+                            <th>Unit-Out</th>
+                            <th>Dept.</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -139,33 +162,38 @@
                         <script type="text/template" id="ShowTable-tr-template">
 
                             <td style="padding: 9px 4px;"><%- code %></td>
+                            <td style="padding: 9px 4px;"><%- name %></td>
+
                             <td style="padding: 9px 4px;"><%- requisition_id %></td>
                             <td style="padding: 9px 4px;"><%- out_date %></td>
                             <td style="padding: 9px 4px;"><%- unit %></td>
                             <td style="padding: 9px 4px;"><%- job %></td>
 
                             <td>
-                                <input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
+                                <input type="button" class="editButton" data-mini="true" value="Edit"></td>
                             <td>
-                                <input type="button" class="deleteButton" data-mini="true" value="ลบ">
+                                <input type="button" class="deleteButton" data-mini="true" value="Delete">
                             </td>
                         </script>
                         <script type="text/template" id="EditTable-tr-template">
 
-                            <td style="padding: 9px 4px;"><%- code %></td>
+                            <!--<td style="padding: 9px 4px;"><%- code %></td>-->
+                             <td>
+                                <input class="input" placeholder="code" data-type="code" value="<%- code %>" /></td>
 
+                            <td style="padding: 9px 4px;" class="nameTd"><%- name %></td>
                             <td>
-                                <input class="input" placeholder="เลขที่ใบเบิกชอง" data-type="requisition_id" value="<%- requisition_id %>" /></td>
+                                <input class="input" placeholder="Doc Number" data-type="requisition_id" value="<%- requisition_id %>" /></td>
                             <td>
-                                <input class="input" placeholder="วันที่เอกสาร" data-type="out_date" value="<%- out_date %>" /></td>
+                                <input class="input" placeholder="Doc Date" data-type="out_date" value="<%- out_date %>" /></td>
                             <td>
-                                <input class="input" placeholder="จ่าย" data-type="unit" value="<%- unit %>" /></td>
+                                <input class="input" placeholder="Unit-Out" data-type="unit" value="<%- unit %>" /></td>
                             <td>
-                                <input class="input" placeholder="job" data-type="job" value="<%- job %>" /></td>
+                                <input class="input" placeholder="Dept." data-type="job" value="<%- job %>" /></td>
                             <td>
-                                <input type="button" class="cancelEditButton button" data-mini="true" value="ยกเลิก"></td>
+                                <input type="button" class="cancelEditButton button" data-mini="true" value="Cancel"></td>
                             <td>
-                                <input type="button" class="saveButton button" data-mini="true" value="บันทึก">
+                                <input type="button" class="saveButton button" data-mini="true" value="Save">
                             </td>
 
                         </script>
@@ -181,20 +209,38 @@
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+                     <li>
+                    <a href="Supplier.html" data-menu="Supplier"  data-transition="flow">Supplier-Create</a>
+                </li>
+
                 <li>
-                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
                 </li>
                 <li>
-                    <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                </li>
+
+                <li>
+                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
                 </li>
                 <li>
-                    <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                </li>
+
+                <li>
+                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="Report.html" data-transition="flow">รายงาน</a>
+                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                </li>
+                <li>
+                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                </li>
+                <li>
+                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
 
@@ -202,26 +248,15 @@
         </div>
         <!-- /panel -->
 
-        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
+         <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
 
-            <!-- <form class="userform">
-
-                <h2>Login</h2>
-
-                <label for="name">Username:</label>
-                <input type="text" name="name" id="name" value="" data-clear-btn="true" data-mini="true">
-
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
-
-                <div class="ui-grid-a">
-                    <div class="ui-block-a"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Cancel</a></div>
-                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
-                </div>
-            </form>-->
+            <button class="LogInButton">Log In</button>
+            <button class="LogOutButton">Log Out</button>
+              <button class="SettingButton">Setting</button>
 
         </div>
         <!-- /panel -->
+
 
         <div data-role="popup" id="sure" data-title="Are you sure?">
             <div data-role="content">
@@ -232,14 +267,36 @@
             </div>
         </div>
 
+
+     <!--   <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="Supplier.html" data-transition="flow">Supplier</a>
+                    </li>
+                    <li>
+                        <a href="Products.html" data-transition="flow">Product</a>
+                    </li>
+                    <li>
+                        <a href="ImportProducts.html" data-transition="flow">Stock-In</a>
+                    </li>
+                    <li>
+                        <a href="ExportProducts.html" data-transition="flow" class="ui-btn-active">Stock-Out</a>
+                    </li>
+                    <li>
+                        <a href="CheckProducts.html" data-transition="flow">Stock-Checking</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow">Report</a>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+        <!-- /footer -->
+
+
     </div>
     <!-- /page -->
-
-    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="a">
-
-        <!-- /navbar -->
-    </div>
-    <!-- /footer -->
 
     <div data-role="page" id="p1">
 

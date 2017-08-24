@@ -15,12 +15,24 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             var numSave = 0;
             async.eachSeries(self.toArray(), function (model, callback) {
-                model.save(stock_selected, function () {
-                    numSave++;
-                    self.remove(model);
-                    callback();
-                });
+                if (model.isValid()) {
+                    model.save(stock_selected, function (result, errMsg) {
+                        if (result) {
+                            numSave++;
+                            self.remove(model);
+                            callback();
+
+                        } else {
+                            callback('Fail to save \n' + errMsg);// + JSON.stringify(model.toJSON()));
+                        }
+                    });
+                }
+                else {
+                    callback('Invalid Data\n' + JSON.stringify(model.toJSON()));
+                }
             }, function (err) {
+
+
                 if (cb) cb(err, numSave);
             });
         },
@@ -38,8 +50,44 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             app.serviceMethod.getImportProductInPeriod({ stock_name: stock_selected, timeStart: timeStart, timeEnd: timeEnd }, function (result) {
                 //console.log(result);
-                self.reset(result);
-                if (cb) cb(result);
+
+                var codes = _.chain(result).pluck('code').uniq().value();
+
+                app.serviceMethod.getProductByCodeArray({ stock_name: stock_selected, codes: codes }, function (products) {
+
+                    result = _.map(result, function (obj) {
+                        var product = _.findWhere(products, { code: obj.code });
+                        return _.extend(obj, _.pick(product, ['name', 'unit_type']));
+                    });
+
+                    self.reset(result);
+                    if (cb) cb(result);
+                });
+            });
+        },
+        getInPeriodWithSearch: function (stock_selected, timeStart, timeEnd, searchObj, cb) {
+
+            var self = this;
+            searchObj = _.extend(searchObj, { stock_name: stock_selected, timeStart: timeStart, timeEnd: timeEnd });
+            console.log('getInPeriodWithSearch', searchObj);
+            app.serviceMethod.getImportProductInPeriodWithSearch(searchObj, function (result) {
+                console.log(result);
+
+                var codes = _.chain(result).pluck('code').uniq().value();
+
+                app.serviceMethod.getProductByCodeArray({ stock_name: stock_selected, codes: codes }, function (products) {
+
+                    result = _.map(result, function (obj) {
+                        var product = _.findWhere(products, { code: obj.code });
+                        return _.extend(obj, _.pick(product, ['name', 'unit_type']));
+                    });
+
+                    self.reset(result);
+                    if (cb) cb(result);
+                });
+
+                //self.reset(result);
+                //if (cb) cb(result);
             });
         },
     });

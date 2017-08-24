@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script>
+
+        window.location.href = "index.html";
+
+    </script>
+</head>
+<body>
+
+    <div data-role="page" data-title="Stock-Checking" class="jqm-demos ui-responsive-panel">
+
+
+        <div data-role="header" data-position="fixed" data-theme="a">
+            <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
+
+            <h1>Products</h1>
+            <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
+            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
+
+            <div data-role="navbar">
+                <ul>
+                    <li><a data-value="checkProduct" class="ui-btn-active">Checking</a></li>
+                    <li><a data-value="editCheckProduct">Edit</a></li>
+                </ul>
+            </div>
+            <!-- /navbar -->
+
+            <!--  <form> 
+            <label for="searchbar" class="ui-hidden-accessible">Search:</label>
+            <input type="search" name="searchbar" id="search1" value="" data-theme="d" data-mini="true" />
+        </form>-->
+        </div>
+
+
+        <!-- /header -->
+        <div role="main" id="main" class="ui-content jqm-content jqm-fullwidth">
+
+            <div class="checkProduct checkProductNav">
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <label for="select-stock">Store Name</label>
+                        <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                        </select>
+                    </div>
+
+                    <div class="ui-block-b">
+
+                        <!--<div class="ui-field-contain">-->
+                        <label for="text-12">Checking Date:</label>
+                        <input type="text" name="text-12" id="checkingDateBox" value="" data-mini="true">
+                        <!--</div>-->
+                    </div>
+
+                </div>
+                <div class="info jqm-content">
+                    <!-- <h2>ตรวจนับ ณ วันที่:</h2>-->
+                </div>
+
+                <div id="exportProductTable"></div>
+                <!-- <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
+
+                    <col width="80px" />
+                    <col />
+                    <col width="100px" />
+                    <col width="180px" />
+                    <tbody>
+                        <tr>
+                            <th>Code</th>
+                            <th>ชื่อ</th>
+                            <th>หน่วย</th>
+
+                            <th>จำนวนตรวจนับจริง</th>
+
+                        </tr>
+                 
+                    </tbody>
+                </table>-->
+                <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="PrintFile">Print Form</button>
+                <button class="SaveCheckProducts ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">Save</button>
+            </div>
+
+            <div class="editCheckProduct checkProductNav" style="display: none">
+
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                        </select>
+                    </div>
+                    <div class="ui-block-b">
+                        <select class="select-checking-date" data-mini="true" data-native-menu="true">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="editCheckProductButon ui-grid-a ui-responsive" >
+                    <div class="ui-block-a">
+                        <a class="EditCheckProducts ui-btn ui-icon-edit ui-btn-icon-right  ui-corner-all" data-mini="true">Edit Date</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a class="DeleteCheckProducts ui-btn ui-icon-delete ui-btn-icon-right  ui-corner-all" data-mini="true">Delete</a>
+                    </div>
+
+                </div>
+                <br />
+                <!-- <div class="productInfo jqm-content">
+                    <h2>info</h2>
+                </div>-->
+
+                <div id="ReportCheckProductEditTable"></div>
+                <button class="SaveCheckProducts ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">Save</button>
+
+            </div>
+
+        </div>
+        <!-- /content -->
+
+        <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
+            <h2><a href="index.html" data-transition="flow">HOME</a></h2>
+
+            <ul data-role="listview">
+                    <li>
+                    <a href="Supplier.html" data-menu="Supplier"  data-transition="flow">Supplier-Create</a>
+                </li>
+
+                <li>
+                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
+                </li>
+                <li>
+                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                </li>
+
+
+                <li>
+                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
+                </li>
+                <li>
+                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                </li>
+
+                <li>
+                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
+                </li>
+                <li>
+                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
+                </li>
+                <li>
+                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                </li>
+                <li>
+                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                </li>
+                <li>
+                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
+                </li>
+            </ul>
+
+            </ul>
+
+
+        </div>
+        <!-- /panel -->
+
+        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
+
+            <button class="LogInButton">Log In</button>
+            <button class="LogOutButton">Log Out</button>
+             <button class="SettingButton">Setting</button>
+
+        </div>
+        <!-- /panel -->
+
+
+     <!--   <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="Supplier.html" data-transition="flow">Supplier</a>
+                    </li>
+                    <li>
+                        <a href="Products.html" data-transition="flow">Product</a>
+                    </li>
+                    <li>
+                        <a href="ImportProducts.html" data-transition="flow">Stock-In</a>
+                    </li>
+                    <li>
+                        <a href="ExportProducts.html" data-transition="flow">Stock-Out</a>
+                    </li>
+                    <li>
+                        <a href="CheckProducts.html" data-transition="flow" class="ui-btn-active">Stock-Checking</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow">Report</a>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+        <!-- /footer -->
+
+        <div data-role="popup" id="sure" data-title="Are you sure?">
+            <div data-role="content">
+                <h3 class="sure-1">???</h3>
+                <p class="sure-2">???</p>
+                <a href="#" class="sure-do" data-role="button" data-theme="b" data-rel="back">Yes</a>
+                <a href="#" data-role="button" data-theme="c" data-rel="back">Cancel</a>
+            </div>
+        </div>
+
+    </div>
+    <!-- /page -->
+
+
+    <div data-role="page" id="p1">
+
+        <div data-role="header">
+            <h1>Landing page</h1>
+        </div>
+        <!-- /header -->
+
+        <div role="main" class="ui-content jqm-content">
+
+            <p>This is just a landing page.</p>
+
+            <a href="#panel-responsive-page1" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini ui-icon-back ui-btn-icon-left">Back</a>
+
+        </div>
+        <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+
+
+</body>
+</html>

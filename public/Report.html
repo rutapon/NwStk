@@ -15,7 +15,7 @@
 </head>
 <body>
 
-    <div data-role="page" data-title="รายงาน" class="jqm-demos ui-responsive-panel">
+    <div data-role="page" data-title="Report" class="jqm-demos ui-responsive-panel">
 
 
         <div data-role="header" data-position="fixed" data-theme="a">
@@ -23,14 +23,15 @@
 
             <h1>Anda-Stock</h1>
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
-            <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
+            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
 
             <div data-role="navbar">
                 <ul>
-                    <li><a data-value="ReportStockCard" class="ui-btn-active">การเคลื่อนไหวของสินค้า</a></li>
-                    <li><a data-value="ReportStockLasting">สินค้าคงเหลือ</a></li>
-                    <li><a data-value="ReportPurchaseSupplier">การซื้อ BY Supplier</a></li>
-                    <li><a data-value="ReportPurchaseProduct">การซื้อ BY Product</a></li>
+                    <li><a data-value="ReportStockCard" class="ui-btn-active">Stock Movement</a></li>
+                    <li><a data-value="ReportStockLasting">Ending Stock</a></li>
+                    <li><a data-value="ReportCheckProduct">Stock Checking</a></li>
+                    <li><a data-value="ReportPurchaseSupplier">Purchasing By Supplier</a></li>
+                    <li><a data-value="ReportPurchaseProduct">Purchasing By Product</a></li>
                 </ul>
             </div>
 
@@ -43,10 +44,10 @@
                 <div class="ui-block-c">
                     <select name="select-time" class="select-time-type" data-mini="true" data-native-menu="true">
 
-                        <option value="oneMonthPeriod">ช่วงหนี่งเดื่อน</option>
-                        <option value="oneYearPeriod">ช่วงหนี่งปี</option>
-                        <option value="last">ย้อนหลัง</option>
-                        <option value="custom">กำหนดเอง</option>
+                        <option value="oneMonthPeriod">Month</option>
+                        <option value="oneYearPeriod">Year</option>
+                        <option value="last">Back Date</option>
+                        <option value="custom">Define</option>
                     </select>
                 </div>
                 <div class="ui-block-c select-time-div">
@@ -73,15 +74,23 @@
                         </select>
                     </div>
                     <div class="ui-block-b">
-                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">Product Selecting</a>
                     </div>
                     <div class="ui-block-c">
-                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockCardFile">Download File Exel</button>
+                        <a class="ClearAll ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" data-mini="true">Clear All</a>
+                    </div>
+
+                </div>
+
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockCardFile">Download Exel</button>
+                    </div>
+                    <div class="ui-block-b">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockCardReport">Print Report</button>
                     </div>
                 </div>
-                <br />
-
-                <div class="productInfo jqm-content">
+                <!--    <div class="productInfo jqm-content">
                     <h2>code:undefined</h2>
                 </div>
 
@@ -89,82 +98,181 @@
                     <h2>code:<%- code %> - <%- name %> - หน่วยนับ: <%- unit_type %></h2>
                 </script>
 
-                <div id="ReportStockCardTable"></div>
+                <div id="ReportStockCardTable"></div>-->
+
+
+                <div class="ReportStockCardResult">
+
+                    <script type="text/template" class="ReportStockCardResult-template">
+                        <br />
+                        <div class="productInfo jqm-content">
+                            <h2>code:<%- code %> - <%- name %> - หน่วยนับ: <%- unit_type %></h2>
+                        </div>
+
+                        <div class="ReportStockCardTable"></div>
+
+                    </script>
+
+                </div>
 
             </div>
 
             <div class="ReportStockLasting reportNav" style="display: none">
 
-                <div class="ui-grid-a ui-responsive">
+                <div class="ui-grid-b ui-responsive">
                     <div class="ui-block-a">
                         <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
                         </select>
                     </div>
 
                     <div class="ui-block-b">
-                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadReportStockLastingFile">Download File Exel</button>
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downloadReportStockLastingFile">Download File Exel</button>
+                    </div>
+                    <div class="ui-block-c">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="printReportStockLastingFile">Print Report</button>
                     </div>
                 </div>
                 <br />
+
+                <div class="productInfo jqm-content">
+                    <h2>info</h2>
+                </div>
 
                 <div id="ReportStockLastingTable"></div>
 
             </div>
 
-            <div class="ReportPurchaseSupplier reportNav" style="display: none">
+            <div class="ReportCheckProduct reportNav" style="display: none">
 
                 <div class="ui-grid-b ui-responsive">
+                    <div class="ui-block-a">
+                        <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                        </select>
+                    </div>
+                    <div class="ui-block-b">
+                        <select name="select-cheking-month" class="select-cheking-month" data-mini="true" data-native-menu="true">
+                            <!--<option value="oneMonthPeriod">Month</option>-->
+                        </select>
+                    </div>
+                    <div class="ui-block-c">
+                        <select class="select-checking-date" data-mini="true" data-native-menu="true">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downloadReportCheckProduct">Download File Exel</button>
+                    </div>
+                    <div class="ui-block-b">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="printReportCheckProduct">Print Report</button>
+                    </div>
+                </div>
+
+                <br />
+                <div class="productInfo jqm-content">
+                    <h2>info</h2>
+                </div>
+
+                <div id="ReportCheckProductTable"></div>
+
+            </div>
+
+            <div class="ReportPurchaseSupplier reportNav" style="display: none">
+
+                <div class="ui-grid-c ui-responsive">
                     <div class="ui-block-a">
                         <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
                         </select>
                     </div>
                     <div class="ui-block-b">
-                        <select name="select-supplier2" class="select-supplier" data-mini="false" data-native-menu="true">
+                        <select name="select-supplier2" class="select-supplier-report" data-mini="false" data-native-menu="true">
                         </select>
                     </div>
-
                     <div class="ui-block-c">
-                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all downLoadReport" >Download File Exel</button>
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all downLoadReport">Download File Exel</button>
+                    </div>
+                    <div class="ui-block-d">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="printReportPurchaseSupplier">Print Report</button>
                     </div>
                 </div>
                 <br />
 
-                 <div class="productInfo jqm-content">
+                <div class="ReportPurchaseSupplierResult">
+
+                    <script type="text/template" class="ReportPurchaseSupplier-template">
+                        <br />
+                        <div class="productInfo jqm-content">
+                            <h2></h2>
+                        </div>
+
+                        <div class="ReportPurchaseSupplierTable"></div>
+
+                    </script>
+
+                </div>
+                <!--   <div class="productInfo jqm-content">
                     <h2>supplier:undefined</h2>
                 </div>
-
                 <script type="text/template" class="supplierInfo-template">
-                    <h2><%- code %>: <%- name %> - เครดิต:  <%- credit %> วัน ### รวม:  <%- sum %> บาท</h2>
+                    <h2></h2>
                 </script>
+                <div id="ReportPurchaseSupplierTable"></div>-->
 
-                <div id="ReportPurchaseSupplierTable"></div>
+                <br />
+                <div class="sumTotal jqm-content" align="right">
+                    <h3 style="color: #1378c1">Sum Total #</h3>
+                </div>
             </div>
 
             <div class="ReportPurchaseProduct reportNav" style="display: none">
 
-                <div class="ui-grid-b ui-responsive">
+                <div class="ui-grid-d ui-responsive">
                     <div class="ui-block-a">
                         <select name="select-stock" class="select-stock" data-mini="false" data-native-menu="true">
                         </select>
                     </div>
 
                     <div class="ui-block-b">
-                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">เลือกสินค้า</a>
-
+                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">Product Selecting</a>
                     </div>
                     <div class="ui-block-c">
-                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="Button2">Download File Exel</button>
+                        <a class="ClearAll ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" data-mini="true">Clear All</a>
+                    </div>
+                    <div class="ui-block-d">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="dowloadReportPurchaseProduct">Download File Exel</button>
+                    </div>
+                    <div class="ui-block-e">
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="printReportPurchaseProduct">Print Report</button>
                     </div>
                 </div>
                 <br />
-                  <div class="productInfo jqm-content">
+                <div class="ReportPurchaseProductResult">
+
+                    <script type="text/template" class="ReportPurchaseProductResult-template">
+                        <br />
+                        <div class="productInfo jqm-content">
+                            <h2></h2>
+                        </div>
+
+                        <div class="ReportPurchaseProductTable"></div>
+
+                    </script>
+
+                </div>
+
+                <!-- <div class="productInfo jqm-content">
                     <h2>code:undefined</h2>
                 </div>
 
                 <script type="text/template" class="productInfo-template">
                     <h2>code:<%- code %> - <%- name %> - หน่วยนับ: <%- unit_type %>  ### รวม:  <%- sum %> บาท</h2>
                 </script>
-                 <div id="ReportPurchaseProductTable"></div>
+                <div id="ReportPurchaseProductTable"></div>-->
+                <br />
+                <div class="sumTotal jqm-content" align="right">
+                    <h3 style="color: #1378c1">Sum Total #</h3>
+                </div>
             </div>
 
             <div data-role="popup" id="popupSelectProduct" data-theme="a" class="ui-corner-all" data-overlay-theme="b">
@@ -174,7 +282,7 @@
                         <a data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 
                         <h3>Select Product</h3>
-                        <input  data-theme="a" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
+                        <input data-theme="a" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
                         <!-- <label for="un" class="ui-hidden-accessible">Username:</label>
                             <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
                             <label for="pw" class="ui-hidden-accessible">Password:</label>
@@ -193,38 +301,102 @@
 
                         </div>-->
 
+                        <div class="ui-grid-a ui-responsive">
+                            <div class="ui-block-a">
+                                <a href="#" class="cancelClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back">Cancel</a>
+                            </div>
+
+                            <div class="ui-block-b">
+                                <a href="#" class="selectClick ui-btn ui-corner-all ui-shadow ui-btn-a" data-rel="back" data-transition="flow">Select</a>
+                            </div>
+
+                        </div>
                     </div>
                 </form>
             </div>
 
         </div>
-        <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">เลือกสินค้า</button>-->
+        <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">Product Selecting</button>-->
 
+
+        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
+
+            <button class="LogInButton">Log In</button>
+            <button class="LogOutButton">Log Out</button>
+             <button class="SettingButton">Setting</button>
+
+        </div>
+        <!-- /panel -->
 
         <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+                   <li>
+                    <a href="Supplier.html" data-menu="Supplier"  data-transition="flow">Supplier-Create</a>
+                </li>
+
                 <li>
-                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
                 </li>
                 <li>
-                    <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                </li>
+
+
+                <li>
+                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
                 </li>
                 <li>
-                    <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                </li>
+
+                <li>
+                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="Report.html" data-transition="flow">รายงาน</a>
+                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                </li>
+                <li>
+                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                </li>
+                <li>
+                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
 
 
         </div>
         <!-- /panel -->
+
+       <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="Supplier.html" data-transition="flow">Supplier</a>
+                    </li>
+                    <li>
+                        <a href="Products.html" data-transition="flow">Product</a>
+                    </li>
+                    <li>
+                        <a href="ImportProducts.html" data-transition="flow">Stock-In</a>
+                    </li>
+                    <li>
+                        <a href="ExportProducts.html" data-transition="flow">Stock-Out</a>
+                    </li>
+                    <li>
+                        <a href="CheckProducts.html" data-transition="flow">Stock-Checking</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow" class="ui-btn-active">Report</a>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+        <!-- /footer -->
 
     </div>
 

@@ -14,8 +14,8 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         saveObjKeyPare: {
             code: 'code',
-            name: 'ชื่อ',
-            credit: 'เครดิต'
+            name: 'description',
+            credit: 'credit'
         },
 
         importXlsxObj: function (xlsxObj) {
@@ -59,15 +59,17 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         search: function (searchText, stockSelected, cb) {
             var self = this;
-            console.log('SupplierCollection:search');
-            //app.serviceMethod.findeProductStartWith(stockSelected, searchText, 100, function (result) {
-            //    self.reset(result);
-            //    if (cb) cb(result);
-            //});
+            var findObj = { findWord: searchText, limit: 100 };
+         
+            app.serviceMethod.findeSupplierStartWith(findObj, function (result) {
+                self.reset(result);
+                if (cb) cb(result);
+            });
         },
         getAll: function (cb) {
             var self = this;
             app.serviceMethod.getAllSupplier(function (result) {
+                //console.log(result);
                 self.reset(result);
                 if (cb) cb(result);
             });

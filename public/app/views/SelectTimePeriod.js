@@ -37,10 +37,10 @@ var app = app || { models: {}, collections: {}, views: {} };
             return (n < 10) ? ("0" + n) : n;
         }
         var lastOption = {
-            oneDay: 'หนึ่งวัน',
-            sevenDay: 'หนึ่งสัปดาห์',
-            oneMonth: 'หนึ่งเดื่อน',
-            oneYear: 'หนึ่งปี'
+            oneDay: 'One Day',
+            sevenDay: 'One Week',
+            oneMonth: 'One Month',
+            oneYear: 'One Year'
         };
 
         app.views.SelectTimePeriod = Backbone.View.extend({
@@ -86,8 +86,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var $timeEnd = self.$el.find("#endTime");
 
                 self.model.set({
-                    timeStart: addTimezoneOffset(new Date($timeStart.val())),
-                    timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    //timeStart: addTimezoneOffset(new Date($timeStart.val())),
+                    //timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    timeStart: $timeStart.val(),
+                    timeEnd: $timeEnd.val()
                 });
             },
 
@@ -208,8 +210,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                 }
 
                 self.model.set({
-                    timeStart: addTimezoneOffset(new Date($timeStart.val())),
-                    timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    //timeStart: addTimezoneOffset(new Date($timeStart.val())),
+                    //timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    timeStart: $timeStart.val(),
+                    timeEnd: $timeEnd.val()
                 });
             },
             inputChange: function (ev) {
@@ -225,8 +229,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var $timeEnd = self.$el.find("#endTime");
 
                 self.model.set({
-                    timeStart: addTimezoneOffset(new Date($timeStart.val())),
-                    timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    //timeStart: addTimezoneOffset(new Date($timeStart.val())),
+                    //timeEnd: addTimezoneOffset(addDays(new Date($timeEnd.val()), 1))
+                    timeStart: $timeStart.val(),
+                    timeEnd: $timeEnd.val()
                 });
 
             }

@@ -7,6 +7,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Anda-Stock</title>
+
+
     <!--<link rel="shortcut icon" href="../demos/favicon.ico">-->
     <!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">-->
     <link href="css/family.css" rel="stylesheet" />
@@ -15,8 +17,12 @@
     <link href="css/jqm-demos.css" rel="stylesheet" />
 
     <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/lokijs/lokijs.min.js"></script>
+
     <script src="lib/jquery/jquery-2.1.1.min.js"></script>
     <script src="lib/jquery.mobile/jquery.mobile-1.4.5.js"></script>
+
+    <script src="lib/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer/tableHeadFixer.js"></script>
 
     <link href="lib/jqm-datebox/jqm-datebox.min.css" rel="stylesheet" />
     <script src="lib/jqm-datebox/jqm-datebox.core.min.js"></script>
@@ -25,7 +31,7 @@
     <script src="lib/backbone/backbone-min.js"></script>
 
     <link href="lib/backgrid/lib/backgrid.css" rel="stylesheet" />
-    <script src="lib/backgrid/lib/backgrid.min.js"></script>
+    <script src="lib/backgrid/lib/backgrid.js"></script>
     <link href="lib/backgrid-select-all-master/backgrid-select-all.min.css" rel="stylesheet" />
     <script src="lib/backgrid-select-all-master/backgrid-select-all.min.js"></script>
 
@@ -63,6 +69,10 @@
     <script src="app/models/SupplierModel.js"></script>
     <script src="app/models/SupplyLogModel.js"></script>
     <script src="app/models/ExportProductModel.js"></script>
+    <script src="app/models/CheckProductsModel.js"></script>
+    <script src="app/models/UserModel.js"></script>
+    <script src="app/models/PettyCashModel.js"></script>
+
 
     <script src="app/collections/products.js"></script>
     <script src="app/collections/ImportProductCollection.js"></script>
@@ -70,37 +80,44 @@
     <script src="app/collections/SupplierCollection.js"></script>
     <script src="app/collections/ExportProductCollection.js"></script>
     <script src="app/collections/ReportCollection.js"></script>
-
-    <script src="app/views/CreateProductTableTr.js"></script>
-    <script src="app/views/CreateProductTable.js"></script>
-    <script src="app/views/CreateProduct.js"></script>
-    <script src="app/views/ShowProduct.js"></script>
-    <script src="app/views/EditProductTableTr.js"></script>
-    <script src="app/views/EditProduct.js"></script>
+    <script src="app/collections/CheckProductsCollection.js"></script>
 
     <script src="app/views/SelectProduct.js"></script>
     <script src="app/views/SelectProduct2.js"></script>
     <script src="app/views/SelectTimePeriod.js"></script>
 
-     <script src="app/views/ImportProductCreate.js"></script>
-    <script src="app/views/ImportProductEditTableTr.js"></script>
-    <script src="app/views/ImportProductEdit.js"></script>
-  
-    <script src="app/views/ExportProductCreate.js"></script>
-    <script src="app/views/ExportProductEditTableTr.js"></script>
-    <script src="app/views/ExportProductEdit.js"></script>
 
-    <script src="app/views/SupplierCreateTableTr.js"></script>
-    <script src="app/views/SupplierCreateTable.js"></script>
-    <script src="app/views/SupplierCreate.js"></script>
-    <script src="app/views/SupplierEditTableTr.js"></script>
-    <script src="app/views/SupplierEdit.js"></script>
+    <script src="app/views_product/CreateProductTableTr.js"></script>
+    <script src="app/views_product/CreateProductTable.js"></script>
+    <script src="app/views_product/CreateProduct.js"></script>
+    <script src="app/views_product/ShowProduct.js"></script>
+    <script src="app/views_product/EditProductTableTr.js"></script>
+    <script src="app/views_product/EditProduct.js"></script>
 
-    <script src="app/views/ReportPurchaseProduct.js"></script>
-    <script src="app/views/ReportPurchaseSupplier.js"></script>
-    <script src="app/views/ReportStockCard.js"></script>
-    <script src="app/views/ReportStockLasting.js"></script>
+    <script src="app/views_import_product/ImportProductCreate.js"></script>
+    <script src="app/views_import_product/ImportProductEditTableTr.js"></script>
+    <script src="app/views_import_product/ImportProductEdit.js"></script>
 
+    <script src="app/views_export_product/ExportProductCreate.js"></script>
+    <script src="app/views_export_product/ExportProductEditTableTr.js"></script>
+    <script src="app/views_export_product/ExportProductEdit.js"></script>
+
+    <script src="app/views_supplier/SupplierCreateTableTr.js"></script>
+    <script src="app/views_supplier/SupplierCreateTable.js"></script>
+    <script src="app/views_supplier/SupplierCreate.js"></script>
+    <script src="app/views_supplier/SupplierEditTableTr.js"></script>
+    <script src="app/views_supplier/SupplierEdit.js"></script>
+
+    <script src="app/views_report/ReportPurchaseProduct.js"></script>
+    <script src="app/views_report/ReportPurchaseSupplier.js"></script>
+    <script src="app/views_report/ReportStockCard.js"></script>
+    <script src="app/views_report/ReportStockLasting.js"></script>
+    <script src="app/views_report/ReportCheckProduct.js"></script>
+
+    <script src="app/views_CheckProducts/CheckProductsCreate.js"></script>
+    <script src="app/views_CheckProducts/CheckProductsEdit.js"></script>
+
+    <script src="app/views/PettyCashFormView.js"></script>
 
     <!--<script src="js/views/ImportProduct.js"></script>-->
 
@@ -109,9 +126,6 @@
     <link href="css/index.css" rel="stylesheet" />
     <script src="index.js"></script>
 
-    <script>
-
-    </script>
     <style type="text/css">
         td {
             border-style: none;
@@ -131,7 +145,26 @@
             white-space: nowrap;
         }
 
-        </style>
+        /*table {
+            overflow: scroll;
+            -webkit-overflow-scrolling: auto;
+        }*/
+
+
+
+        div [data-role="footer"] li {
+            width: 16.66% !important; /* 12.5% for 8 tabs wide */
+            clear: none !important; /* Prevent line break caused by ui-block-a */
+        }
+
+        .active {
+            background: #89ff5a;
+        }
+
+        iframe {
+            border: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -142,7 +175,7 @@
 
             <h1>Anda-Stock</h1>
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
-            <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
+            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
 
             <!--  <form> 
             <label for="searchbar" class="ui-hidden-accessible">Search:</label>
@@ -154,207 +187,15 @@
         <!-- /header -->
         <div role="main" id="main" class="ui-content jqm-content jqm-fullwidth">
             <h1>Andamania Stock</h1>
-              <h2>Supplier Code (4 Letters)</h2>
-
-            <table border="0" cellpadding="0" cellspacing="0" width="581" style='border-collapse: collapse; table-layout: fixed; width: 436pt'>
-                <col width="72" style='width: 54pt'>
-                <col width="130" style='mso-width-source: userset; mso-width-alt: 4160; width: 98pt'>
-                <col width="91" style='mso-width-source: userset; mso-width-alt: 2912; width: 68pt'>
-                <col width="72" span="1" style='width: 54pt'>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl78">ชื่อผู้ขาย</td>
-                    <td class="xl78">รห้ส </td>
-                    <td class="xl78">เครดิต</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" colspan="4" style='height: 14.25pt; mso-ignore: colspan'></td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl80">เงินสด</td>
-                    <td align="left">CASH</td>
-                    <td class="xl79">&nbsp;</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl80">รีฟันเจิน</td>
-                    <td align="left">REFG</td>
-                    <td align="right">30</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl80"><span style='mso-spacerun: yes'>&nbsp;</span>Super cheap</td>
-                    <td align="left">SCHP</td>
-                    <td align="right">30</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl80">โฟร์โมสต์</td>
-                    <td align="left">FORM</td>
-                    <td align="right">30</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl80">วอลล์</td>
-                    <td align="left">WALL</td>
-                    <td align="right">30</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl81">เขาหลัก โกลเด็น</td>
-                    <td align="left">GOLD</td>
-                    <td align="right">15</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl81">เขาหลักการไฟฟ้า</td>
-                    <td align="left">ELEC</td>
-                    <td align="right">15</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl81">Home pro</td>
-                    <td align="left">HOME</td>
-                    <td align="right">7</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl81">สาธิต</td>
-                    <td align="left">SATT</td>
-                    <td align="right">7</td>
-                </tr>
-                <tr height="19" style='height: 14.25pt'>
-                    <td height="19" style='height: 14.25pt'></td>
-                    <td class="xl81">Bon Caf&eacute;</td>
-                    <td align="left">BONC</td>
-                    <td align="right">15</td>
-                </tr>
-                <![if supportMisalignedColumns]>
-                <![endif]>
-            </table>
+            Clear cache for new update 27/7/17
 
 
-            
-
-
-            <br />
-            <h2>Activity: In</h2>
-
-
-            <p>
-                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 228pt"
-                    width="303">
-                    <colgroup>
-                        <col width="42" />
-                        <col width="85" />
-                        <col width="176" />
-                    </colgroup>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl66" height="19">1 )</td>
-                        <td align="left" class="xl67" colspan="2">วันที่<span style="mso-spacerun: yes">&nbsp; </span>default<span style="mso-spacerun: yes">&nbsp; </span>จ่ากเครื่อง</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl66" height="19">2 )</td>
-                        <td align="left" class="xl67" colspan="2">เป็นส่วน ที่ เครื่องจะดีงจาก<span style="mso-spacerun: yes">&nbsp; </span>database<span style="mso-spacerun: yes">&nbsp; </span>อัตโนมัติ เมิ่อมีการ<span style="mso-spacerun: yes">&nbsp; </span>key รห้ส หรือ ชื่อ สินค้า</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td align="left" class="xl65" colspan="2">ต้องสร้าง ให้มีการ search จากการ key รหัสหรือขื่อสินค้าตัวแรก</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td class="xl65"></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl69" height="19">3 )</td>
-                        <td align="left" class="xl68" colspan="2"><span style="mso-spacerun: yes">&nbsp;</span>Entry by user<span style="mso-spacerun: yes">&nbsp; </span>:<span style="mso-spacerun: yes">&nbsp; </span>ดลังสินค้า , ชื่อผู้ขาย,<span style="mso-spacerun: yes">&nbsp; </span>เลขที่เอกสาร/วันที่<span style="mso-spacerun: yes">&nbsp; </span>ใบส่งสืนค้า (invoice) จากผู้ขาย<span style="mso-spacerun: yes">&nbsp; </span>,ปรืมาณ รับ</td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl68" height="19">&nbsp;</td>
-                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span></td>
-                        <td class="xl68">&nbsp;</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td align="left" class="xl70" height="19">4)</td>
-                        <td align="left" class="xl70" colspan="2">ส่วนที่เครื่องคำนวณให้<span style="mso-spacerun: yes">&nbsp; </span>โดย นำราคา จาก database X จำนวนรับ-จ่าย</td>
-                    </tr>
-                </table>
-            </p>
-            <h2>Activity :Out</h2>
-
-            <p>
-                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 96pt"
-                    width="127">
-                    <colgroup>
-                        <col width="42" />
-                        <col width="85" />
-                    </colgroup>
-                    <tr height="19">
-                        <td class="xl66" height="19" width="42">1 )</td>
-                        <td align="left" class="xl67" width="85">วันที่<span style="mso-spacerun: yes">&nbsp; </span>default<span style="mso-spacerun: yes">&nbsp; </span>จ่ากเครื่อง</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl66" height="19">2 )</td>
-                        <td align="left" class="xl67">เป็นส่วน ที่ เครื่องจะดีงจาก<span style="mso-spacerun: yes">&nbsp; </span>database<span style="mso-spacerun: yes">&nbsp; </span>อัตโนมัติ เมิ่อมีการ<span style="mso-spacerun: yes">&nbsp; </span>key รห้ส หรือ ชื่อ สินค้า</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td align="left" class="xl65">ต้องสร้าง ให้มีการ search จากการ key รหัสหรือขื่อสินค้าตัวแรก</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td class="xl65"></td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl69" height="19">3 )</td>
-                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span>Entry by user<span style="mso-spacerun: yes">&nbsp; </span>:<span style="mso-spacerun: yes">&nbsp; </span>ดลังสินค้า<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>เลขที่เอกสาร/วันที่<span style="mso-spacerun: yes">&nbsp; </span>ใบเบิก สืนค้า<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>ปรืมาณ จ่าย</td>
-                    </tr>
-                    <tr height="19">
-                        <td class="xl68" height="19">&nbsp;</td>
-                        <td align="left" class="xl68"><span style="mso-spacerun: yes">&nbsp;</span>แผนกที่เบิก /<span style="mso-spacerun: yes">&nbsp;&nbsp; </span>Job (กรณีอุปกรณ์ช่าง)</td>
-                    </tr>
-                    <tr height="19">
-                        <td height="19"></td>
-                        <td></td>
-                    </tr>
-                    <tr height="19">
-                        <td align="left" class="xl70" height="19">4)</td>
-                        <td align="left" class="xl70">ส่วนที่เครื่องคำนวณให้<span style="mso-spacerun: yes">&nbsp; </span>โดย นำราคา จาก database X จำนวนรับ-จ่าย</td>
-                    </tr>
-                </table>
-            </p>
-            <p></p>
-            <p></p>
+            <ul>
+                <li>Press <kbd>F12</kbd> to open Chrome Developer Tools (will pop up from bottom)</li>
+                <li><code>Application</code> tab</li>
+                <li><code>Clear storage</code> in left tree</li>
+                <li>Select the data items to clear, then click <code>Clear site data</code></li>
+            </ul>
 
         </div>
         <!-- /content -->
@@ -362,73 +203,157 @@
         <div data-role="panel" data-display="reveal" data-theme="b" class="menu-panel">
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
-            <ul data-role="listview">
-                <li>
-                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+            <ul data-role="listview"  class="jqm-list ui-alt-icon ui-nodisc-icon">
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Account Create
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            
+                            <li>
+                                <a href="Supplier.html" data-menu="Supplier" data-transition="flow">Supplier-Create</a>
+                            </li>
+
+                            <li>
+                                <a href="Stock.html" data-menu="Stock" data-transition="flow">Item-Create</a>
+                            </li>
+                        <!--    <li>
+                                <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                            </li>-->
+
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+
+
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Purchase
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Credit</a>
+                            </li>
+                           <!-- <li>
+                                <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                            </li>-->
+
+                            <li>
+                                <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">PettyCash</a>
+                            </li>
+                        <!--    <li>
+                                <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
+                            </li>-->
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Stock
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                            </li>
+                            <li>
+                                <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
+
                 <li>
-                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
-                </li>
-                <li>
-                    <a href="Report.html" data-transition="flow">รายงาน</a>
+                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
 
         </div>
         <!-- /panel -->
 
-        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
+        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
 
-            <form class="userform">
+            <!--    <a data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ">Log In</a>
+            <a  data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ">Log Out</a>-->
 
-                <h2>Login</h2>
+            <button class="LogInButton">Log In</button>
+            <button class="LogOutButton">Log Out</button>
+            <button class="SettingButton">Setting</button>
 
-                <label for="name">Username:</label>
-                <input type="text" name="name" id="userNameInput" value="" data-clear-btn="true" data-mini="true">
+
+            <!--              <a href="#popupExit" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ">Exit</a>
+            <div data-role="popup" id="popupExit" data-overlay-theme="a" data-theme="a" data-corners="false" data-tolerance="15,15">
+                <a href="#" data-rel="back" class="ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                <iframe src="setting/exit.html" width="480" height="320" seamless=""></iframe>
+            </div>-->
+
+
+
+            <!--<form class="userform" autocomplete="off" >-->
+
+            <!--<h2>Login</h2>-->
+
+            <!--  <label for="name">Username:</label>
+                <input type="text" name="user" id="user" value="" data-clear-btn="true"   data-mini="true" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 
                 <label for="password">Password:</label>
                 <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
 
                 <div class="ui-grid-a">
                     <div class="ui-block-a"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Cancel</a></div>
-                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
-                </div>
-            </form>
+                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Log In</a></div>
+                </div>-->
+            <!--</form>-->
 
         </div>
         <!-- /panel -->
 
-        <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+        <!--        <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
             <div data-role="navbar">
                 <ul>
                     <li>
-                        <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                        <a href="Supplier.html" data-transition="flow">Supplier</a>
                     </li>
                     <li>
-                        <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                        <a href="Products.html" data-transition="flow">Product</a>
                     </li>
                     <li>
-                        <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                        <a href="ImportProducts.html" data-transition="flow">Stock-In</a>
                     </li>
                     <li>
-                        <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                        <a href="ExportProducts.html" data-transition="flow">Stock-Out</a>
                     </li>
                     <li>
-                        <a href="Report.html" data-transition="flow">รายงาน</a>
+                        <a href="CheckProducts.html" data-transition="flow">Stock-Checking</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow">Report</a>
                     </li>
                 </ul>
             </div>
-        </div>
+        </div>-->
+
         <!-- /footer -->
 
     </div>
     <!-- /page -->
+
+    <!--       <div data-role="popup" id="popupLogout" data-overlay-theme="a" data-theme="a" data-corners="false" data-tolerance="15,15">
+                <a href="#" data-rel="back" class="ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                <iframe src="setting/logout.html" width="480" height="320" seamless=""></iframe>
+            </div>
+              <div data-role="popup" id="popupMap" data-overlay-theme="a" data-theme="a" data-corners="false" data-tolerance="15,15">
+                <a href="#" data-rel="back" class="ui-btn ui-btn-b ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                <iframe src="setting/login.html" width="480" height="320" seamless=""></iframe>
+            </div>-->
 
 
     <div data-role="page" id="p1">

@@ -8,20 +8,19 @@
 </head>
 <body>
 
-    <div data-role="page" data-title="ผู้ขาย" class="jqm-demos ui-responsive-panel">
-
+    <div data-role="page" data-title="Supplier" class="jqm-demos ui-responsive-panel">
 
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
             <h1>Products</h1>
             <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
-            <a class="seting" data-icon="gear" data-iconpos="notext">Add</a>
+            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
 
             <div data-role="navbar">
                 <ul>
-                    <li><a data-value="createNav" class="ui-btn-active">สร้าง</a></li>
-                    <li><a data-value="editNav">แก้ใข</a></li>
+                    <li><a data-value="createSupplier" class="ui-btn-active">Create</a></li>
+                    <li><a data-value="editSupplier">Edit</a></li>
 
                 </ul>
             </div>
@@ -40,8 +39,8 @@
             <!--     <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
             </select>-->
 
-            <div id="createNav" class="Nav">
-               
+            <div id="createSupplier" class="Nav">
+
                 <div class="ui-grid-a ui-responsive">
                     <div class="ui-block-a">
                         <div>
@@ -61,22 +60,24 @@
                 <table id="CreateTable" class="StockTable" border="0">
                     <col width="80px" />
                     <col />
-                    <col width="150px" />
+                    <col width="100px" />
                     <tbody>
                         <tr>
                             <th>Code</th>
-                            <th>ชื่อ</th>
-                            <th>เครดิต</th>
-
+                            <th>SupplierName</th>
+                            <th>Credit</th>
+                            <th>Address</th>
                         </tr>
                         <script type="text/template" id="CreateTable-tr-template">
 
                             <td>
                                 <input placeholder="Code" data-type="code" value="<%- code %>" /></td>
                             <td>
-                                <input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
+                                <input placeholder="SupplierName" data-type="name" value="<%- name %>" /></td>
                             <td>
-                                <input placeholder="เครดิต" data-type="credit" value="<%- credit %>" /></td>
+                                <input placeholder="Credit" data-type="credit" value="<%- credit %>" /></td>
+                            <td>
+                                <input placeholder="Address" data-type="credit" value="<%- address %>" /></td>
 
                         </script>
 
@@ -89,7 +90,7 @@
                                 <td>
                                     <input placeholder="Code" value="" /></td>
                                 <td>
-                                    <input placeholder="ชื่อ" value="" /></td>
+                                    <input placeholder="SupplierName" value="" /></td>
                                 <td>
                                     <input placeholder="หน่วย" value="" /></td>
                                 <td>
@@ -104,25 +105,29 @@
                 <!-- <input type="button" class="ClearNewProductRow" value="Clear Table">
                     <input type="button" class="SaveNewProductRows" value="บันทึกรายการสินค้า">-->
 
-                <button class="ClearNewCreateRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" id="Button2" data-mini="true">Clear Table</button>
-                <button class="SaveNewCreateRows ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">บันทึก</button>
+                <button class="ClearNewCreateRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all" data-mini="true">Clear Table</button>
+                <button class="SaveNewCreateRows ui-btn ui-icon-action ui-btn-icon-left  ui-corner-all">Save</button>
 
             </div>
 
-            <div id="editNav" style="display: none" class="Nav">
-              
-                <!--<input type="search" data-theme="a" name="searchbar" class="show_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
+            <div id="editSupplier" style="display: none" class="Nav">
+                 <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or description" data-inline="true">-->
+                <input type="search" data-theme="a" name="searchbar" class="edit_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
                 <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadFile">Download File Exel</button>
 
                 <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
                     <col width="80px" />
                     <col />
-                    <col width="150px" />
+                    <col width="100px" />
+                    <col />
+                    <col width="50px" />
+                    <col width="50px" />
                     <tbody>
                         <tr>
                             <th>Code</th>
-                            <th>ชื่อ</th>
-                            <th>เครดิต</th>
+                            <th>SupplierName</th>
+                            <th>Credit</th>
+                            <th>Address</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -131,25 +136,28 @@
                             <td style="padding: 9px 4px;"><%- code %></td>
                             <td style="padding: 9px 4px;"><%- name %></td>
                             <td style="padding: 9px 4px;"><%- credit %></td>
+                            <td style="padding: 9px 4px;"><%- address %></td>
 
                             <td>
-                                <input type="button" class="editButton" data-mini="true" value="แก้ใข"></td>
+                                <input type="button" class="editButton" data-mini="true" value="Edit"></td>
                             <td>
-                                <input type="button" class="deleteButton" data-mini="true" value="ลบ">
+                                <input type="button" class="deleteButton" data-mini="true" value="Delete">
                             </td>
                         </script>
                         <script type="text/template" id="EditStockTable-tr-template">
 
                             <td style="padding: 9px 4px;"><%- code %></td>
                             <td>
-                                <input placeholder="ชื่อ" data-type="name" value="<%- name %>" /></td>
+                                <input placeholder="SupplierName" data-type="name" value="<%- name %>" /></td>
                             <td>
-                                <input placeholder="เครดิต" data-type="credit" value="<%- credit %>" /></td>
+                                <input placeholder="Credit" data-type="credit" value="<%- credit %>" /></td>
+                            <td>
+                                <input placeholder="Address" data-type="address" value="<%- address %>" /></td>
 
                             <td>
-                                <input type="button" class="cancelEditButton" data-mini="true" value="ยกเลิก"></td>
+                                <input type="button" class="cancelEditButton" data-mini="true" value="Cancel"></td>
                             <td>
-                                <input type="button" class="saveButton" data-mini="true" value="บันทึก">
+                                <input type="button" class="saveButton" data-mini="true" value="Save">
                             </td>
 
                         </script>
@@ -165,20 +173,40 @@
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
             <ul data-role="listview">
+              
                 <li>
-                    <a href="Supplier.html" data-transition="flow">ผู้ขาย</a>
+                    <a href="Supplier.html" data-menu="Supplier"  data-transition="flow">Supplier-Create</a>
+                </li>
+
+                <li>
+                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
                 </li>
                 <li>
-                    <a href="Products.html" data-transition="flow">ชนิดสินค้า</a>
+                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                </li>
+
+
+                <li>
+                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
                 </li>
                 <li>
-                    <a href="ImportProducts.html" data-transition="flow">สินค้าเข้า</a>
+                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                </li>
+
+                <li>
+                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="ExportProducts.html" data-transition="flow">สินค้าออก</a>
+                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
                 </li>
                 <li>
-                    <a href="Report.html" data-transition="flow">รายงาน</a>
+                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                </li>
+                <li>
+                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                </li>
+                <li>
+                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
 
@@ -186,28 +214,39 @@
         </div>
         <!-- /panel -->
 
-        <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="seting-panel">
+         <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
 
-            <!-- <form class="userform">
-
-                <h2>Login</h2>
-
-                <label for="name">Username:</label>
-                <input type="text" name="name" id="userNameInput" value="" data-clear-btn="true" data-mini="true">
-
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
-
-                <div class="ui-grid-a">
-                    <div class="ui-block-a"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Cancel</a></div>
-                    <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
-                </div>
-            </form>-->
+            <button class="LogInButton">Log In</button>
+            <button class="LogOutButton">Log Out</button>
+              <button class="SettingButton">Setting</button>
 
         </div>
         <!-- /panel -->
-        <div data-role="footer" data-position="fixed" data-theme="a">
-        </div>
+
+       <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li>
+                        <a href="Supplier.html" data-transition="flow" class="ui-btn-active">Supplier</a>
+                    </li>
+                    <li>
+                        <a href="Products.html" data-transition="flow">Product</a>
+                    </li>
+                    <li>
+                        <a href="ImportProducts.html" data-transition="flow">Stock-In</a>
+                    </li>
+                    <li>
+                        <a href="ExportProducts.html" data-transition="flow">Stock-Out</a>
+                    </li>
+                    <li>
+                        <a href="CheckProducts.html" data-transition="flow">Stock-Checking</a>
+                    </li>
+                    <li>
+                        <a href="Report.html" data-transition="flow">Report</a>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
         <!-- /footer -->
 
         <div data-role="popup" id="sure" data-title="Are you sure?">

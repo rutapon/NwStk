@@ -101,6 +101,16 @@
             background-color: black;
             color: white;
         }
+
+        @media print {
+            /*body {
+                transform: scale(.7);
+            }*/
+
+            table {
+                page-break-inside: avoid;
+            }
+        }
     </style>
 
 </head>
@@ -152,7 +162,7 @@
 
         </table>
     </div>
-      <h3 style="text-align: center; font: 21px verdana;">Products type 2    </h3>
+    <h3 style="text-align: center; font: 21px verdana;">Products type 2    </h3>
 
     <div style="margin: 30px">
         <table id="t01">
@@ -165,6 +175,37 @@
                 <td>Jill</td>
                 <td>Smith</td>
                 <td>50</td>
+            </tr>
+            <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+            </tr>
+            
+            <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>80</td>
+            </tr>
+            <tr>
+                <td>Jill</td>
+                <td>Smith</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Eve</td>
+                <td>Jackson</td>
+                <td>94</td>
+            </tr>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>80</td>
             </tr>
             <tr>
                 <td>Eve</td>

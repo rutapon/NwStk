@@ -4,13 +4,16 @@
 
 /// <reference path="../NwLib/NwLib.js" />
 /// <reference path="../NwConn/NwConn.js" />
-/// <reference path="../service_conn/NwStockServiceConn.js" />
+/// <reference path="../service_conn/NwServiceConn.js" />
 /// <reference path="models/Stock.js" />
-
+var app = app || { models: {}, collections: {}, views: {} };
 
 (function () {
+
     var host = window.location.hostname;
-    var port = window.location.port;
+    //var host = 'andamania.duckdns.org';
+
+    var port = window.location.port
     var protocol = 'ws:';
     //var host = 'localhost';
     //var host = 'newww.dyndns.org';
@@ -22,6 +25,7 @@
     } else {
         var wsClient = app.wsClient = new NwWsClient(protocol + '//' + host + ":" + port);
     }
+
     var serviceMethod = app.serviceMethod = new NwServiceConn(wsClient);
 
     wsClient.setOnConnectEventListener(function (socket) {
@@ -47,10 +51,10 @@
         var editSupplierCollection = new app.collections.SupplierCollection();
         var supplierEditView = new app.views.SupplierEdit({ collection: editSupplierCollection });
 
-        var curTab = 'createNav';
+        var curTab = 'createSupplier';
         var updateView = function () {
 
-            if (curTab == 'editNav') {
+            if (curTab == 'editSupplier') {
                 console.log('updateView editNav');
 
                 supplierEditView.search();
@@ -69,7 +73,7 @@
 
     };
 
-    app.initProduct = function () {
+    app.initProduct = function (listType) {
 
         //var productsClass = app.Class.Products;
 
@@ -80,7 +84,7 @@
 
         var newProductsCollection = new app.collections.products([new app.models.product()]);
 
-        var CreateProduct = new app.views.CreateProduct({ collection: newProductsCollection, model: { stockModel: stockModel } });
+        var CreateProduct = new app.views.CreateProduct({ el: '#createItem', collection: newProductsCollection, model: { stockModel: stockModel } });
 
         var productCollection = new app.collections.products();
 
@@ -91,7 +95,7 @@
         var editProductView = new app.views.EditProduct({ collection: editProductsCollection, model: { stockModel: stockModel } });
 
 
-        var curTab = 'createProdutNav';
+        var curTab = 'createItem';
         $(".ui-page-active [data-role='header'] li a").click(function () {
             //curTab = $(this).text();//.text();
             curTab = $(this).jqmData('value');
@@ -129,19 +133,20 @@
 
             console.log('updateProductView');
 
-            if (curTab == 'showProductNav') {
+            if (curTab == 'showItem') {
                 showProductView.search();
-            } else if (curTab == 'editProductNav') {
+            } else if (curTab == 'editItem') {
                 editProductView.search();
             }
         }
         stockModel.set('stock', []);
-        stockModel.update();
+        stockModel.update(null, listType);
     };
 
-    app.initImportProduct = function () {
+    app.initImportProduct = function (listType) {
 
         var selectProductCollection = new app.collections.products();
+
         var importProductCollection = new app.collections.ImportProductCollection();
 
         var addImportProductModel = new app.models.AddImportProductModel({
@@ -159,6 +164,8 @@
             el: '#popupSelectProduct',
             model: addImportProductModel
         });
+
+        viewSelectProduct.search();
 
         var importProductCollection = new app.collections.ImportProductCollection();
         var importProductEdit = new app.views.ImportProductEdit({
@@ -198,12 +205,13 @@
 
         stockModel.on('change:stock_selected', function (model, stock_selected) {
             console.log('change:stock_selected');
+            selectProductCollection.setLocalData(stock_selected);
             updateView();
         });
 
 
         stockModel.set('stock', []);
-        stockModel.update();
+        stockModel.update(null, listType);
 
         //stockModel.on('change:stock', function (model, stock) {
 
@@ -219,6 +227,71 @@
         //stockModel.on('change:stock_selected', function (model, stock_selected) {
         //    updateView();
         //});
+    };
+
+    app.initImportProductPettyCash = function (listType) {
+
+        var pettyCashModel = new app.models.PettyCashModel();
+        var selectProductCollection = new app.collections.products();
+
+        var importProductCollection = new app.collections.ImportProductCollection();
+
+        var addImportProductModel = new app.models.AddImportProductModel({
+            stockModel: stockModel,
+            selectProductCollection: selectProductCollection,
+            importProductCollection: importProductCollection
+        });
+
+        var addImportProduct = new app.views.ImportProductCreate({
+            el: '.importProduct',
+            model: addImportProductModel,
+           
+        });
+
+        addImportProduct.setPettyCashModel(pettyCashModel)
+
+        new app.views.PettyCashFormView({ el: '#PettyCashForm', model: pettyCashModel });
+
+
+        var viewSelectProduct = new app.views.SelectProduct({
+            el: '#popupSelectProduct',
+            model: addImportProductModel
+        });
+
+        viewSelectProduct.search();
+
+        var importProductCollection = new app.collections.ImportProductCollection();
+        var importProductEdit = new app.views.ImportProductEdit({
+            el: '.editImportProduct',
+            model: stockModel, collection: importProductCollection
+        });
+
+        var updateView = function () {
+            if (curTab == 'editImportProduct') {
+                importProductEdit.search();
+            }
+        };
+
+        var curTab = 'importProduct';
+        $(".ui-page-active [data-role='header'] li a").click(function () {
+            //curTab = $(this).text();//.text();
+            curTab = $(this).jqmData('value');
+
+            $('.importProductNav').hide();
+            $('.' + curTab).show();
+            updateView();
+        });
+
+
+        stockModel.on('change:stock_selected', function (model, stock_selected) {
+            console.log('change:stock_selected');
+            selectProductCollection.setLocalData(stock_selected);
+            updateView();
+        });
+
+
+        stockModel.set('stock', []);
+        stockModel.update(null, listType);
     };
 
     app.initExportProduct = function () {
@@ -280,6 +353,7 @@
 
         stockModel.on('change:stock_selected', function (model, stock_selected) {
             console.log('change:stock_selected');
+            selectProductCollection.setLocalData(stock_selected);
             updateView();
         });
 
@@ -303,8 +377,56 @@
         //});
     };
 
+    app.initCheckProduct = function () {
+        var stockModel = new app.models.Stock();
+
+        var checkProductsCreate = new app.views.CheckProductsCreate({
+            el: '.checkProduct',
+            model: { stockModel: stockModel }
+        });
+
+        var checkProductsEdit = new app.views.CheckProductsEdit({
+            el: '.editCheckProduct',
+            model: { stockModel: stockModel }
+        });
+
+        var updateView = function () {
+            if (curTab == 'checkProduct') {
+                checkProductsCreate.render();
+            }
+            else if (curTab == 'editCheckProduct') {
+                checkProductsEdit.render();
+            }
+        };
+
+        var curTab = 'checkProduct';
+        $(".ui-page-active [data-role='header'] li a").click(function () {
+            //curTab = $(this).text();//.text();
+            curTab = $(this).jqmData('value');
+
+            $('.checkProductNav').hide();
+            $('.' + curTab).show();
+            updateView();
+        });
+
+
+        stockModel.on('change:stock_selected', function (model, stock_selected) {
+            console.log('change:stock_selected');
+            updateView();
+        });
+
+
+        stockModel.set('stock', []);
+
+        stockModel.update();
+
+    };
+
     app.initReport = function () {
         console.log('app.initReport');
+        var stockModel = new app.models.Stock();
+
+
         var selectTimePeriodModel = new Backbone.Model();
 
         var selectTimePeriodView = new app.views.SelectTimePeriod({
@@ -331,8 +453,11 @@
             el: '.ReportPurchaseProduct',
             model: { stockModel: stockModel, selectTimePeriodModel: selectTimePeriodModel }
         });
-        
 
+        var reportCheckProductView = new app.views.ReportCheckProduct({
+            el: '.ReportCheckProduct',
+            model: { stockModel: stockModel }
+        });
 
         var viewSelectProduct = new app.views.SelectProduct2({
             el: '#popupSelectProduct',
@@ -340,19 +465,20 @@
         });
 
         viewSelectProduct.on('select', function (selectedModels) {
+            //console.log('viewSelectProduct',selectedModels);
             if (selectedModels.length > 0) {
-                $("#popupSelectProduct").popup('close', { transition: 'flow' });
+                //$("#popupSelectProduct").popup('close', { transition: 'flow' });
 
                 var selectProduct = selectedModels[0];
 
                 if (curTab == 'ReportStockCard') {
                     $('.SelectTimePeriod').show();
-                    reportStockCardView.search(selectProduct);
+                    reportStockCardView.search(selectedModels);
                     reportStockCardView.render();
                 }
                 else if (curTab == 'ReportPurchaseProduct') {
                     $('.SelectTimePeriod').show();
-                    reportPurchaseProductView.search(selectProduct);
+                    reportPurchaseProductView.search(selectedModels);
                     reportPurchaseProductView.render();
                 }
             }
@@ -362,8 +488,6 @@
             //    console.log(product.toJSON());
             //}
         })
-
-
 
         var curTab = 'ReportStockCard';
         var updateView = function () {
@@ -380,6 +504,11 @@
             }
             else if (curTab == 'ReportPurchaseProduct') {
                 $('.SelectTimePeriod').show();
+            }
+            else if (curTab == 'ReportCheckProduct') {
+                //$('.ReportCheckProduct').show();
+                $('.SelectTimePeriod').hide();
+                reportCheckProductView.search();
             }
         };
 

@@ -20,14 +20,19 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         //    this.trigger('removeUi', this);
         //}
-        
-        update: function (cb) {
-            var self = this;
-            app.serviceMethod.getAllStockName(function myfunction(result) {
-                self.set('stock', result);
 
-                if (cb) cb(result);
-            });
+        update: function (cb, type) {
+            if (!type) type = 'Store'
+            var self = this;
+            var result = app.userModel.getListsName(type);
+            self.set('stock', result);
+            if (cb) cb(result);
+
+            //app.serviceMethod.getAllStockName({}, function (result) {
+            //    console.log(result);
+            //    self.set('stock', result);
+            //    if (cb) cb(result);
+            //});
         }
     });
 
