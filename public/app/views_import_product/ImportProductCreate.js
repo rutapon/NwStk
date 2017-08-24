@@ -32,7 +32,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     function hackedSplice(index, howMany /* model1, ... modelN */) {
         var args = _.toArray(arguments).slice(2).concat({ at: index }),
-          removed = this.models.slice(index, index + howMany);
+            removed = this.models.slice(index, index + howMany);
 
         this.remove(removed).add.apply(this, args);
 
@@ -143,105 +143,66 @@ var app = app || { models: {}, collections: {}, views: {} };
             var columns;
             var colHeaders;
 
-            if (app.userModel.get('type') == 'staff_support') {
-                $('#sum-amount-label').hide();
+
+            if (app.userModel.get('type') == 'staff_main') {
+
                 columns = [
-                  { readOnly: true, data: attr('code') },
-                  { readOnly: true, data: attr('name') },
-                  { readOnly: true, data: attr('unit_type') },
+                    { readOnly: true, data: attr('code') },
+                    { readOnly: true, data: attr('name') },
+                    { readOnly: true, data: attr('unit_type') },
+                    //{ readOnly: true, data: attr('unit_size') },
 
-
-                   {
-                       data: attr('invoid_id'),
-                   },
-
-                   {
-                       data: attr('in_date'),
-                       type: 'date',
-                       dateFormat: 'YYYY-MM-DD',
-                       correctFormat: true,
-                       strict: true
-                   },
-                   {
-                       data: attr('unit'),
-                       type: 'numeric',
-                       format: '0,0.00',
-                       //strict: true
-                   }
-
-                ];
-
-                colHeaders = [
-                        'code',
-                        'Description',
-                        'UnitType',
-                        //'ขนาด',
-                        //'ผู้ขาย',
-                        'W/H Receive No.',
-                        'Bill Date',
-                        'Unit-In'
-                ];
-            }
-            else {
-                if (app.userModel.get('type') == 'staff_main') {
-
-                    columns = [
-                   { readOnly: true, data: attr('code') },
-                   { readOnly: true, data: attr('name') },
-                   { readOnly: true, data: attr('unit_type') },
-                   //{ readOnly: true, data: attr('unit_size') },
-
-                   /*{
-                       data: attr('supplier_code'),
-                       //type: 'autocomplete',
-                       type: 'dropdown',
-                       strict: true,
-                       allowInvalid: false,
-                       source: function (query, process) {
-                           process(supplierCollection.pluck("code"));
-    
-                           //console.log(this.row);
-                           //var ImportProductModel = importProductCollection.at(this.row);
-    
-                           //console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
-    
-                           //var code = ImportProductModel.get('code');
-    
-                           //supplyLogCollection.find(code, stockModel.get('stock_selected'), function () {
-    
-                           //    //    process(_.uniq(supplyLogCollection.pluck('supplier_name')).reverse().splice(0,6));
-                           //    //});
-    
-                           //    //supplyLogCollection.getAll(stockModel.get('stock_selected'), function () {
-                           //    //var supplier_nameArry = _.pluck(_.filter(supplyLogCollection.toArray(), function (model) {
-                           //    //    return model.get('product_id') == product_id;
-                           //    //}), 'supplier_name');
-    
-                           //    var ModelObjArray = _.map(supplyLogCollection.toArray().reverse(), function (model) {
-                           //        return model.toJSON();
-                           //    });
-    
-                           //    var otherSupplier_nameArry = _.chain(ModelObjArray).
-                           //        filter(function myfunction(modelObj) {
-                           //            return modelObj['code'] != code;
-                           //        }).pluck('supplier_code').unique().value();
-    
-    
-                           //    var supplier_nameArry = _.chain(ModelObjArray).
-                           //        filter(function myfunction(modelObj) {
-                           //            return modelObj['code'] == code;
-                           //        }).pluck('supplier_code').unique()
-                           //        .union(otherSupplier_nameArry)
-                           //        .first(5)
-                           //        .value();
-    
-                           //    process(supplier_nameArry);
-                           //});
-    
-                           //process(['ร้าน a', 'ร้าน b', 'ร้าน c']);
-                       },
-                       filter: false
-                   },*/
+                    /*{
+                        data: attr('supplier_code'),
+                        //type: 'autocomplete',
+                        type: 'dropdown',
+                        strict: true,
+                        allowInvalid: false,
+                        source: function (query, process) {
+                            process(supplierCollection.pluck("code"));
+     
+                            //console.log(this.row);
+                            //var ImportProductModel = importProductCollection.at(this.row);
+     
+                            //console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
+     
+                            //var code = ImportProductModel.get('code');
+     
+                            //supplyLogCollection.find(code, stockModel.get('stock_selected'), function () {
+     
+                            //    //    process(_.uniq(supplyLogCollection.pluck('supplier_name')).reverse().splice(0,6));
+                            //    //});
+     
+                            //    //supplyLogCollection.getAll(stockModel.get('stock_selected'), function () {
+                            //    //var supplier_nameArry = _.pluck(_.filter(supplyLogCollection.toArray(), function (model) {
+                            //    //    return model.get('product_id') == product_id;
+                            //    //}), 'supplier_name');
+     
+                            //    var ModelObjArray = _.map(supplyLogCollection.toArray().reverse(), function (model) {
+                            //        return model.toJSON();
+                            //    });
+     
+                            //    var otherSupplier_nameArry = _.chain(ModelObjArray).
+                            //        filter(function myfunction(modelObj) {
+                            //            return modelObj['code'] != code;
+                            //        }).pluck('supplier_code').unique().value();
+     
+     
+                            //    var supplier_nameArry = _.chain(ModelObjArray).
+                            //        filter(function myfunction(modelObj) {
+                            //            return modelObj['code'] == code;
+                            //        }).pluck('supplier_code').unique()
+                            //        .union(otherSupplier_nameArry)
+                            //        .first(5)
+                            //        .value();
+     
+                            //    process(supplier_nameArry);
+                            //});
+     
+                            //process(['ร้าน a', 'ร้าน b', 'ร้าน c']);
+                        },
+                        filter: false
+                    },*/
 
                     {
                         //readOnly: true,
@@ -294,124 +255,124 @@ var app = app || { models: {}, collections: {}, views: {} };
                         format: '0,0.00',
                         //strict: true
                     },
-                     {
-                         data: attr('sum'),
-                         readOnly: true,
-                         type: 'numeric',
-                         format: '0,0.00',
-                         //strict: true
-                     }
-                    ];
-
-                    colHeaders = [
-                      'code',
-                      'Description',
-                      'UnitType',
-                      //'ขนาด',
-                      //'ผู้ขาย',
-                      'Price/Unit',
-                      'Bill Number',
-                      'Bill Date',
-                      'Unit-In',
-                      'Amount'
-                    ];
-                }
-                else {
-
-                    columns = [
-                 { readOnly: true, data: attr('code') },
-                 { readOnly: true, data: attr('nameTh') },
-                 { readOnly: true, data: attr('nameEn') },
-                 { readOnly: true, data: attr('unit_type') },
-                 {
-                     //readOnly: true,
-                     data: attr('unit_price'),
-                     //type: 'autocomplete',
-                     type: 'dropdown',
-                     allowInvalid: false,
-                     strict: true,
-                     source: function (query, process) {
-                         //    //console.log(this.row);
-
-                         var ImportProductModel = importProductCollection.at(this.row);
-
-                         var priceArr = [];
-
-                         for (var i = 1; i <= 3; i++) {
-                             if (ImportProductModel.get('unit_price' + i)) {
-                                 priceArr.push(ImportProductModel.get('unit_price' + i));
-                             }
-                         }
-
-
-                         //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
-
-                         //    var code = ImportProductModel.get('code')
-                         //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
-
-                         //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
-                         //    });
-                         process(priceArr);
-                         //    //process([10, 50, 100]);
-
-                     },
-                     //filter: false
-                 },
-                  {
-                      data: attr('invoid_id'),
-                  },
-
-                  {
-                      data: attr('in_date'),
-                      type: 'date',
-                      dateFormat: 'YYYY-MM-DD',
-                      correctFormat: true,
-                      strict: true
-                  },
-                  {
-                      data: attr('unit'),
-                      type: 'numeric',
-                      format: '0,0.00',
-                      //strict: true
-                  },
-                   {
-                       data: attr('sum'),
-                       readOnly: true,
-                       type: 'numeric',
-                       format: '0,0.00',
-                       //strict: true
-                   }];
-
-                    colHeaders = [
-                      'code',
-                      'DescriptionTh',
-                      'DescriptionEn',
-                      'UnitType',
-                      //'ขนาด',
-                      //'ผู้ขาย',
-                      'Price/Unit',
-                      'Bill Number',
-                      'Bill Date',
-                      'Unit-In',
-                      'Amount'
-                    ];
-                }
-
-                importProductCollection.on('change:sum', function (model) {
-
-                    var sumAmount = 0;
-                    importProductCollection.forEach(function (modelEach, index) {
-                        sumAmount += modelEach.attributes['sum'];
-                    });
-
-                    if (self.pettyCashModel) {
-                        self.pettyCashModel.set('sum', sumAmount)
+                    {
+                        data: attr('sum'),
+                        readOnly: true,
+                        type: 'numeric',
+                        format: '0,0.00',
+                        //strict: true
                     }
+                ];
 
-                    $('#sum-amount-label').text('All Amount: ' + sumAmount + '฿');
-
-                });
+                colHeaders = [
+                    'code',
+                    'Description',
+                    'UnitType',
+                    //'ขนาด',
+                    //'ผู้ขาย',
+                    'Price/Unit',
+                    'Bill Number',
+                    'Bill Date',
+                    'Unit-In',
+                    'Amount'
+                ];
             }
+            else {
+
+                columns = [
+                    { readOnly: true, data: attr('code') },
+                    { readOnly: true, data: attr('nameTh') },
+                    { readOnly: true, data: attr('nameEn') },
+                    { readOnly: true, data: attr('unit_type') },
+                    {
+                        //readOnly: true,
+                        data: attr('unit_price'),
+                        //type: 'autocomplete',
+                        type: 'dropdown',
+                        allowInvalid: false,
+                        strict: true,
+                        source: function (query, process) {
+                            //    //console.log(this.row);
+
+                            var ImportProductModel = importProductCollection.at(this.row);
+
+                            var priceArr = [];
+
+                            for (var i = 1; i <= 3; i++) {
+                                if (ImportProductModel.get('unit_price' + i)) {
+                                    priceArr.push(ImportProductModel.get('unit_price' + i));
+                                }
+                            }
+
+
+                            //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
+
+                            //    var code = ImportProductModel.get('code')
+                            //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
+
+                            //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
+                            //    });
+                            process(priceArr);
+                            //    //process([10, 50, 100]);
+
+                        },
+                        //filter: false
+                    },
+                    {
+                        data: attr('invoid_id'),
+                    },
+
+                    {
+                        data: attr('in_date'),
+                        type: 'date',
+                        dateFormat: 'YYYY-MM-DD',
+                        correctFormat: true,
+                        strict: true
+                    },
+                    {
+                        data: attr('unit'),
+                        type: 'numeric',
+                        format: '0,0.00',
+                        //strict: true
+                    },
+                    {
+                        data: attr('sum'),
+                        readOnly: true,
+                        type: 'numeric',
+                        format: '0,0.00',
+                        //strict: true
+                    }];
+
+                colHeaders = [
+                    'code',
+                    'DescriptionTh',
+                    'DescriptionEn',
+                    'UnitType',
+                    //'ขนาด',
+                    //'ผู้ขาย',
+                    'Price/Unit',
+                    'Bill Number',
+                    'Bill Date',
+                    'Unit-In',
+                    'Amount'
+                ];
+            }
+
+            importProductCollection.on('change:sum', function (model) {
+
+                var sumAmount = 0;
+                importProductCollection.forEach(function (modelEach, index) {
+                    sumAmount += modelEach.attributes['sum'];
+                });
+
+                if (self.pettyCashModel) {
+                    self.pettyCashModel.set('sum', sumAmount)
+                }
+
+                $('#sum-amount-label').text('All Amount: ' + sumAmount + '฿');
+
+            });
+
 
             //columns[4]= {
             //    data: attr('unit_price'),
