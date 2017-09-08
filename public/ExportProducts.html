@@ -50,7 +50,7 @@
                     </div>
 
                 </div>
-                <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">àÅ×Í¡ÊÔ¹¤éÒ</button>-->
+                <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">ï¿½ï¿½ï¿½Í¡ï¿½Ô¹ï¿½ï¿½ï¿½</button>-->
 
 
                 <div id="popupExportProduct"></div>
@@ -205,45 +205,81 @@
         </div>
         <!-- /content -->
 
-        <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
+    <div data-role="panel" data-display="reveal" data-theme="b" class="menu-panel">
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
-            <ul data-role="listview">
-                     <li>
-                    <a href="Supplier.html" data-menu="Supplier"  data-transition="flow">Supplier-Create</a>
+            <ul data-role="listview"  class="jqm-list ui-alt-icon ui-nodisc-icon">
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Account Create
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            
+                            <li>
+                                <a href="Supplier.html" data-menu="Supplier" data-transition="flow">Supplier-Create</a>
+                            </li>
+
+                            <li>
+                                <a href="Stock.html" data-menu="Stock" data-transition="flow">Item-Create</a>
+                            </li>
+                        <!--    <li>
+                                <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                            </li>-->
+
+                        </ul>
+                    </div>
                 </li>
 
-                <li>
-                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
+
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Purchase
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Credit</a>
+                            </li>
+                           <!-- <li>
+                                <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                            </li>-->
+
+                            <li>
+                                <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">PettyCash</a>
+                            </li>
+                        <!--    <li>
+                                <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
+                            </li>-->
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Stock
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                            </li>
+                            <li>
+                                <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
-                <li>
-                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
-                </li>
-                <li>
-                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
-                </li>
 
-                <li>
-                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
-                </li>
-                <li>
-                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
-                </li>
-                <li>
-                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
-                </li>
-                <li>
-                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
-                </li>
                 <li>
                     <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
-
 
         </div>
         <!-- /panel -->

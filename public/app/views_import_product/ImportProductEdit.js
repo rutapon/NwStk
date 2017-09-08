@@ -43,7 +43,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             initialize: function () {
                 var self = this;
 
-                var stockModel = this.model;
+                this.supplierCollection = this.model.get('supplierCollection'); //new app.collections.SupplierCollection();
+
+                var stockModel  = this.stockModel= this.model.get('stockModel');
 
                 var selectTimePeriodModel = this.selectTimePeriodModel = new Backbone.Model();
 
@@ -90,9 +92,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 this.collection.on('reset', this.resetProduct, this);
 
                 this.render();
-
-                this.supplierCollection = new app.collections.SupplierCollection();
-                this.supplierCollection.getAll();
                 
                 if (app.userModel.get('type') == 'staff_support') {
                     self.$el.find('.div-select-supplier-in-edit').remove();//select-supplier-in
@@ -135,7 +134,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             showAll: function () {
                 var self = this;
 
-                var stockSelected = this.model.get('stock_selected'); //$('.select-stock  option:selected').select().text();
+                var stockSelected = this.stockModel.get('stock_selected'); //$('.select-stock  option:selected').select().text();
                 //app.serviceMethod.getAllProducts(stockSelected, function (result) {
                 //    _.each(result, function (item) {
                 //        item['stock_name'] = stockSelected;
@@ -154,7 +153,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             },
             showInPeriod: function (timeStart, timeEnd) {
-                var stockSelected = this.model.get('stock_selected');
+                var stockSelected = this.stockModel.get('stock_selected');
                 this.collection.getInPeriod(stockSelected, timeStart, timeEnd);
             },
             resetFromService: function (result, stockSelected) {
@@ -182,7 +181,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var timeStart = selectTimePeriodModel.get('timeStart');
                 var timeEnd = selectTimePeriodModel.get('timeEnd');
 
-                var stockSelected = this.model.get('stock_selected');
+                var stockSelected = this.stockModel.get('stock_selected');
 
               
                 //this.showInPeriod(timeStart, timeEnd);

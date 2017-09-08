@@ -60,16 +60,22 @@ var app = app || { models: {}, collections: {}, views: {} };
         search: function (searchText, stockSelected, cb) {
             var self = this;
             var findObj = { findWord: searchText, limit: 100 };
-         
+
             app.serviceMethod.findeSupplierStartWith(findObj, function (result) {
                 self.reset(result);
                 if (cb) cb(result);
             });
         },
-        getAll: function (cb) {
+        getAll: function (cb, onlyCodes) {
             var self = this;
             app.serviceMethod.getAllSupplier(function (result) {
-                //console.log(result);
+                //console.log('getAll supplier',result);
+                if (onlyCodes) {
+                    result = _.filter(result, function (item) {
+                        return _.contains(onlyCodes, item.code);
+                    });
+                }
+
                 self.reset(result);
                 if (cb) cb(result);
             });

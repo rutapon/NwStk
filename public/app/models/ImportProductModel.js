@@ -23,7 +23,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             invoid_id: '',
             in_date: '',
             sum: 0,
-            stock_name: ''
+            stock_name: '',
+            remark: null,
         },
 
         initialize: function () {
@@ -69,8 +70,15 @@ var app = app || { models: {}, collections: {}, views: {} };
         //},
 
         validate: function (attrs, options) {
+            console.log('validate', options);
             // if (!attrs.code || !attrs.stock_name || !attrs.unit_price || !attrs.unit || !attrs.invoid_id || !attrs.sum) {
-            if (!attrs.code || !attrs.stock_name || !attrs.unit || !attrs.invoid_id || !attrs.unit_price) {
+            var isInvalid = !attrs.code || !attrs.stock_name || !attrs.invoid_id;
+
+            if (!isInvalid && attrs.stock_name.split('-')[0] != 'OE') {
+                isInvalid = isInvalid || !attrs.unit || !attrs.unit_price;
+            }
+
+            if (isInvalid) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name || !attrs.unit || !attrs.unit_price) ");
                 alert("ข้อมูลไม่ครบ");
@@ -153,19 +161,19 @@ var app = app || { models: {}, collections: {}, views: {} };
         getProductModel: function () {
 
             var productDataField = [
-             'code',
-             'name',
-             'unit_type',
-             'description',
-             'stock_name',
-             'supplier_default',
-             'unit_price_default',
-             'supplier1',
-             'unit_price1',
-             'supplier2',
-             'unit_price2',
-             'supplier3',
-             'unit_price3'
+                'code',
+                'name',
+                'unit_type',
+                'description',
+                'stock_name',
+                'supplier_default',
+                'unit_price_default',
+                'supplier1',
+                'unit_price1',
+                'supplier2',
+                'unit_price2',
+                'supplier3',
+                'unit_price3'
             ];
 
 

@@ -107,45 +107,46 @@
     var supplierDataField = ['code', 'name', 'credit', 'address'];
 
     var productDataField = [
-               'code',
-               //'name',
-               'nameTh',
-               'nameEn',
-               'unit_type',
-               'description',
-               'stock_name',
-               'supplier_default',
-               'unit_price_default',
-               'supplier1',
-               'unit_price1',
-               'supplier2',
-               'unit_price2',
-               'supplier3',
-               'unit_price3'
+        'code',
+        //'name',
+        'nameTh',
+        'nameEn',
+        'unit_type',
+        'description',
+        'stock_name',
+        'supplier_default',
+        'unit_price_default',
+        'supplier1',
+        'unit_price1',
+        'supplier2',
+        'unit_price2',
+        'supplier3',
+        'unit_price3'
     ];
 
 
     var importProductDataField = [
-                'code',
-                'supplier_code',
-                'unit_price',
-                'unit',
-                'in_date',
-                'invoid_id',
-                'sum',
-                'stock_name'
+        'code',
+        'supplier_code',
+        'unit_price',
+        'unit',
+        'in_date',
+        'invoid_id',
+        'sum',
+        'stock_name',
+        'remark'
     ]
 
     var exportProductDataField = [
-                'code',
-                //'supplier_code',
-                //'unit_price',
-                'unit',
-                'out_date',
-                'requisition_id',
-                //'sum',
-                'job',
-                'stock_name'
+        'code',
+        //'supplier_code',
+        //'unit_price',
+        'unit',
+        'out_date',
+        'requisition_id',
+        //'sum',
+        'job',
+        'stock_name'
     ];
 
     var checkProductDataField = ['code', 'unit', 'check_date', 'stock_name'];
@@ -241,9 +242,9 @@
 
     var getStock = function (stockName, dqm, isForceUseNonSupportDb) {
 
-        if (isForceUseNonSupportDb && stockName.indexOf('--by--') > -1) {
-            stockName = stockName.split('--by--')[0];
-        }
+        // if (isForceUseNonSupportDb && stockName.indexOf('--by--') > -1) {
+        //     stockName = stockName.split('--by--')[0];
+        // }
 
         return stocks[dqm];
     }
@@ -1152,7 +1153,7 @@
         //#region Supplier
         getAllSupplier: function (data, cb) {
 
-            //console.log('getAllSupplier', data);
+            console.log('getAllSupplier', data);
 
             var stock = getStock('globalDB', data.dpm);
 

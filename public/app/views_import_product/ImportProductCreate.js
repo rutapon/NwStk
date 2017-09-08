@@ -62,6 +62,9 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             var self = this;
 
+            
+            this.supplierCollection = this.model.get('supplierCollection'); //new app.collections.SupplierCollection();
+           
             this.importProductTable = this.$el.find('#popupImportProduct').get(0);
             var selectImportProductTable = $(".select-result");
             this.select_product_search = this.$el.find('.select_product_search');
@@ -118,11 +121,6 @@ var app = app || { models: {}, collections: {}, views: {} };
             //var supplierCollection = new app.collections.SupplierCollection();
             //supplierCollection.getAll();
 
-
-            this.supplierCollection = new app.collections.SupplierCollection();
-            this.supplierCollection.getAll();
-
-
             if (app.userModel.get('type') == 'staff_support') {
                 self.$el.find('.div-select-supplier-in').remove();//select-supplier-in
             }
@@ -142,7 +140,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 });
             }
 
-
+            //$('#sum-amount-label').text('All Amount: ''฿');
             this.initImportProductCollectionEventHandle();
         },
 
@@ -220,236 +218,110 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             var importProductTable = self.importProductTable;
             $(importProductTable).html('');
-            
+
             var importProductCollection = self.importProductCollection;
             var columns;
             var colHeaders;
 
-            if (app.userModel.get('type') == 'staff_main') {
-
-                columns = [
-                    { readOnly: true, data: attr('code') },
-                    { readOnly: true, data: attr('name') },
-                    { readOnly: true, data: attr('unit_type') },
-                    //{ readOnly: true, data: attr('unit_size') },
-
-                    /*{
-                        data: attr('supplier_code'),
-                        //type: 'autocomplete',
-                        type: 'dropdown',
-                        strict: true,
-                        allowInvalid: false,
-                        source: function (query, process) {
-                            process(supplierCollection.pluck("code"));
-     
-                            //console.log(this.row);
-                            //var ImportProductModel = importProductCollection.at(this.row);
-     
-                            //console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
-     
-                            //var code = ImportProductModel.get('code');
-     
-                            //supplyLogCollection.find(code, stockModel.get('stock_selected'), function () {
-     
-                            //    //    process(_.uniq(supplyLogCollection.pluck('supplier_name')).reverse().splice(0,6));
-                            //    //});
-     
-                            //    //supplyLogCollection.getAll(stockModel.get('stock_selected'), function () {
-                            //    //var supplier_nameArry = _.pluck(_.filter(supplyLogCollection.toArray(), function (model) {
-                            //    //    return model.get('product_id') == product_id;
-                            //    //}), 'supplier_name');
-     
-                            //    var ModelObjArray = _.map(supplyLogCollection.toArray().reverse(), function (model) {
-                            //        return model.toJSON();
-                            //    });
-     
-                            //    var otherSupplier_nameArry = _.chain(ModelObjArray).
-                            //        filter(function myfunction(modelObj) {
-                            //            return modelObj['code'] != code;
-                            //        }).pluck('supplier_code').unique().value();
-     
-     
-                            //    var supplier_nameArry = _.chain(ModelObjArray).
-                            //        filter(function myfunction(modelObj) {
-                            //            return modelObj['code'] == code;
-                            //        }).pluck('supplier_code').unique()
-                            //        .union(otherSupplier_nameArry)
-                            //        .first(5)
-                            //        .value();
-     
-                            //    process(supplier_nameArry);
-                            //});
-     
-                            //process(['ร้าน a', 'ร้าน b', 'ร้าน c']);
-                        },
-                        filter: false
-                    },*/
-
-                    {
-                        //readOnly: true,
-                        data: attr('unit_price'),
-                        //type: 'autocomplete',
-                        type: 'dropdown',
-                        allowInvalid: false,
-                        strict: true,
-                        source: function (query, process) {
-                            //    //console.log(this.row);
-
-                            var ImportProductModel = importProductCollection.at(this.row);
-
-                            var priceArr = [];
-
-                            for (var i = 1; i <= 3; i++) {
-                                if (ImportProductModel.get('unit_price' + i)) {
-                                    priceArr.push(ImportProductModel.get('unit_price' + i));
-                                }
-                            }
-
-
-                            //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
-
-                            //    var code = ImportProductModel.get('code')
-                            //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
-
-                            //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
-                            //    });
-                            process(priceArr);
-                            //    //process([10, 50, 100]);
-
-                        },
-                        //filter: false
-                    },
-                    {
-                        data: attr('invoid_id'),
-                    },
-
-                    {
-                        data: attr('in_date'),
-                        type: 'date',
-                        dateFormat: 'YYYY-MM-DD',
-                        correctFormat: true,
-                        strict: true
-                    },
-                    {
-                        data: attr('unit'),
-                        type: 'numeric',
-                        format: '0,0.00',
-                        //strict: true
-                    },
-                    {
-                        data: attr('sum'),
-                        readOnly: true,
-                        type: 'numeric',
-                        format: '0,0.00',
-                        //strict: true
-                    }
-                ];
-
-                colHeaders = [
-                    'code',
-                    'Description',
-                    'UnitType',
-                    //'ขนาด',
-                    //'ผู้ขาย',
-                    'Price/Unit',
-                    'Bill Number',
-                    'Bill Date',
-                    'Unit-In',
-                    'Amount'
-                ];
+            var setCol = function (colName, colObj, newColName) {
+                var colId = colHeaders.indexOf(colName);
+                columns[colId] = colObj;
+                if (newColName) colHeaders[colId] = newColName;
             }
-            else {
+            var removeCol = function (colName) {
+                var colId = colHeaders.indexOf(colName);
+                colHeaders.splice(colId, 1);
+                columns.splice(colId, 1);
+            }
 
-                columns = [
-                    { readOnly: true, data: attr('code') },
-                    { readOnly: true, data: attr('nameTh') },
-                    { readOnly: true, data: attr('nameEn') },
-                    { readOnly: true, data: attr('unit_type') },
-                    {
-                        //readOnly: true,
-                        data: attr('unit_price'),
-                        //type: 'autocomplete',
-                        type: 'dropdown',
-                        allowInvalid: false,
-                        strict: true,
-                        source: function (query, process) {
-                            //    //console.log(this.row);
 
-                            var ImportProductModel = importProductCollection.at(this.row);
+            columns = [
+                { readOnly: true, data: attr('code') },
+                { readOnly: true, data: attr('nameTh') },
+                { readOnly: true, data: attr('nameEn') },
+                { readOnly: true, data: attr('unit_type') },
+                {
+                    //readOnly: true,
+                    data: attr('unit_price'),
+                    //type: 'autocomplete',
+                    type: 'dropdown',
+                    allowInvalid: false,
+                    strict: true,
+                    source: function (query, process) {
+                        //    //console.log(this.row);
 
-                            var priceArr = [];
+                        var ImportProductModel = importProductCollection.at(this.row);
 
-                            for (var i = 1; i <= 3; i++) {
-                                if (ImportProductModel.get('unit_price' + i)) {
-                                    priceArr.push(ImportProductModel.get('unit_price' + i));
-                                }
+                        var priceArr = [];
+
+                        for (var i = 1; i <= 3; i++) {
+                            if (ImportProductModel.get('unit_price' + i)) {
+                                priceArr.push(ImportProductModel.get('unit_price' + i));
                             }
+                        }
 
 
-                            //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
+                        //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
 
-                            //    var code = ImportProductModel.get('code')
-                            //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
+                        //    var code = ImportProductModel.get('code')
+                        //    supplyLogCollection.findeSupplyLog(code, stockModel.get('stock_selected'), function () {
 
-                            //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
-                            //    });
-                            process(priceArr);
-                            //    //process([10, 50, 100]);
+                        //        process(_.uniq(supplyLogCollection.pluck('unit_price')).reverse().splice(0, 6));
+                        //    });
+                        process(priceArr);
+                        //    //process([10, 50, 100]);
 
-                        },
-                        //filter: false
                     },
-                    {
-                        data: attr('invoid_id'),
-                    },
+                    //filter: false
+                },
+                {
+                    data: attr('invoid_id'),
+                },
 
-                    {
-                        data: attr('in_date'),
-                        type: 'date',
-                        dateFormat: 'YYYY-MM-DD',
-                        correctFormat: true,
-                        strict: true
-                    },
-                    {
-                        data: attr('unit'),
-                        type: 'numeric',
-                        format: '0,0.00',
-                        //strict: true
-                    },
-                    {
-                        data: attr('sum'),
-                        readOnly: true,
-                        type: 'numeric',
-                        format: '0,0.00',
-                        //strict: true
-                    }];
+                {
+                    data: attr('in_date'),
+                    type: 'date',
+                    dateFormat: 'YYYY-MM-DD',
+                    correctFormat: true,
+                    strict: true
+                },
+                {
+                    data: attr('unit'),
+                    type: 'numeric',
+                    format: '0,0.00',
+                    //strict: true
+                },
+                {
+                    data: attr('sum'),
+                    readOnly: true,
+                    type: 'numeric',
+                    format: '0,0.00',
+                    //strict: true
+                },
+                { data: attr('remark') }
+            ];
 
-                colHeaders = [
-                    'code',
-                    'DescriptionTh',
-                    'DescriptionEn',
-                    'UnitType',
-                    //'ขนาด',
-                    //'ผู้ขาย',
-                    'Price/Unit',
-                    'Bill Number',
-                    'Bill Date',
-                    'Unit-In',
-                    'Amount'
-                ];
+            colHeaders = [
+                'code',
+                'DescriptionTh',
+                'DescriptionEn',
+                'UnitType',
+                //'ขนาด',
+                //'ผู้ขาย',
+                'Price/Unit',
+                'Bill Number',
+                'Bill Date',
+                'Unit-In',
+                'Amount',
+                'Remark'
+            ];
+
+            if (app.userModel.get('type') == 'staff_main') {
+                setCol('DescriptionTh', { readOnly: true, data: attr('name') }, 'Description')
+                removeCol('DescriptionEn');
             }
 
             if (self.currentListType == 'OE') {
-                console.log('self.currentListType', self.currentListType);
-                var setCol = function (calName, calObj) {
-                    var calId = colHeaders.indexOf(calName);
-                    columns[calId] = calObj;
-                }
-                var removeCol = function (calName) {
-                    var calId = colHeaders.indexOf(calName);
-                    colHeaders.splice(calId, 1);
-                    columns.splice(calId, 1);
-                }
 
                 setCol('Amount', {
                     data: attr('sum'),
@@ -583,8 +455,6 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var supplierSelected = self.$el.find('select.select-supplier-in').val(); // self.supplierSelected;
 
                 var isAllValid = true;
-
-
 
                 self.importProductCollection.each(function (model) {
 

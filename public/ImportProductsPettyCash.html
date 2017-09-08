@@ -72,10 +72,10 @@
                     </div>-->
 
                 </div>
-                <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">àÅ×Í¡ÊÔ¹¤éÒ</button>-->
+                <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">ï¿½ï¿½ï¿½Í¡ï¿½Ô¹ï¿½ï¿½ï¿½</button>-->
 
 
-                <label id="sum-amount-label">All Amount: 0ß</label>
+                <label id="sum-amount-label">All Amount: 0 Baht</label>
                 <div id="popupImportProduct"></div>
 
                 <button class="ClearNewProductRow ui-btn ui-icon-delete ui-btn-icon-left  ui-corner-all">Clear Table</button>
@@ -181,8 +181,8 @@
                         <tr>
                             <th>Code</th>
                             <th>Description</th>
-                            <!--<th>ª×èÍ</th>
-                            <th>Ë¹èÇÂ</th>-->
+                            <!--<th>ï¿½ï¿½ï¿½ï¿½</th>
+                            <th>Ë¹ï¿½ï¿½ï¿½</th>-->
                             <!--<th>Supplier</th>-->
 
                             <th>Bill Number</th>
@@ -190,6 +190,7 @@
                             <th>Price/Unit</th>
                             <th>Unit-In</th>
                             <th>Amount</th>
+                             <th>Remark</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -208,7 +209,7 @@
                             <td style="padding: 9px 4px;"><%- unit_price %></td>
                             <td style="padding: 9px 4px;"><%- unit %></td>
                             <td style="padding: 9px 4px;"><%- sum %></td>
-
+                            <td style="padding: 9px 4px;"><%- remark %> </td>
                             <td>
                                 <input type="button" class="editButton" data-mini="true" value="Edit"></td>
                             <td>
@@ -262,47 +263,84 @@
         </div>
         <!-- /content -->
 
-        <div data-role="panel" data-display="push" data-theme="b" class="menu-panel">
+        <div data-role="panel" data-display="reveal" data-theme="b" class="menu-panel">
             <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
-            <ul data-role="listview">
-                <li>
-                    <a href="Supplier.html" data-menu="Supplier" data-transition="flow">Supplier-Create</a>
+            <ul data-role="listview"  class="jqm-list ui-alt-icon ui-nodisc-icon">
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Account Create
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            
+                            <li>
+                                <a href="Supplier.html" data-menu="Supplier" data-transition="flow">Supplier-Create</a>
+                            </li>
+
+                            <li>
+                                <a href="Stock.html" data-menu="Stock" data-transition="flow">Item-Create</a>
+                            </li>
+                        <!--    <li>
+                                <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                            </li>-->
+
+                        </ul>
+                    </div>
                 </li>
 
-                <li>
-                    <a href="Stock.html" data-menu="Stock" data-transition="flow">Stock-Create</a>
+
+
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Purchase
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Credit</a>
+                            </li>
+                           <!-- <li>
+                                <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
+                            </li>-->
+
+                            <li>
+                                <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">PettyCash</a>
+                            </li>
+                        <!--    <li>
+                                <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
+                            </li>-->
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
+                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
+                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
+                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Stock
+                        </a>
+                    </h3>
+                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
+                        <ul>
+                            <li>
+                                <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
+                            </li>
+                            <li>
+                                <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
 
-                <li>
-                    <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Stock-In</a>
-                </li>
-                <li>
-                    <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
-                </li>
-
-                <li>
-                    <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">Stock-In (PettyCash)</a>
-                </li>
-                <li>
-                    <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
-                </li>
-                <li>
-                    <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
-                </li>
-                <li>
-                    <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
-                </li>
                 <li>
                     <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
                 </li>
             </ul>
 
         </div>
+        
         <!-- /panel -->
 
 
@@ -314,12 +352,12 @@
 
                     <h3>Select Date</h3>
                     <div class="ui-field-contain">
-                        <label for="editStartDate">àÃÔèÁµé¹:</label>
+                        <label for="editStartDate">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</label>
                         <!--<textarea cols="40" rows="8" name="editStartTime" id="textarea-1">Textarea</textarea>-->
                         <input type="text" name="editStartDate" data-role="date" data-mini="true">
                     </div>
                     <div class="ui-field-contain">
-                        <label for="editEndDate">ÊÔé¹ÊØ´:</label>
+                        <label for="editEndDate">ï¿½ï¿½ï¿½ï¿½Ø´:</label>
                         <!--<textarea cols="40" rows="8" name="editStartTime" id="textarea-1">Textarea</textarea>-->
                         <input type="text" name="editEndDate" data-role="date" data-mini="true">
                     </div>

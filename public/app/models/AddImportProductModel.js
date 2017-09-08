@@ -2,7 +2,6 @@
 /// <reference path="../../lib/jquery/jquery-2.1.1.js" />
 /// <reference path="../../lib/backbone/backbone.js" />
 
-
 var app = app || { models: {}, collections: {}, views: {} };
 
 (function ($) {

@@ -148,11 +148,13 @@ var app = app || { models: {}, collections: {}, views: {} };
         var selectProductCollection = new app.collections.products();
 
         var importProductCollection = new app.collections.ImportProductCollection();
+        var supplierCollection = new app.collections.SupplierCollection();
 
         var addImportProductModel = new app.models.AddImportProductModel({
             stockModel: stockModel,
             selectProductCollection: selectProductCollection,
-            importProductCollection: importProductCollection
+            importProductCollection: importProductCollection,
+            supplierCollection: supplierCollection
         });
 
         var addImportProduct = new app.views.ImportProductCreate({
@@ -170,7 +172,8 @@ var app = app || { models: {}, collections: {}, views: {} };
         var importProductCollection = new app.collections.ImportProductCollection();
         var importProductEdit = new app.views.ImportProductEdit({
             el: '.editImportProduct',
-            model: stockModel, collection: importProductCollection
+            model: new Backbone.Model({ stockModel: stockModel, supplierCollection: supplierCollection }),
+            collection: importProductCollection
         });
 
 
@@ -213,6 +216,8 @@ var app = app || { models: {}, collections: {}, views: {} };
         stockModel.set('stock', []);
         stockModel.update(null, listType);
 
+        supplierCollection.getAll();
+
         //stockModel.on('change:stock', function (model, stock) {
 
         //    if (stock.length > 0) {
@@ -236,16 +241,19 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         var importProductCollection = new app.collections.ImportProductCollection();
 
+        var supplierCollection = new app.collections.SupplierCollection();
+
         var addImportProductModel = new app.models.AddImportProductModel({
             stockModel: stockModel,
             selectProductCollection: selectProductCollection,
-            importProductCollection: importProductCollection
+            importProductCollection: importProductCollection,
+            supplierCollection: supplierCollection
         });
 
         var addImportProduct = new app.views.ImportProductCreate({
             el: '.importProduct',
             model: addImportProductModel,
-           
+
         });
 
         addImportProduct.setPettyCashModel(pettyCashModel)
@@ -263,7 +271,8 @@ var app = app || { models: {}, collections: {}, views: {} };
         var importProductCollection = new app.collections.ImportProductCollection();
         var importProductEdit = new app.views.ImportProductEdit({
             el: '.editImportProduct',
-            model: stockModel, collection: importProductCollection
+            model: new Backbone.Model({ stockModel: stockModel, supplierCollection: supplierCollection }),
+            collection: importProductCollection
         });
 
         var updateView = function () {
@@ -292,6 +301,8 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         stockModel.set('stock', []);
         stockModel.update(null, listType);
+
+         supplierCollection.getAll(null,['CASH']);
     };
 
     app.initExportProduct = function () {
