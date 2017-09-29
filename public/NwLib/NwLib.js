@@ -10,7 +10,7 @@
 //for defend bomb out in IE when the IE debugger is not running
 if (this.window && !window.console) window.console = {};
 if (this.window && !window.console.log) window.console.log = function () { };
-if (!this.require) this.require = function (script) { Nw.inject_module(script); }
+//if (!this.require) this.require = function (script) { Nw.inject_module(script); }
 //########################################################################################################
 
 /*
@@ -1190,6 +1190,7 @@ if (!this.JSON) {
             //#region constructor
             var Qtark = [];
             var tarking = false;
+            var endTrack = null;
             function processQtark() {
                 if (Qtark.length > 0) {
                     tarking = true;
@@ -1213,6 +1214,10 @@ if (!this.JSON) {
                     tark.func.apply(this, arg);
                 } else {
                     tarking = false;
+                    if(endTrack){
+                        endTrack();
+                        endTrack = null;
+                    } 
                 }
             }
             //#endregion
@@ -1232,6 +1237,15 @@ if (!this.JSON) {
                 }
             }
             this.pushAndRun = pushAndRun;
+
+            this.clearTarks = function (endTrackCb) {
+                Qtark = [];
+                if(tarking){
+                    endTrack = endTrackCb;
+                }else{
+                    if(endTrackCb) endTrackCb();
+                }
+            }
         },
      
         //invoke method Asynchonus with limit per timeout

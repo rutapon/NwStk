@@ -1192,10 +1192,10 @@ if (!this.JSON) {
             var tarking = false;
             function processQtark() {
                 if (Qtark.length > 0) {
-                    tarking = true;
-
+                   
                     var tark = Qtark.shift();
-
+                    tarking = true;
+                    
                     var arg = tark.arg;
                     var callbackIndex = tark.callbackIndex;
 
@@ -1232,6 +1232,9 @@ if (!this.JSON) {
                 }
             }
             this.pushAndRun = pushAndRun;
+            this.clearTarks = function(){
+                Qtark = [];
+            }
         },
      
         //invoke method Asynchonus with limit per timeout

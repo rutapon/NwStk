@@ -18,13 +18,17 @@ var app = app || { models: {}, collections: {}, views: {} };
             //name: '', unit_type: '', unit_size: '', description: '',
             //product_id: '',
             supplier_code: '',
-            unit_price: '',
+            unit_price: '', //canot edit
             unit: null,
             invoid_id: '',
             in_date: '',
-            sum: 0,
-            stock_name: '',
+            sum: 0, //canot edit
+            stock_name: '', //canot edit
             remark: null,
+
+            payment_type:null, //canot edit
+            sessionId:null, //canot edit
+            userId: null, //canot edit
         },
 
         initialize: function () {

@@ -16,14 +16,19 @@ var app = app || { models: {}, collections: {}, views: {} };
     app.models.PettyCashModel = Backbone.Model.extend({
         defaults: {
             in_date: '',
-            BF: 0,
+            
             moneyAddAmount: 0,
             chqueData: '',
 
-            inItems: [],//[{code: '',unit: null,}]
+            inItems: [],//[{code: '',unit: 0,price:0,sum:0}] or Id ?
             userId: null,
-            stock_name: '',
+            stock_name: '',    
             sum: 0,
+           
+            sessionId: null,
+
+            // dynamic value, calculate from server.
+            BF: 0,
             balance: 0,
         },
         initialize: function () {
@@ -34,7 +39,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             self.attributes.userId = app.userModel.get('user');
 
             self._getLastPettyCashData(function (result) {
-                self.attributes.BF = result ? result.balance : 0;
+                self.attributes.BF = result ? result.BF : 0;
                 self.clearInItem();
             });
         },

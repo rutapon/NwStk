@@ -1,11 +1,82 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title></title>
+
+    <link href="css/family.css" rel="stylesheet" />
+
+    <link href="lib/jquery.mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <link href="css/jqm-demos.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
+
+    <script src="lib/underscore/underscore-min.js"></script>
+    <script src="lib/lokijs/lokijs.min.js"></script>
+
+    <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+    <script src="lib/jquery.mobile/jquery.mobile-1.4.5.js"></script>
+
+    <script src="lib/backbone/backbone-min.js"></script>
+
+    <script src="lib/xdr.js"></script>
+    <script src="lib/socket.io-1.2.1.js"></script>
+
+    <script src="lib/step/step.js"></script>
+    <script src="lib/async/async.min.js"></script>
+
+    <script src="NwLib/NwLib.js"></script>
+    <script src="NwUtil/NwDataMsgObj.js"></script>
+
+    <script src="NwConn/NwWsClient.js"></script>
+    <script src="service_conn/NwServiceConn.js"></script>
+
+    <script src="lib/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer/tableHeadFixer.js"></script>
+
+    <script src="lib/xlsx/xlsx.core.min.js"></script>
+    <script src="lib/xlsx/Blob.js"></script>
+    <script src="lib/xlsx/FileSaver.js"></script>
+    <script src="lib/xlsx/NwXlsx.js"></script>
+
+    <script src="app/models/product.js"></script>
+    <script src="app/models/Stock.js"></script>
+    <script src="app/models/ImportProductModel.js"></script>
+    <script src="app/models/AddImportProductModel.js"></script>
+    <script src="app/models/SupplierModel.js"></script>
+    <script src="app/models/SupplyLogModel.js"></script>
+    <!-- <script src="app/models/ExportProductModel.js"></script> -->
+    <!-- <script src="app/models/CheckProductsModel.js"></script> -->
+    <script src="app/models/UserModel.js"></script>
+    <!-- <script src="app/models/PettyCashModel.js"></script> -->
+
+
+    <script src="app/collections/products.js"></script>
+    <script src="app/collections/ImportProductCollection.js"></script>
+    <script src="app/collections/SupplyLogCollection.js"></script>
+    <script src="app/collections/SupplierCollection.js"></script>
+    <!-- <script src="app/collections/ExportProductCollection.js"></script> -->
+    <!-- <script src="app/collections/ReportCollection.js"></script> -->
+    <!-- <script src="app/collections/CheckProductsCollection.js"></script> -->
+
+    <script src="app/views/SelectProduct.js"></script>
+    <script src="app/views/SelectProduct2.js"></script>
+    <script src="app/views/SelectTimePeriod.js"></script>
+
+    <script src="app/views_supplier/SupplierCreateTableTr.js"></script>
+    <script src="app/views_supplier/SupplierCreateTable.js"></script>
+    <script src="app/views_supplier/SupplierCreate.js"></script>
+    <script src="app/views_supplier/SupplierEditTableTr.js"></script>
+    <script src="app/views_supplier/SupplierEdit.js"></script>
+
+    <script src="app/app.js"></script>
+    <script src="app/app/SupplierApp.js"></script>
+
     <script>
-        window.location.href = "index.html";
+        $(function () {
+            app.initSupplier();
+        })
     </script>
 </head>
+
 <body>
 
     <div data-role="page" data-title="Supplier" class="jqm-demos ui-responsive-panel">
@@ -13,9 +84,7 @@
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
-            <h1>Products</h1>
-            <a class="menu" data-icon="grid" data-iconpos="notext">Menu</a>
-            <a class="setting" data-icon="gear" data-iconpos="notext">Add</a>
+            <h1>Supplier-Create</h1>
 
             <div data-role="navbar">
                 <ul>
@@ -111,153 +180,81 @@
             </div>
 
             <div id="editSupplier" style="display: none" class="Nav">
-                 <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or description" data-inline="true">-->
-                <input type="search" data-theme="a" name="searchbar" class="edit_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">
+                <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or description" data-inline="true">-->
+                <input type="search" data-theme="a" name="searchbar" class="edit_search" data-mini="true" value="" placeholder="search by code or name"
+                    data-inline="true">
                 <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="downLoadFile">Download File Exel</button>
+                <div style="overflow-x: auto; display: block; height: 500px;">
+                    <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
+                        <col width="80px" />
+                        <col />
+                        <col width="100px" />
+                        <col />
+                        <col width="50px" />
+                        <col width="50px" />
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>SupplierName</th>
+                                <th>Credit</th>
+                                <th>Address</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                <table id="fooBar" class="StockTable" border="0" style='text-align: justify;'>
-                    <col width="80px" />
-                    <col />
-                    <col width="100px" />
-                    <col />
-                    <col width="50px" />
-                    <col width="50px" />
-                    <tbody>
-                        <tr>
-                            <th>Code</th>
-                            <th>SupplierName</th>
-                            <th>Credit</th>
-                            <th>Address</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        <script type="text/template" id="ShowStockTable-tr-template">
+                            <script type="text/template" id="ShowStockTable-tr-template">
 
-                            <td style="padding: 9px 4px;"><%- code %></td>
-                            <td style="padding: 9px 4px;"><%- name %></td>
-                            <td style="padding: 9px 4px;"><%- credit %></td>
-                            <td style="padding: 9px 4px;"><%- address %></td>
+                                <td style="padding: 9px 4px;">
+                                    <%- code %>
+                                </td>
+                                <td style="padding: 9px 4px;">
+                                    <%- name %>
+                                </td>
+                                <td style="padding: 9px 4px;">
+                                    <%- credit %>
+                                </td>
+                                <td style="padding: 9px 4px;">
+                                    <%- address %>
+                                </td>
 
-                            <td>
-                                <input type="button" class="editButton" data-mini="true" value="Edit"></td>
-                            <td>
-                                <input type="button" class="deleteButton" data-mini="true" value="Delete">
-                            </td>
-                        </script>
-                        <script type="text/template" id="EditStockTable-tr-template">
+                                <td>
+                                    <input type="button" class="editButton" data-mini="true" value="Edit"></td>
+                                <td>
+                                    <input type="button" class="deleteButton" data-mini="true" value="Delete">
+                                </td>
+                            </script>
+                            <script type="text/template" id="EditStockTable-tr-template">
 
-                            <td style="padding: 9px 4px;"><%- code %></td>
-                            <td>
-                                <input placeholder="SupplierName" data-type="name" value="<%- name %>" /></td>
-                            <td>
-                                <input placeholder="Credit" data-type="credit" value="<%- credit %>" /></td>
-                            <td>
-                                <input placeholder="Address" data-type="address" value="<%- address %>" /></td>
+                                <td style="padding: 9px 4px;">
+                                    <%- code %>
+                                </td>
+                                <td>
+                                    <input placeholder="SupplierName" data-type="name" value="<%- name %>" /></td>
+                                <td>
+                                    <input placeholder="Credit" data-type="credit" value="<%- credit %>" /></td>
+                                <td>
+                                    <input placeholder="Address" data-type="address" value="<%- address %>" /></td>
 
-                            <td>
-                                <input type="button" class="cancelEditButton" data-mini="true" value="Cancel"></td>
-                            <td>
-                                <input type="button" class="saveButton" data-mini="true" value="Save">
-                            </td>
+                                <td>
+                                    <input type="button" class="cancelEditButton" data-mini="true" value="Cancel"></td>
+                                <td>
+                                    <input type="button" class="saveButton" data-mini="true" value="Save">
+                                </td>
 
-                        </script>
+                            </script>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
         <!-- /content -->
 
-          <div data-role="panel" data-display="reveal" data-theme="b" class="menu-panel">
-            <h2><a href="index.html" data-transition="flow">HOME</a></h2>
 
-            <ul data-role="listview"  class="jqm-list ui-alt-icon ui-nodisc-icon">
-
-                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
-                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
-                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Account Create
-                        </a>
-                    </h3>
-                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
-                        <ul>
-                            
-                            <li>
-                                <a href="Supplier.html" data-menu="Supplier" data-transition="flow">Supplier-Create</a>
-                            </li>
-
-                            <li>
-                                <a href="Stock.html" data-menu="Stock" data-transition="flow">Item-Create</a>
-                            </li>
-                        <!--    <li>
-                                <a href="OE.html" data-menu="OE" data-transition="flow">OE-Create</a>
-                            </li>-->
-
-                        </ul>
-                    </div>
-                </li>
-
-
-
-                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
-                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
-                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Purchase
-                        </a>
-                    </h3>
-                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
-                        <ul>
-                            <li>
-                                <a href="ImportProducts.html" data-menu="Stock-In" data-transition="flow">Credit</a>
-                            </li>
-                           <!-- <li>
-                                <a href="ImportOE.html" data-menu="OE-In" data-transition="flow">OE-In</a>
-                            </li>-->
-
-                            <li>
-                                <a href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)" data-transition="flow">PettyCash</a>
-                            </li>
-                        <!--    <li>
-                                <a href="ImportOEPettyCash.html" data-menu="OE-In (PettyCash)" data-transition="flow">OE-In (PettyCash)</a>
-                            </li>-->
-                        </ul>
-                    </div>
-                </li>
-                <li data-role="collapsible" data-enhanced="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-iconpos="right" data-inset="false" class="ui-collapsible ui-collapsible-themed-content ui-collapsible-collapsed">
-                    <h3 class="ui-collapsible-heading ui-collapsible-heading-collapsed">
-                        <a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-right ui-btn-inherit ui-icon-carat-d">Stock
-                        </a>
-                    </h3>
-                    <div class="ui-collapsible-content ui-body-inherit ui-collapsible-content-collapsed" aria-hidden="true">
-                        <ul>
-                            <li>
-                                <a href="ExportProducts.html" data-menu="Stock-Out" data-transition="flow">Stock-Out</a>
-                            </li>
-                            <li>
-                                <a href="CheckProducts.html" data-menu="Stock-Checking" data-transition="flow">Stock-Checking</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-
-                <li>
-                    <a href="Report.html" data-menu="Report" data-transition="flow">Report</a>
-                </li>
-            </ul>
-
-        </div>
-        <!-- /panel -->
-
-         <div data-role="panel" data-position="right" data-display="reveal" data-theme="a" class="setting-panel">
-
-            <button class="LogInButton">Log In</button>
-            <button class="LogOutButton">Log Out</button>
-              <button class="SettingButton">Setting</button>
-
-        </div>
-        <!-- /panel -->
-
-       <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+        <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
             <div data-role="navbar">
                 <ul>
                     <li>
@@ -318,4 +315,5 @@
 
 
 </body>
+
 </html>

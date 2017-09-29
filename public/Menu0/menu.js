@@ -303,10 +303,10 @@ jQuery(function() {
         speed: 800
     });
     // color animation
-    if (!($.browser.msie && $.browser.version.substr(0, 1) == '6')){
-        $('ul ul a span', '#menu').css('color', 'rgb(169,169,169)').hover(
-            function(){ $(this).animate({color: 'rgb(255,255,255)'}, 500); },
-            function(){ $(this).animate({color: 'rgb(169,169,169)'}, 200); }
-        );
-    }
+    // if (!($.browser.msie && $.browser.version.substr(0, 1) == '6')){
+    //     $('ul ul a span', '#menu').css('color', 'rgb(169,169,169)').hover(
+    //         function(){ $(this).animate({color: 'rgb(255,255,255)'}, 500); },
+    //         function(){ $(this).animate({color: 'rgb(169,169,169)'}, 200); }
+    //     );
+    // }
 });

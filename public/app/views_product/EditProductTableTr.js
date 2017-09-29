@@ -110,7 +110,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             editClick: function () {
                 this.edit();
-                $("#EditProductTable").tableHeadFixer({ "left": 1, "right": 2 });
+                //$("#EditProductTable").tableHeadFixer({ "left": 1, "right": 2 });
 
             },
             cancelEdit: function () {
@@ -118,7 +118,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             cancelEditClick: function () {
                 this.cancelEdit();
-                $("#EditProductTable").tableHeadFixer({ "left": 1, "right": 2 });
+                //$("#EditProductTable").tableHeadFixer({ "left": 1, "right": 2 });
 
             },
             saveClick: function () {

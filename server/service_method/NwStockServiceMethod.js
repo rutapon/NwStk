@@ -100,7 +100,7 @@
 
     var listTableName = 'lists';
     var userTableName = 'users';
-    var pettyCashTableName = 'petty_cash';
+    var purchaseSessionTableName = 'purchase_session';
 
     var supplyLogDataField = ['product_code', 'supplier_code', 'unit_price'];
 
@@ -134,7 +134,11 @@
         'invoid_id',
         'sum',
         'stock_name',
-        'remark'
+        'remark',
+
+        'payment_type',
+        'sessionId',
+        'userId'
     ]
 
     var exportProductDataField = [
@@ -153,9 +157,43 @@
 
     var listDataField = ['name', 'listType'];
 
-    var userDataField = ['user', 'pass', 'dmp', 'type', 'permission', 'listAccessPermission'];
+    var userDataField = ['user',
+        'pass',
+        'dmp',
+        'type',
+        'permission',
+        'listAccessPermission'
+    ];
 
-    var pettyCashDataField = ['userId', 'stock_name', 'in_date', 'BF', 'moneyAddAmount', 'chqueData', 'inItems', 'sum', 'balance'];
+    // var pettyCashDataField = [
+    //     'userId',
+    //     'stock_name',
+    //     'in_date',
+    //     'moneyAddAmount',
+    //     'chqueData',
+    //     'inItems',
+    //     'sum',
+
+    //     'sessionId',
+    //     //'BF',
+    //     //'balance'
+    // ];
+
+    var purchaseSessionDataField = [
+        'userId',
+        'stock_name',
+        'in_date',
+
+        'inItems',
+        'sum',
+
+        'moneyAddAmount',
+        'chqueData',
+
+        'sessionId',
+        //'BF',
+        //'balance'
+    ];
 
     var stocks = {};
 
@@ -1227,10 +1265,10 @@
         //#endregion
 
         //#region Account
-        getMenuStructure: function (data, cb) {
-            var menuStructure = requireUncached('../Database/menuStructure.js');
-            if (cb) cb(menuStructure);
-        },
+        // getMenuStructure: function (data, cb) {
+        //     var menuStructure = requireUncached('../Database/menuStructure.js');
+        //     if (cb) cb(menuStructure);
+        // },
         //#endregion
 
         //#region list
@@ -1349,24 +1387,37 @@
 
         //#region PettyCash
         getLastPettyCash: function (data, cb) {
-            //console.log('getProduct', data);
+            console.log('getProduct', data);
 
             var userId = data.userId;
-            var stock = getStock('globalDB', data.dpm, true);
-            stock.findLastOne(pettyCashTableName, { 'userId': userId }, { _id: -1 }, function (result) {
-                if (cb) { cb(result) }
-            });
+            var stock = getStock('globalDB', data.dpm);
+            stock.sumValue(purchaseSessionTableName, { 'userId': userId }, ['sum', 'moneyAddAmount'], function (result) {
+                var resultObj = { BF: 0};
+                console.log(result);
+                if (result.length > 0) {
+                    resultObj.totalSum= result[0]['total_sum'];
+                    resultObj.totalMoneyAddAmount = result[0]['total_moneyAddAmount'];
+
+                    resultObj.BF =  resultObj.totalMoneyAddAmount -  resultObj.totalSum;
+                }
+
+                if (cb) { cb(resultObj) }
+            })
+            // stock.findLastOne(purchaseSessionTableName, { 'userId': userId }, { _id: -1 }, function (result) {
+            //     if (cb) { cb(result) }
+            // });
         },
+
         insertPettyCash: function (data, cb) {
             //console.log('insertUser', data);
             var self = this;
 
-            var dataObj = _.pick(data, pettyCashDataField);
+            var dataObj = _.pick(data, purchaseSessionDataField);
 
             dataObj.createingLog = { creator: data.user, 'createDate': new Date() };
 
             var stock = getStock('globalDB', data.dpm);
-            stock.insert(pettyCashTableName, dataObj, function (result) {
+            stock.insert(purchaseSessionTableName, dataObj, function (result) {
                 if (cb) { cb(result) }
             });
         },

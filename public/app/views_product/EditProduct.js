@@ -16,6 +16,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         $("#sure").popup('open');
     }
 
+    var sysncTarking = new Nw.SysncTarking();
     $(function () {
         app.views.EditProduct = Backbone.View.extend({
 
@@ -34,6 +35,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             initialize: function () {
                 this.collection.on('add', this.addOne, this);
                 this.collection.on('reset', this.resetProduct, this);
+                //this.collection.on('reset', sysncTarking.clearTarks, this);
 
                 this.supplierCollection = new app.collections.SupplierCollection();
                 this.supplierCollection.getAll();
@@ -50,7 +52,12 @@ var app = app || { models: {}, collections: {}, views: {} };
                 }
 
                 this.$el.find('.EditProductTableTr').remove();
-                this.collection.each(this.addOne, this);
+                if(this.collection.length>50){
+                    this.collection.each(this.addOneSyncTack, this);
+                }else{
+                    this.collection.each(this.addOne, this);
+                }
+             
                 return this;
             },
             showAllProduct: function (cb) {
@@ -191,13 +198,28 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             },
 
+            addOneSyncTack: function (product) {
+                var self = this;
+                sysncTarking.pushAndRun(function (cb,product) {
+                    setTimeout(function () {
+                        self.addOne(product);
+                        //$("#EditProductTable").tableHeadFixer({ "left": 1, "right": 2 });                        
+                        cb();
+                    }, 1);
+
+                }, [null,product], 0)
+
+            },
             addOne: function (product) {
                 var productView = new app.views.EditProductTableTr({ model: product, collection: this.supplierCollection });
                 var productEl = productView.render().el;
                 this.$el.find('tbody').append(productEl);
             },
             resetProduct: function (product) {
-                this.render();
+                var self = this;
+                sysncTarking.clearTarks(function () {
+                    self.render();
+                });
             },
 
         });

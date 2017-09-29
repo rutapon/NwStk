@@ -12,7 +12,7 @@
         async = require("async");
 
         MongoClient = require('mongodb').MongoClient;
-           
+
     } else {
 
     }
@@ -52,7 +52,7 @@
 
                 return this.dbConn.collection(tableName);
             },
-       
+
             getAllTable: function (cb) {
                 cb(_.keys(this.allTable));
             },
@@ -114,10 +114,10 @@
                 }
 
                 db.find(query)
-              //.sort({ esearch: 1 })
-               .limit(limit).toArray(function (err, docs) {
-                   callback(docs);
-               });
+                    //.sort({ esearch: 1 })
+                    .limit(limit).toArray(function (err, docs) {
+                        callback(docs);
+                    });
 
             },
             findInPeriod: function (tableName, query, timeField, timeStart, timeEnd, callback) {
@@ -188,7 +188,23 @@
                     });
             },
 
-            sumValue: function (tableName, findObj, sumField, callback) { },
+            sumValue: function (tableName, findObj, sumFields, callback) {
+                var db = this._getDB(tableName);
+
+                var groupObj = { _id: null }
+                _.forEach(sumFields, function (item, id) {
+                    groupObj['total_' + item] = { $sum: '$' + item }
+                })
+                console.log('groupObj',groupObj);
+                db.aggregate([
+                    { $match: findObj }, 
+                    {
+                        $group: groupObj,
+                    },
+                ]).toArray(function (err, docs) {
+                    callback(docs);
+                });
+            },
 
             searchStartWith: function (tableName, findObj, limit, callback) {
 
@@ -211,10 +227,10 @@
 
 
                 db.find(query, selectObj)
-              //.sort({ esearch: 1 })
-               .limit(limit).toArray(function (err, docs) {
-                   callback(docs);
-               });
+                    //.sort({ esearch: 1 })
+                    .limit(limit).toArray(function (err, docs) {
+                        callback(docs);
+                    });
 
             },
 
