@@ -53,9 +53,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             remove: function () {
                 var self = this;
-
                 self.$el.remove();
-
             },
             removeProduct: function () {
                 this.model.destroy();

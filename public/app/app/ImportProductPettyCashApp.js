@@ -4,7 +4,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     app.initImportProductPettyCash = function (listType) {
         var stockModel = new app.models.Stock();
-        var pettyCashModel = new app.models.PettyCashModel();
+        var purchaseSessionModel = new app.models.PurchaseSessionModel();
         var selectProductCollection = new app.collections.products();
 
         var importProductCollection = new app.collections.ImportProductCollection();
@@ -15,7 +15,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             stockModel: stockModel,
             selectProductCollection: selectProductCollection,
             importProductCollection: importProductCollection,
-            supplierCollection: supplierCollection
+            supplierCollection: supplierCollection,
+            purchaseSessionModel:purchaseSessionModel,
+            payment_type :'PettyCash'
         });
 
         var addImportProduct = new app.views.ImportProductCreate({
@@ -23,16 +25,16 @@ var app = app || { models: {}, collections: {}, views: {} };
             model: addImportProductModel,
 
         });
-
-        addImportProduct.setPettyCashModel(pettyCashModel)
-
-        new app.views.PettyCashFormView({ el: '#PettyCashForm', model: pettyCashModel });
-
-
+        //addImportProduct.setPurchaseSessionModel(purchaseSessionModel)
+        new app.views.PettyCashFormView({ el: '#PettyCashForm', model: purchaseSessionModel });
+           
         var viewSelectProduct = new app.views.SelectProduct({
             el: '#popupSelectProduct',
             model: addImportProductModel
         });
+
+        purchaseSessionModel.setNewSessionId();
+        purchaseSessionModel.setLastPettyCashData();
 
         viewSelectProduct.search();
 
@@ -44,8 +46,11 @@ var app = app || { models: {}, collections: {}, views: {} };
         });
 
         var updateView = function () {
+            
             if (curTab == 'editImportProduct') {
                 importProductEdit.search();
+            }else{
+                purchaseSessionModel.setLastPettyCashData();
             }
         };
 

@@ -244,6 +244,14 @@
 
                 this.wsClient.callService('getLastImportProduct', dataObj, cb);
             },
+
+            findImportProduct: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('findImportProduct', dataObj, cb);
+            },
+
             removeImportProduct: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
                 dataObj = _.extend(dataObj, userObj);
@@ -263,6 +271,48 @@
                 this.wsClient.callService('checkDuplicateImportProduct', dataObj, cb);
             },
             //#endregion
+
+            //#region PurchaseSession
+            getLastPettyCash: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getLastPettyCash', dataObj, cb);
+            },
+            getLastPurchaseSession: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getLastPurchaseSession', dataObj, cb);
+            }, 
+            genNewPurchaseSessionId: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('genNewPurchaseSessionId', dataObj, cb);
+            },
+            findPurchaseSession: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('findPurchaseSession', dataObj, cb);
+            },
+            insertPurchaseSession: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('insertPurchaseSession', dataObj, cb);
+            },
+           
+            reCalulatePurchaseSession: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('reCalulatePurchaseSession', dataObj, cb);
+            },
+            //#endregion
+
+
             //#region ExportProduct
             insertExportProduct: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
@@ -451,20 +501,6 @@
             },
             //#endregion
 
-            //#region PettyCash
-            getLastPettyCash: function (dataObj, cb) {
-                var userObj = app.userModel.getUserObj();
-                dataObj = _.extend(dataObj, userObj);
-
-                this.wsClient.callService('getLastPettyCash', dataObj, cb);
-            },
-            insertPettyCash: function (dataObj, cb) {
-                var userObj = app.userModel.getUserObj();
-                dataObj = _.extend(dataObj, userObj);
-
-                this.wsClient.callService('insertPettyCash', dataObj, cb);
-            },
-            //#endregion
         };
     });
 

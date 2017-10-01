@@ -21,6 +21,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             initialize: function () {
                 var self = this;
                 self.model.on('updateInItem', self.render, self);
+                self.model.on('change:BF',self.render, self)
                 self.render();
             },
 

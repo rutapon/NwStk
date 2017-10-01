@@ -53,7 +53,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             if (!attrs.code || !attrs.stock_name || !attrs.requisition_id || !attrs.unit) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name || !attrs.unit) ");
-                alert("ข้อมูลไม่ครบ");
+                //alert("ข้อมูลไม่ครบ");
+                alert("ข้อมูลไม่ครบ \n In item code:"+attrs.code);
+                
                 //alert("To err is human, but so, too, is to repent for those mistakes and learn from them. ข้อมูลไม่ครบ");
 
                 return "false";

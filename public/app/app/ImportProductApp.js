@@ -7,6 +7,8 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     app.initImportProduct = function (listType) {
         var stockModel = new app.models.Stock();
+        var purchaseSessionModel = new app.models.PurchaseSessionModel();
+
         var selectProductCollection = new app.collections.products();
 
         var importProductCollection = new app.collections.ImportProductCollection();
@@ -16,13 +18,16 @@ var app = app || { models: {}, collections: {}, views: {} };
             stockModel: stockModel,
             selectProductCollection: selectProductCollection,
             importProductCollection: importProductCollection,
-            supplierCollection: supplierCollection
+            supplierCollection: supplierCollection,
+            purchaseSessionModel:purchaseSessionModel
         });
 
         var addImportProduct = new app.views.ImportProductCreate({
             el: '.importProduct',
             model: addImportProductModel
         });
+
+        purchaseSessionModel.setNewSessionId();
 
         var viewSelectProduct = new app.views.SelectProduct({
             el: '#popupSelectProduct',
@@ -37,7 +42,6 @@ var app = app || { models: {}, collections: {}, views: {} };
             model: new Backbone.Model({ stockModel: stockModel, supplierCollection: supplierCollection }),
             collection: importProductCollection
         });
-
 
         //var viewImportProduct = new app.views.ImportProduct({ el: '#popupImportProduct', model: { stockModel: stockModel } });
 

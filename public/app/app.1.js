@@ -236,7 +236,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     app.initImportProductPettyCash = function (listType) {
 
-        var pettyCashModel = new app.models.PettyCashModel();
+        var purchaseSessionModel = new app.models.PurchaseSessionModel();
         var selectProductCollection = new app.collections.products();
 
         var importProductCollection = new app.collections.ImportProductCollection();
@@ -256,9 +256,9 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         });
 
-        addImportProduct.setPettyCashModel(pettyCashModel)
+        addImportProduct.setPurchaseSessionModel(purchaseSessionModel)
 
-        new app.views.PettyCashFormView({ el: '#PettyCashForm', model: pettyCashModel });
+        new app.views.PettyCashFormView({ el: '#PettyCashForm', model: purchaseSessionModel });
 
 
         var viewSelectProduct = new app.views.SelectProduct({

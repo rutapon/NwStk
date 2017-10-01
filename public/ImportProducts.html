@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="TIS-620">
     <!--<meta charset="Windows-874">-->
@@ -68,7 +69,7 @@
     <!-- <script src="app/models/ExportProductModel.js"></script> -->
     <!-- <script src="app/models/CheckProductsModel.js"></script> -->
     <script src="app/models/UserModel.js"></script>
-    <!-- <script src="app/models/PettyCashModel.js"></script> -->
+    <script src="app/models/PurchaseSessionModel.js"></script>
 
     <script src="app/collections/products.js"></script>
     <script src="app/collections/ImportProductCollection.js"></script>
@@ -97,6 +98,7 @@
     </script>
 
 </head>
+
 <body>
 
     <div data-role="page" data-title="Stock-In" class="jqm-demos ui-responsive-panel">
@@ -105,7 +107,7 @@
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
             <h1>Anda-Stock</h1>
-                    <div data-role="navbar">
+            <div data-role="navbar">
                 <ul>
                     <li><a data-value="importProduct" class="ui-btn-active">Create</a></li>
                     <li><a data-value="editImportProduct">Edit</a></li>
@@ -117,26 +119,42 @@
         <div role="main" class="ui-content jqm-content jqm-fullwidth">
             <div class="importProduct importProductNav">
 
-                <div class="ui-grid-a ui-responsive">
-                    <div class="ui-block-a">
-                        <label for="select-stock">List Name</label>
-                        <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
-                        </select>
-                    </div>
-                    <div class="ui-block-b div-select-supplier-in">
-                        <label for="select-supplier2">Supplier Code</label>
-                        <select name="select-supplier2" class="select-supplier-in" data-mini="true" data-native-menu="true">
-                        </select>
-                    </div>
-                    <!--   <div class="ui-block-c">
-                          <label for="bill-date">bill-date</label>
-                          <input id="Text1" name="bill-date" type="text" data-type="startTime">
-                    </div>-->
 
-                </div>
                 <!--<button class="ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">���͡�Թ���</button>-->
 
-                <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">Product Selecting</a>
+                <div class="ui-grid-a ui-responsive">
+                    <div class="ui-block-a">
+                        <div class="ui-grid-a ui-responsive">
+                            <div class="ui-block-a">
+                                <label for="select-stock">List Name</label>
+                                <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                                        </select>
+                            </div>
+                            <div class="ui-block-b div-select-supplier-in">
+                                <label for="select-supplier2">Supplier Code</label>
+                                <select name="select-supplier2" class="select-supplier-in" data-mini="true" data-native-menu="true">
+                                        </select>
+                            </div>
+
+                            <!--   <div class="ui-block-c">
+                                          <label for="bill-date">bill-date</label>
+                                          <input id="Text1" name="bill-date" type="text" data-type="startTime">
+                                    </div>-->
+
+                        </div>
+                        <!-- <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" data-transition="pop">Product Selecting</a> -->
+                        <button class="SelectProductPopUpButton ui-btn ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">Item Selecting</button>
+                    </div>
+                    <div class="ui-block-b div-select-supplier-in" style="padding-left: 30px;">
+                        <div data-role="fieldcontain">
+                            <label>Sesseion Id</label>
+                            <input type="text" data-wrapper-class="SesseionId" id="SesseionId" data-mini="true" value="" disabled="disabled" placeholder="0"
+                            />
+                        </div>
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="PrintFormButton">Print Form</button>
+                    </div>
+                </div>
+
                 <label id="sum-amount-label">All Amount: 0 Baht</label>
                 <div id="popupImportProduct"></div>
 
@@ -153,7 +171,8 @@
 
                         <h3>Select Product</h3>
                         <!--<input type="search" data-theme="a" name="searchbar" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">-->
-                        <input data-theme="a" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true" autocapitalize="none" autocomplete="off">
+                        <input data-theme="a" class="select_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true"
+                            autocapitalize="none" autocomplete="off">
 
 
                         <!-- <label for="un" class="ui-hidden-accessible">Username:</label>
@@ -197,8 +216,7 @@
                         <input id="startTime" type="text" data-type="startTime">
                     </div>
                     <div class="ui-block-c">
-                        <label>&nbsp;&nbsp;to&nbsp;&nbsp; </label>
-                        &nbsp;
+                        <label>&nbsp;&nbsp;to&nbsp;&nbsp; </label> &nbsp;
                     </div>
                     <div class="ui-block-c">
                         <input id="endTime" type="text" data-type="endTime">
@@ -221,7 +239,8 @@
                     </div>
                     <div class="ui-block-c">
                         <label for="select-supplier2">Bill Number</label>
-                        <input type="search" data-theme="a" name="searchbar" class="import_product_search" data-mini="true" value="" placeholder="search by Bill Number" data-inline="true">
+                        <input type="search" data-theme="a" name="searchbar" class="import_product_search" data-mini="true" value="" placeholder="search by Bill Number"
+                            data-inline="true">
                     </div>
 
                 </div>
@@ -261,17 +280,33 @@
                              -->
                         <script type="text/template" id="ShowTable-tr-template">
 
-                            <td style="padding: 9px 4px;"><%- code %></td>
-                            <td style="padding: 9px 4px;"><%- name %></td>
+                            <td style="padding: 9px 4px;">
+                                <%- code %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- name %>
+                            </td>
 
                             <!--   <td style="padding: 9px 4px;"><%- supplier_code %></td>-->
 
-                            <td style="padding: 9px 4px;"><%- invoid_id %></td>
-                            <td style="padding: 9px 4px;"><%- in_date %></td>
-                            <td style="padding: 9px 4px;"><%- unit_price %></td>
-                            <td style="padding: 9px 4px;"><%- unit %></td>
-                            <td style="padding: 9px 4px;"><%- sum %></td>
-                            <td style="padding: 9px 4px;"><%- remark %> </td>
+                            <td style="padding: 9px 4px;">
+                                <%- invoid_id %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- in_date %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- unit_price %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- unit %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- sum %>
+                            </td>
+                            <td style="padding: 9px 4px;">
+                                <%- remark %>
+                            </td>
                             <td>
                                 <input type="button" class="editButton" data-mini="true" value="Edit"></td>
                             <td>
@@ -284,7 +319,9 @@
                             <!--<td style="padding: 9px 4px;"><%- p.code %></td>-->
                             <td>
                                 <input class="input" placeholder="code" data-type="code" value="<%- p.code %>" /></td>
-                            <td style="padding: 9px 4px;" class="nameTd"><%- p.name %></td>
+                            <td style="padding: 9px 4px;" class="nameTd">
+                                <%- p.name %>
+                            </td>
 
                             <!--  <td>
                                 <select name="select-supplier" class="not_chosen" style="height: 100%; width: 100%; text-align: center;">
@@ -359,7 +396,7 @@
         </div>
 
 
-       <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
+        <!-- <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-theme="b">
             <div data-role="navbar">
                 <ul>
                     <li>
@@ -382,12 +419,13 @@
                     </li>
                 </ul>
             </div>-->
-        </div>
-        <!-- /footer -->
+    </div>
+    <!-- /footer -->
 
     </div>
     <!-- /page -->
 
 
 </body>
+
 </html>

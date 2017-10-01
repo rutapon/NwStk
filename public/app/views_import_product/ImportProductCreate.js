@@ -62,15 +62,16 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             var self = this;
 
-            
+
             this.supplierCollection = this.model.get('supplierCollection'); //new app.collections.SupplierCollection();
-           
+
             this.importProductTable = this.$el.find('#popupImportProduct').get(0);
             var selectImportProductTable = $(".select-result");
             this.select_product_search = this.$el.find('.select_product_search');
 
             var stockModel = this.model.get('stockModel');
             var importProductCollection = this.importProductCollection = this.model.get('importProductCollection');
+            var purchaseSessionModel = this.purchaseSessionModel = this.model.get('purchaseSessionModel');
 
             importProductCollection.splice = hackedSplice;
 
@@ -142,6 +143,11 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             //$('#sum-amount-label').text('All Amount: ''฿');
             this.initImportProductCollectionEventHandle();
+
+            this.purchaseSessionModel.on('change:sessionId', function (model) {
+                self.$el.find("#SesseionId").val(model.get('sessionId'))
+            })
+
         },
 
         initImportProductCollectionEventHandle: function () {
@@ -155,8 +161,8 @@ var app = app || { models: {}, collections: {}, views: {} };
                     sumAmount += modelEach.attributes['sum'];
                 });
 
-                if (self.pettyCashModel) {
-                    self.pettyCashModel.set('sum', sumAmount)
+                if (self.purchaseSessionModel) {
+                    self.purchaseSessionModel.set('sum', sumAmount)
                 }
 
                 $('#sum-amount-label').text('All Amount: ' + sumAmount + '฿');
@@ -403,9 +409,9 @@ var app = app || { models: {}, collections: {}, views: {} };
         render: function () {
 
         },
-        setPettyCashModel: function (model) {
-            this.pettyCashModel = model;
-        },
+        // setPurchaseSessionModel: function (model) {
+        //     this.purchaseSessionModel = model;
+        // },
 
         SelectProductPopUpButtonClick: function () {
             $("#popupSelectProduct").popup('open', { transition: 'pop' });
@@ -438,8 +444,8 @@ var app = app || { models: {}, collections: {}, views: {} };
         //},
         clearNewProductRow: function () {
             this.importProductCollection.reset();
-            if (this.pettyCashModel) {
-                this.pettyCashModel.set('sum', 0)
+            if (this.purchaseSessionModel) {
+                this.purchaseSessionModel.set('sum', 0)
             }
             $('#sum-amount-label').text('All Amount: ' + 0 + '฿');
         },
@@ -451,6 +457,14 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var stock_selected = stockModel.get('stock_selected');
                 //console.log(self.importProductCollection.toArray());
 
+                var sessionId = self.purchaseSessionModel.get('sessionId');
+                var userId = self.purchaseSessionModel.get('userId');
+
+                var prementType = self.model.get('payment_type');
+                if (!prementType) {
+                    prementType = 'Credit'
+                }
+                self.purchaseSessionModel.set('payment_type', prementType)
 
                 var supplierSelected = self.$el.find('select.select-supplier-in').val(); // self.supplierSelected;
 
@@ -466,37 +480,53 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                     if (isAllValid && !model.isValid()) {
                         isAllValid = false;
+                    } else {
+                        model.set('sessionId', sessionId)
+                        model.set('userId', userId)
+
+                        //model.set('payment_type', prementType)
                     }
 
                 });
 
                 if (isAllValid) {
-                    self.importProductCollection.saveToServer(stock_selected, function (err, numSave) {
-                        if (err) {
-                            setTimeout(function () {
-                                alert(err);
-                            }, 10);
+                    self.purchaseSessionModel.save(stock_selected, function (result) {
+                        self.importProductCollection.saveToServer(stock_selected, function (err, numSave) {
+                            if (err) {
+                                setTimeout(function () {
+                                    alert(err);
+                                }, 10);
 
-                        } else {
-                            setTimeout(function () {
-                                alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
-                            }, 1);
-
-                            self.invoid_id_last = null;
-
-                            if (self.pettyCashModel) {
-                                self.pettyCashModel.setInItemArray(self.importProductCollection.toJSON());
-                                self.pettyCashModel.save(stock_selected, function () {
-                                    self.clearNewProductRow();
-                                });
                             } else {
+                                setTimeout(function () {
+                                    alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
+                                }, 1);
+
+                                self.invoid_id_last = null;
+
+                                // if (self.purchaseSessionModel) {
+                                //     //self.purchaseSessionModel.setInItemArray(self.importProductCollection.toJSON());
+                                //     self.purchaseSessionModel.save(stock_selected, function () {
+                                //         self.clearNewProductRow();
+                                //     });
+                                // } else {
+
+                                // }
+
                                 self.clearNewProductRow();
+                                self.purchaseSessionModel.clearInItem();
+                                self.purchaseSessionModel.setNewSessionId();
+
+                                if (prementType == 'PettyCash') {
+                                    self.purchaseSessionModel.setLastPettyCashData();
+                                }
+
                             }
 
-
-                        }
-
+                        });
                     });
+
+
                 }
 
                 //self.importProductCollection.forEach(function (model) {

@@ -134,7 +134,7 @@
 
             },
 
-            findLastOne: function (tableName, query, sortObj, callback) {
+            findSortOne: function (tableName, query, sortObj, callback) {
 
                 var db = this._getDB(tableName);
 

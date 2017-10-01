@@ -69,7 +69,7 @@
     <!-- <script src="app/models/ExportProductModel.js"></script> -->
     <!-- <script src="app/models/CheckProductsModel.js"></script> -->
     <script src="app/models/UserModel.js"></script>
-    <script src="app/models/PettyCashModel.js"></script>
+    <script src="app/models/PurchaseSessionModel.js"></script>
 
     <script src="app/collections/products.js"></script>
     <script src="app/collections/ImportProductCollection.js"></script>
@@ -109,7 +109,7 @@
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
 
             <h1>Anda-Stock</h1>
-           
+
             <div data-role="navbar">
                 <ul>
                     <li><a data-value="importProduct" class="ui-btn-active">Create</a></li>
@@ -124,18 +124,29 @@
 
                 <div class="ui-grid-a ui-responsive">
                     <div class="ui-block-a">
-                        <div data-role="fieldcontain">
-                            <label for="select-stock">Store Name</label>
-                            <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
+                        <div class="ui-grid-a ui-responsive">
+                            <div class="ui-block-a">
+                                <label for="select-stock">Store Name</label>
+                                <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
                             </select>
+                            </div>
+                            <div class="ui-block-b div-select-supplier-in">
+                                <label for="select-supplier2">Supplier Code</label>
+                                <select name="select-supplier2" class="select-supplier-in" data-mini="true" data-native-menu="true">
+                            </select>
+                            </div>
+                        </div>
+                        <!-- <div data-role="fieldcontain">
+                          
                         </div>
                         <div data-role="fieldcontain">
-                            <label for="select-supplier2">Supplier Code</label>
-                            <select name="select-supplier2" class="select-supplier-in" data-mini="true" data-native-menu="true">
-                            </select>
-                        </div>
-                        <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all"
-                            data-transition="pop">Product Selecting</a>
+                           
+                        </div> -->
+                      
+                        <!-- <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all"
+                            data-transition="pop">Item Selecting</a> -->
+                            <button class="SelectProductPopUpButton ui-btn ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" >Item Selecting</button>
+                            
                     </div>
                     <div id="PettyCashForm" class="ui-block-b" style="padding-left: 30px;">
                         <div data-role="fieldcontain">
@@ -150,6 +161,12 @@
                             <input type="text" data-wrapper-class="moneyAmount" id="moneyAddAmount" data-mini="true" value="" placeholder="0" />
                             <input data-wrapper-class="chqueData" type="text" id="chqueData" data-mini="true" placeholder="Chq no./dd" />
                         </div>
+
+                        <div data-role="fieldcontain">
+                                <label>Sesseion Id</label>
+                                <input type="text" data-wrapper-class="SesseionId" id="SesseionId" data-mini="true" value="" disabled="disabled" placeholder="0" />
+                            </div>
+                            
                         <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="PrintFormButton">Print Form</button>
                     </div>
                     <!--   <div class="ui-block-c">

@@ -26,8 +26,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             stock_name: '', //canot edit
             remark: null,
 
-            payment_type:null, //canot edit
-            sessionId:null, //canot edit
+            payment_type: null, //canot edit
+            sessionId: null, //canot edit
             userId: null, //canot edit
         },
 
@@ -76,16 +76,16 @@ var app = app || { models: {}, collections: {}, views: {} };
         validate: function (attrs, options) {
             console.log('validate', options);
             // if (!attrs.code || !attrs.stock_name || !attrs.unit_price || !attrs.unit || !attrs.invoid_id || !attrs.sum) {
-            var isInvalid = !attrs.code || !attrs.stock_name || !attrs.invoid_id;
+            var isValid = attrs.code && attrs.stock_name && attrs.invoid_id;
 
-            if (!isInvalid && attrs.stock_name.split('-')[0] != 'OE') {
-                isInvalid = isInvalid || !attrs.unit || !attrs.unit_price;
+            if (isValid && attrs.stock_name.split('-')[0] != 'OE') {
+                isValid = isValid && attrs.unit && attrs.unit_price;
             }
 
-            if (isInvalid) {
+            if (!isValid) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name || !attrs.unit || !attrs.unit_price) ");
-                alert("ข้อมูลไม่ครบ");
+                alert("ข้อมูลไม่ครบ \n In item code:" + attrs.code);
 
                 //alert(" ข้อมูลไม่ครบหรือผิดพลาด \n To err is human, but so, too, is to repent for those mistakes and learn from them.");
 
@@ -152,8 +152,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             });
         },
         destroy: function (cb) {
-
-            app.serviceMethod.removeImportProduct({ _id: this.attributes._id, stock_name: this.attributes.stock_name }, function (result) {
+            //app.serviceMethod.removeImportProduct({ _id: this.attributes._id, stock_name: this.attributes.stock_name }, function (result) {           
+            app.serviceMethod.removeImportProduct(this.attributes, function (result) {
                 if (cb) cb(result);
             });
         },

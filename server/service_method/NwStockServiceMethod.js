@@ -136,7 +136,6 @@
         'stock_name',
         'remark',
 
-        'payment_type',
         'sessionId',
         'userId'
     ]
@@ -190,6 +189,7 @@
         'moneyAddAmount',
         'chqueData',
 
+        'payment_type',
         'sessionId',
         //'BF',
         //'balance'
@@ -658,7 +658,7 @@
             //    }
             //});
 
-            stock.findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
+            stock.findSortOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
 
                 if (result && result.unit_price == data.unit_price) {
                     if (cb) { cb(false) }
@@ -723,7 +723,7 @@
 
             //findObj.store = stockName,
 
-            getStock(stockName, data.dpm).findLastOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
+            getStock(stockName, data.dpm).findSortOne(supplyLogTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
                 if (cb) cb(result);
             });
         },
@@ -809,7 +809,6 @@
                 //})
 
                 if (cb) { cb(result) }
-
                 //if (cb) { cb(result) }
             });
         },
@@ -879,6 +878,19 @@
                 if (cb) { cb(result) }
             });
         },
+
+
+        findImportProduct: function (data, cb) {
+
+            var findObj = _.pick(data, importProductDataField);
+            var db = getStock('globalDB', data.dpm);
+
+            db.find(importProductTableName, findObj, function (result) {
+                if (cb) { cb(result) }
+            });
+
+        },
+
         getAllImportProduct: function (data, cb) {
             var stockName = data.stock_name;
             //console.log('getAllSupplier', data);
@@ -900,11 +912,11 @@
 
             findObj.stock_name = stockName;
 
-            //getStock(stockName).findLastOne(importProductTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
+            //getStock(stockName).findSortOne(importProductTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
             //    cb(result);
             //});
             var stock = getStock(stockName, data.dpm);
-            stock.findLastOne(importProductTableName, findObj, { 'in_date': -1 }, function (result) {
+            stock.findSortOne(importProductTableName, findObj, { 'in_date': -1 }, function (result) {
                 cb(result);
             });
         },
@@ -916,9 +928,12 @@
 
             var stock = getStock(stockName, data.dpm);
             stock.destroy(importProductTableName, { _id: _id }, function (result) {
-                //console.log(result);
+               console.log('result.result',result.result);
                 //self.updateProductUnitNumber(data, function () {
-                if (cb) { cb(result) }
+                self.reCalulatePurchaseSession(data, function () {
+                    if (cb) { cb(result.result) }
+                });
+
                 //});
             })
         },
@@ -950,7 +965,10 @@
                 //self.updateProductUnitNumber(data, function () {
                 //    if (cb) { cb(result) }
                 //});
-                if (cb) { cb(result) }
+
+                self.reCalulatePurchaseSession(data, function () {
+                    if (cb) { cb(result) }
+                });
             })
         },
 
@@ -968,6 +986,164 @@
                 console.log('isDuplicate', stockName, isDuplicate, result);
                 if (cb) { cb(isDuplicate) }
             });
+        },
+
+        //#endregion
+
+        //#region purchaseSession
+        getLastPettyCash: function (data, cb) {
+            console.log('getProduct', data);
+            var userId = data.userId;
+            var findObj = { 'userId': userId, 'payment_type': 'PettyCash' };
+
+            var db = getStock('globalDB', data.dpm);
+            db.sumValue(purchaseSessionTableName, findObj, ['sum', 'moneyAddAmount'], function (result) {
+                var resultObj = { BF: 0 };
+                console.log(result);
+                if (result.length > 0) {
+                    resultObj.totalSum = result[0]['total_sum'];
+                    resultObj.totalMoneyAddAmount = result[0]['total_moneyAddAmount'];
+
+                    resultObj.BF = resultObj.totalMoneyAddAmount - resultObj.totalSum;
+                }
+
+                if (cb) { cb(resultObj) }
+            })
+            // stock.findSortOne(purchaseSessionTableName, { 'userId': userId }, { _id: -1 }, function (result) {
+            //     if (cb) { cb(result) }
+            // });
+        },
+        getLastPurchaseSession: function (data, cb) {
+            //findObj.store = stockName,
+            var db = getStock('globalDB', data.dpm);
+            db.findSortOne(purchaseSessionTableName, {}, { 'createingLog.createDate': -1 }, function (result) {
+                if (cb) cb(result);
+            });
+        },
+        _lastPurchaseSessionId: null,
+        genNewPurchaseSessionId: function (data, cb) {
+            //findObj.store = stockName,
+            var self = this;
+            var date = new Date();
+            var nowStr = date.toISOString().substr(0, 10);
+            var setPurchaseSessionId = function (lastPurchaseSessionId) {
+                var sp = lastPurchaseSessionId.split('#');
+                if (sp[0] == nowStr) {
+                    self._lastPurchaseSessionId = nowStr + '#' + (sp[1] ? parseInt(sp[1]) + 1 : 1);
+                }
+                else {
+                    self._lastPurchaseSessionId = nowStr + '#1';
+                }
+            }
+
+            if (self._lastPurchaseSessionId) {
+                setPurchaseSessionId(self._lastPurchaseSessionId)
+                if (cb) cb(self._lastPurchaseSessionId);
+
+            } else {
+                self.getLastPurchaseSession(data, function (result) {
+                    if (result && result.sessionId) {
+                        setPurchaseSessionId(result.sessionId);
+                    } else {
+                        self._lastPurchaseSessionId = nowStr + '#1';
+                    }
+
+                    if (cb) cb(self._lastPurchaseSessionId);
+                });
+            }
+        },
+        findPurchaseSession: function (data, cb) {
+            //console.log(data);
+            var findObj = _.pick(data, purchaseSessionDataField);
+            var db = getStock('globalDB', data.dpm);
+
+            db.find(purchaseSessionTableName, findObj, function (result) {
+                if (cb) { cb(result) }
+            });
+        },
+
+        insertPurchaseSession: function (data, cb) {
+            //console.log('insertUser', data);
+            var self = this;
+
+            var dataObj = _.pick(data, purchaseSessionDataField);
+
+            dataObj.createingLog = { creator: data.user, 'createDate': new Date() };
+
+            var stock = getStock('globalDB', data.dpm);
+            stock.insert(purchaseSessionTableName, dataObj, function (result) {
+                if (cb) { cb(result) }
+            });
+        },
+
+        updatePurchaseSession: function (data, cb) {
+            var self = this;
+
+            var _id = getObjId(data._id);
+
+            //var dataObj = _.pick(data, [
+            //   'supplier_code',
+            //   'unit_price',
+            //   'unit',
+            //   'in_date',
+            //   'invoid_id',
+            //   'sum'
+            //   //'stock_name'
+            //]);
+
+            var dataObj = _.pick(data, purchaseSessionDataField);
+
+            dataObj['createingLog.updater'] = data.user;
+            dataObj['createingLog.updateDate'] = new Date();
+
+            console.log('updateImportProduct', dataObj);
+
+            var db = getStock(stockName, data.dpm);
+            db.update(purchaseSessionTableName, { _id: _id }, dataObj, function (result) {
+
+                //self.updateProductUnitNumber(data, function () {
+                //    if (cb) { cb(result) }
+                //});
+                if (cb) { cb(result) }
+            })
+        },
+        reCalulatePurchaseSession: function (data, cb) {
+
+            if (data.sessionId) {
+                var findObj = { 'sessionId': data.sessionId };
+                console.log('reCalulatePurchaseSession', findObj);
+
+                var db = getStock('globalDB', data.dpm);
+
+                db.findOne(purchaseSessionTableName, findObj, function (result) {
+
+                    if (result) {
+                        db.find(importProductTableName, findObj, function (resultArray) {
+
+                            var sum = _.reduce(resultArray, function (memo, obj) {
+                                return memo + (obj.sum ? obj.sum : 0);
+                            }, 0);
+                            result.sum = sum;
+
+                            //var _id = getObjId(data._id);
+                            db.update(purchaseSessionTableName, { _id: result._id }, result, function (updateResult) {
+
+                                //self.updateProductUnitNumber(data, function () {
+                                //    if (cb) { cb(result) }
+                                //});
+                                if (cb) { cb(updateResult) }
+                            })
+                        });
+                    }
+                    else {
+                        if (cb) {
+                            cb({ type: 'err', msg: 'no session' })
+                        }
+                    }
+                });
+            } else {
+                cb(null)
+            }
         },
         //#endregion
 
@@ -1385,47 +1561,12 @@
         },
         //#endregion
 
-        //#region PettyCash
-        getLastPettyCash: function (data, cb) {
-            console.log('getProduct', data);
 
-            var userId = data.userId;
-            var stock = getStock('globalDB', data.dpm);
-            stock.sumValue(purchaseSessionTableName, { 'userId': userId }, ['sum', 'moneyAddAmount'], function (result) {
-                var resultObj = { BF: 0};
-                console.log(result);
-                if (result.length > 0) {
-                    resultObj.totalSum= result[0]['total_sum'];
-                    resultObj.totalMoneyAddAmount = result[0]['total_moneyAddAmount'];
-
-                    resultObj.BF =  resultObj.totalMoneyAddAmount -  resultObj.totalSum;
-                }
-
-                if (cb) { cb(resultObj) }
-            })
-            // stock.findLastOne(purchaseSessionTableName, { 'userId': userId }, { _id: -1 }, function (result) {
-            //     if (cb) { cb(result) }
-            // });
-        },
-
-        insertPettyCash: function (data, cb) {
-            //console.log('insertUser', data);
-            var self = this;
-
-            var dataObj = _.pick(data, purchaseSessionDataField);
-
-            dataObj.createingLog = { creator: data.user, 'createDate': new Date() };
-
-            var stock = getStock('globalDB', data.dpm);
-            stock.insert(purchaseSessionTableName, dataObj, function (result) {
-                if (cb) { cb(result) }
-            });
-        },
-        //#endregion
 
     };
 
-    if (typeof module !== "undefined" && module.exports) {                       // NodeJS/CommonJS
+    if (typeof module !== "undefined" && module.exports) {
+        // NodeJS/CommonJS
         module.exports = NwStockServiceMethod;
     } else {
 
