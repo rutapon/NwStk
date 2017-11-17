@@ -94,25 +94,128 @@ $(function () {
     }
 
 
-    var v = (new Date()).getTime();;
+    function loadUpdate() {
+        var myWindow = window.open("update.html");
+
+        var handle = setInterval(function () {
+
+            if (myWindow.window.setWindow) {
+                console.log('setWindow');
+                clearInterval(handle);
+
+                myWindow.window.setWindow(window);
+            }
+        }, 100);
+    }
+
+
+
+    $('.permissible').hide();
+    $('#logout').hide();
+    $('#setting').hide();
+
+    if (sessionStorage.user) {
+        //alert(sessionStorage.user);
+
+        app.userModel = new app.models.UserModel(JSON.parse(sessionStorage.userModelattributes));
+        app.userModel.login(function (result) {
+            console.log(result);
+            if (result) {
+                sessionStorage.userModelattributes = JSON.stringify(app.userModel.attributes);
+                sessionStorage.type = result.type
+
+            }
+            else {
+                sessionStorage.userModelattributes = null;
+                sessionStorage.user = null;
+                sessionStorage.type = null
+            }
+
+            checkMenuPermission();
+        });
+        //console.log(app.userModel);
+    }
+    else {
+        app.userModel = new app.models.UserModel({ permission: {} });
+        checkMenuPermission();
+    }
+
+    function checkMenuPermission() {
+
+        var permissionObj = app.userModel.get('permission');
+
+        console.log('permissionObj', permissionObj);
+
+        var permitRoot = {};
+        _.each(permissionObj, function (item, key) {
+            //console.log(item);
+            var root = key.split('->')[0];
+            permitRoot[root] = true;
+        })
+
+        $('.permissible').each(function (id, el) {
+            var $el = $(el);
+            var root = $el.find('span').eq(0).text();
+            //console.log(root);
+            if (permitRoot[root]) {
+                $el.show();
+                var subMenus = $el.find('li');
+                //subMenus.hide();
+                subMenus.each(function (id, sub) {
+                    var $sub = $(sub);
+                    var subMenu = $sub.find('span').text();
+                    if (!permissionObj[root + '->' + subMenu]) {
+                        $sub.hide();
+                    }
+                });
+
+            }
+        })
+
+
+        if (app.userModel.get('user')) {
+            $('#logout').show();
+        }
+
+        if (app.userModel.get('type') == 'admin') {
+            $('#setting').show();
+        }
+    }
+
+
+    var v = (new Date()).getTime();
+
+    var loadMainFrameHref = function (href) {
+        $('#mainFrame').attr('src', href + '?v=' + v)
+    }
+
     $(document).on('click', "#idmenu li", function (ev) {
         ev.preventDefault();
         var thisEl = $(ev.target);
         //var href = thisEl.parents("a").attr('href');
         var href = thisEl.attr('data-href');
         href = href ? href : thisEl.parents("li").attr('data-href');
-        
+
         console.log('cl', href);
         if (href) {
             console.log(href);
             if (href.indexOf('.html') != -1) {
-                $('#mainFrame').attr('src', href + '?v=' + v)
-            }
-            else if (href == '#setting') {
 
+                let herfSp = href.split('?');
+                let hrefWithPara = herfSp[0] + '?v=' + v;
+                if (herfSp[1]) {
+                    hrefWithPara = hrefWithPara + '&' + herfSp[1];
+                }
+                $('#mainFrame').attr('src', hrefWithPara)
+            }
+            else if (href == '#update') {
+                window.location = 'update.html?v=' + v;
             }
             else if (href == '#logging') {
                 loadLogin();
+            }
+            else if (href == '#logout') {
+                loadLogout();
             }
         }
 
@@ -123,7 +226,6 @@ $(function () {
         //alert($(ev.target).parents("[data-role='navbar']").find('a').length);
         return false;
     });
-
 
     // $.get("test/index.html", function (data) {
     //     //$( ".result" ).html( data );

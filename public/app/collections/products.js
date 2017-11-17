@@ -76,9 +76,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             //console.log('setLocalData');
             app.serviceMethod.getAllProducts(stockSelected, function (result) {
-                _.each(result, function (item) {
-                    item['stock_name'] = stockSelected;
-                });
+                // _.each(result, function (item) {
+                //     item['stock_name'] = stockSelected;
+                // });
 
                 self.setLocalDatabase(stockSelected, result);
 
@@ -126,9 +126,9 @@ var app = app || { models: {}, collections: {}, views: {} };
             else {
                 app.serviceMethod.getAllProducts(stockSelected, function (result) {
                     //console.log(result);
-                    _.each(result, function (item) {
-                        item['stock_name'] = stockSelected;
-                    });
+                    // _.each(result, function (item) {
+                    //     item['stock_name'] = stockSelected;
+                    // });
 
                     self.setLocalDatabase(stockSelected, result);
 

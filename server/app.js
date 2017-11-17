@@ -24,7 +24,7 @@
 
         //require('./StaticHttp.js');
 
-        request = require('request');
+        //request = require('request');
 
         var express = require('express');
         var compression = require('compression');
@@ -59,6 +59,19 @@
 
     } else {
 
+    }
+
+
+    var runCmd = function (cmd) {
+        const exec = require('child_process').exec;
+        exec(cmd, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+            console.log(`stderr: ${stderr}`);
+        });
     }
 
     NwServiceProcess.addServiceMethod(NwStockServiceMethod);
@@ -132,29 +145,16 @@
 
     listenCommand(process.env.PORT || 8088);
 
-    //var url = "andamania";
-    //var token =  "501c6eeb-1d48-429c-a79c-c869624efd3c"
-    ////var token = "563f471d-5950-459c-9461-2424eae03e37";
-
-    var url = "newww";
-    var token = "1c7c011a-c53e-40db-bd12-df8e74a4a326";
-
-    function updateDns(url, token) {
-        var url = "https://www.duckdns.org/update/" + url + "/" + token;
-        request.get(url, function (error, response, body) {
-
-            if (!error && response.statusCode == 200) {
-                console.log('update dns', body);
-                //cb(body);
-            }
-        });
+    var updateSntp = () => {
+        runCmd('sntp -s time.google.com');
     }
+    updateSntp();
 
-    updateDns(url, token);
     setInterval(function () {
-        updateDns(url, token);
-    }, 5 * 60000)
+        updateSntp();
+    }, 60 * 60000)
 
+    require('../updateDNS.js');
 
     //NwStockServiceMethod.getAllProducts();
 })(this);

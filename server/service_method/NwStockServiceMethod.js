@@ -6,19 +6,15 @@
 
 (function (context, undefined) {
     //#region requre
+    'use strict';
+    var NwLib = require('../../lib/NwLib.js');
+    var _ = require('../../lib/underscore/underscore.js');
+    var Class = NwLib.Nwjsface.Class;
 
-    if (typeof module !== "undefined") {
-        NwLib = require('../../lib/NwLib.js');
-        _ = require('../../lib/underscore/underscore.js');
-        Class = NwLib.Nwjsface.Class;
+    //sqlite3 = require('sqlite3').verbose();
+    var NwDbConnection = require('../NwConn/NwDbMgConnection.js');
+    var NwServiceProcess = require('../NwServiceProcess.js');
 
-        //sqlite3 = require('sqlite3').verbose();
-        NwDbConnection = require('../NwConn/NwDbMgConnection.js');
-        NwServiceProcess = require('../NwServiceProcess.js');
-
-    } else {
-
-    }
     //#endregion
     //var NwStockServiceMethod = Class(function () {
     //    var stock1 = new NwDbConnection('../Database/stock1.s3db');
@@ -35,7 +31,8 @@
     //    };
     //});
 
-    var mongoDbServerUrl = "192.168.1.200";
+    //var mongoDbServerUrl = "192.168.1.200";
+    var mongoDbServerUrl = "192.168.1.199";
     //var mongoDbServerUrl = "andamania.duckdns.org";
     //var mongoDbServerUrl = "127.0.0.1";
     //var mongoDbServerUrl = "localhost";
@@ -160,6 +157,7 @@
         'pass',
         'dmp',
         'type',
+        'lng',
         'permission',
         'listAccessPermission'
     ];
@@ -377,7 +375,9 @@
             if (stockName) {
                 stock.findOne(productTableName, { stock_name: stockName, code: code }, function (result) {
                     var userDataObj = userData[data.user];
-                    _.each(result, function (eachResult) { eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh; });
+
+                    //_.each(result, function (eachResult) { eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh; });
+                    _.each(result, function (eachResult) { eachResult.name = eachResult.nameTh; });
 
                     result = objArrCompress(result);
 
@@ -392,15 +392,18 @@
 
             var stock = getStock(stockName, data.dpm, true);
 
+            var findObj = { code: { $in: codes } }
             if (stockName) {
-
-                stock.find(productTableName, { stock_name: stockName, code: { $in: codes } }, function (result) {
-                    var userDataObj = userData[data.user];
-                    _.each(result, function (eachResult) { eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh; });
-
-                    if (cb) { cb(result) }
-                });
+                findObj.stock_name = stockName;
             }
+
+            stock.find(productTableName, findObj, function (result) {
+                var userDataObj = userData[data.user];
+                //_.each(result, function (eachResult) { eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh; });
+                _.each(result, function (eachResult) { eachResult.name = eachResult.nameTh; });
+
+                if (cb) { cb(result) }
+            });
         },
 
         getAllProducts: function (data, cb) {
@@ -408,23 +411,27 @@
             var stockName = data.stock_name;
             var stock = getStock(stockName, data.dpm, true);
 
+            var findObj = {}
             if (stockName) {
-                stock.find(productTableName, { stock_name: stockName }, function (result) {
-                    var userDataObj = userData[data.user];
-                    _.each(result, function (eachResult) {
-
-                        eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh;
-
-                        delete eachResult.createingLog;
-                    });
-
-                    result = objArrCompress(result);
-
-                    console.log('getAllProducts fin', result.dt.length);
-
-                    if (cb) { cb(result) }
-                });
+                findObj.stock_name = stockName;
             }
+
+            stock.find(productTableName, findObj, function (result) {
+                var userDataObj = userData[data.user];
+                _.each(result, function (eachResult) {
+
+                    //eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh;
+                    eachResult.name = eachResult.nameTh;
+
+                    delete eachResult.createingLog;
+                });
+
+                result = objArrCompress(result);
+
+                console.log('getAllProducts fin', result.dt.length);
+
+                if (cb) { cb(result) }
+            });
         },
         findeProductStartWith: function (data, cb) {
             console.log('findeProductStartWith', data);
@@ -437,7 +444,8 @@
             stock.findStartWith(productTableName, { stock_name: stockName }, { code: findWord, nameTh: findWord, nameEn: findWord }, limit, function (result) {
                 var userDataObj = userData[data.user];
                 _.each(result, function (eachResult) {
-                    eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh;
+                    // eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh;
+                    eachResult.name = eachResult.nameTh;
 
                     delete eachResult.createingLog;
 
@@ -451,7 +459,7 @@
         },
         insertProduct: function (data, cb) {
 
-            //console.log('insertProduct', data);
+            console.log('insertProduct', data);
 
             var stockName = data.stock_name;
 
@@ -485,8 +493,11 @@
             var stock = getStock(stockName, data.dpm);
 
             stock.insert(productTableName, insertObj, function (result) {
-                var userDataObj = userData[data.user];
-                _.each(result, function (eachResult) { eachResult.name = userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh; });
+                // var userDataObj = userData[data.user];
+                // _.each(result, function (eachResult) {
+                //     console.log('eachResult', eachResult);
+                //     eachResult.name = (userDataObj.lng == 'En' ? eachResult.nameEn : eachResult.nameTh);
+                // });
                 if (cb) { cb(result); }
                 //if (cb) { cb({ 'result': 's', id: result }) }
             })
@@ -772,9 +783,13 @@
 
         //#region ImportProduct
         insertImportProduct: function (data, cb) {
+            console.log('insertImportProductArray data', data);
             var self = this;
             var stockName = data.stock_name;
+            var dpm = data.dpm;
+            var stock = getStock(stockName, dpm);
 
+            var createingLog = { creator: data.user, 'createDate': new Date() };
             //var dataObj = {
             //    product_id: data.product_id,
             //    invoid_id:invoid_id,
@@ -787,30 +802,46 @@
             //};
             //console.log('insertImportProduct', data);
 
-            var dataObj = _.pick(data, importProductDataField);
+            if (!data.dataArray) {
+                let dataObj = _.pick(data, importProductDataField);
 
-            dataObj.createingLog = { creator: data.user, 'createDate': new Date() };
+                if (_.isEmpty(dataObj.in_date)) {
+                    dataObj.in_date = new Date().toISOString().slice(0, 10);
+                }
+                dataObj.createingLog = createingLog;
 
-            var stock = getStock(stockName, data.dpm);
+                stock.insert(importProductTableName, dataObj, function (result) {
 
-            stock.insert(importProductTableName, dataObj, function (result) {
+                    console.log('insertImportProduct', result);
 
-                console.log('insertImportProduct', result);
+                    //var supplier_default = data.supplier_name;
+                    //var unit_price_default = data.unit_price;
 
-                //var supplier_default = data.supplier_name;
-                //var unit_price_default = data.unit_price;
+                    //stock.update(productTableName, { stock_name: stockName, code: data.code }, { supplier_default: supplier_default, unit_price_default: unit_price_default }, function (result) {
 
-                //stock.update(productTableName, { stock_name: stockName, code: data.code }, { supplier_default: supplier_default, unit_price_default: unit_price_default }, function (result) {
+                    //self.updateProductUnitNumber(data, function () {
+                    //    if (cb) { cb(result) }
+                    //});
 
-                //self.updateProductUnitNumber(data, function () {
-                //    if (cb) { cb(result) }
-                //});
+                    //})
 
-                //})
+                    if (cb) { cb(result) }
+                    //if (cb) { cb(result) }
+                });
+            } else {
+                let insertDataArray = _.map(data.dataArray, function (data) {
+                    console.log('data', data);
+                    let dataObj = _.pick(data, importProductDataField);
+                    dataObj.createingLog = createingLog;
+                    return dataObj;
+                })
 
-                if (cb) { cb(result) }
-                //if (cb) { cb(result) }
-            });
+                stock.insert(importProductTableName, insertDataArray, function (result) {
+
+                    if (cb) { cb(result) }
+                });
+            }
+
         },
 
         getImportProductInPeriod: function (data, cb) {
@@ -822,13 +853,15 @@
             var timeStart = data.timeStart;
             var timeEnd = data.timeEnd;
 
-            var findObj = _.pick(data, [
-                'code',
-                'supplier_code',
-                'invoid_id'
-            ]);
+            // var findObj = _.pick(data, [
+            //     'code',
+            //     'supplier_code',
+            //     'invoid_id'
+            // ]);
 
-            findObj.stock_name = stockName;
+            var findObj = _.pick(data, importProductDataField);
+            //findObj.stock_name = stockName;
+
             //console.log('getImportProductInPeriod', data);
 
             var stock = getStock(stockName, data.dpm);
@@ -855,11 +888,18 @@
             var timeStart = data.timeStart;
             var timeEnd = data.timeEnd;
 
-            var findObj = _.pick(data, [
-                'code',
-                'supplier_code',
-                'invoid_id'
-            ]);
+            // var findObj = _.pick(data, [
+            //     'code',
+            //     'supplier_code',
+            //     'invoid_id'
+            // ]);
+            var findObj = _.pick(data, importProductDataField);
+
+            var query = {};
+            if (stockName) {
+                query.stock_name = stockName;
+            }
+
             //console.log('getImportProductInPeriod', data);
 
             var stock = getStock(stockName, data.dpm);
@@ -867,7 +907,7 @@
             //stock.findInPeriodStartWith(importProductTableName, findObj, 'createingLog.createDate', timeStart, timeEnd, function (result) {
             //    if (cb) { cb(result) }
             //});
-            stock.findInPeriodStartWith(importProductTableName, { stock_name: stockName }, findObj, 'in_date', timeStart, timeEnd, function (result) {
+            stock.findInPeriodStartWith(importProductTableName, query, findObj, 'in_date', timeStart, timeEnd, function (result) {
 
                 _.each(result, function (obj) {
                     delete obj.createingLog;
@@ -878,7 +918,6 @@
                 if (cb) { cb(result) }
             });
         },
-
 
         findImportProduct: function (data, cb) {
 
@@ -896,7 +935,11 @@
             //console.log('getAllSupplier', data);
             var stock = getStock(stockName, data.dpm);
 
-            stock.find(importProductTableName, { stock_name: stockName }, function (result) {
+            var query = {};
+            if (stockName) {
+                query.stock_name = stockName;
+            }
+            stock.find(importProductTableName, query, function (result) {
                 _.each(result, function (obj) {
                     delete obj.createingLog;
                 });
@@ -910,7 +953,10 @@
             var stockName = data.stock_name;
             var findObj = _.pick(data, ['code', 'supplier_code']);
 
-            findObj.stock_name = stockName;
+            if (stockName) {
+                findObj.stock_name = stockName;
+            }
+
 
             //getStock(stockName).findSortOne(importProductTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
             //    cb(result);
@@ -920,6 +966,7 @@
                 cb(result);
             });
         },
+
         removeImportProduct: function (data, cb) {
             console.log('removeImportProduct', data);
             var self = this;
@@ -928,7 +975,7 @@
 
             var stock = getStock(stockName, data.dpm);
             stock.destroy(importProductTableName, { _id: _id }, function (result) {
-               console.log('result.result',result.result);
+                console.log('result.result', result.result);
                 //self.updateProductUnitNumber(data, function () {
                 self.reCalulatePurchaseSession(data, function () {
                     if (cb) { cb(result.result) }
@@ -977,13 +1024,19 @@
             var stockName = data.stock_name;
             var code = data.code;
             var invoid_id = data.invoid_id;
+
+            var findObj = { code: code, invoid_id: invoid_id };
+
+            if (stockName) {
+                findObj.stock_name = stockName;
+            }
             //var insertObj = _.pick(data, productDataField);
             //insertObj.createingLog = { creator: 'admin', 'createDate': new Date() };
 
             var stock = getStock(stockName, data.dpm);
-            stock.findOne(importProductTableName, { stock_name: stockName, code: code, invoid_id: invoid_id }, function (result) {
-                var isDuplicate = result ? true : false;
-                console.log('isDuplicate', stockName, isDuplicate, result);
+            stock.findOne(importProductTableName, findObj, function (result) {
+                var isDuplicate = result ? result : false;
+                console.log('isDuplicate', isDuplicate, result);
                 if (cb) { cb(isDuplicate) }
             });
         },
@@ -992,7 +1045,7 @@
 
         //#region purchaseSession
         getLastPettyCash: function (data, cb) {
-            console.log('getProduct', data);
+            console.log('getLastPettyCash', data);
             var userId = data.userId;
             var findObj = { 'userId': userId, 'payment_type': 'PettyCash' };
 
@@ -1013,44 +1066,183 @@
             //     if (cb) { cb(result) }
             // });
         },
+        getฺBeforePettyCash: function (data, cb) {
+            console.log('getฺBeforePettyCash', data);
+            var self = this;
+            var sessionId = data.sessionId;
+            var userId = data.userId;
+            var findObj = { 'userId': userId, 'payment_type': 'PettyCash' };
+
+            var db = getStock('globalDB', data.dpm);
+
+            db.findOne(purchaseSessionTableName, { sessionId: sessionId }, function (sessionIdData) {
+                if (sessionIdData) {
+                    var createDate = sessionIdData.createingLog.createDate;
+                    db.sumValueBefore(purchaseSessionTableName, findObj, ['sum', 'moneyAddAmount'], 'createingLog.createDate', createDate, function (result) {
+                        var resultObj = { BF: 0 };
+                        console.log(result);
+                        if (result.length > 0) {
+                            resultObj.totalSum = result[0]['total_sum'];
+                            resultObj.totalMoneyAddAmount = result[0]['total_moneyAddAmount'];
+
+                            resultObj.BF = resultObj.totalMoneyAddAmount - resultObj.totalSum;
+                        }
+
+                        if (cb) { cb(resultObj) }
+                    })
+                } else {
+                    self.getLastPettyCash(data, cb);
+                }
+
+            });
+
+            // stock.findSortOne(purchaseSessionTableName, { 'userId': userId }, { _id: -1 }, function (result) {
+            //     if (cb) { cb(result) }
+            // });
+        },
         getLastPurchaseSession: function (data, cb) {
+            //console.log('getLastPurchaseSession',data);
             //findObj.store = stockName,
             var db = getStock('globalDB', data.dpm);
-            db.findSortOne(purchaseSessionTableName, {}, { 'createingLog.createDate': -1 }, function (result) {
+            const findObj = {};
+
+            if (data.payment_type) {
+                findObj.payment_type = data.payment_type;
+            }
+
+            db.findSortOne(purchaseSessionTableName, findObj, { 'createingLog.createDate': -1 }, function (result) {
                 if (cb) cb(result);
             });
         },
-        _lastPurchaseSessionId: null,
+        // _lastPurchaseSessionId: {},
+        // genNewPurchaseSessionId: function (data, cb) {
+        //     //findObj.store = stockName,
+        //     var self = this;
+        //     var date = new Date();
+        //     var nowStr = date.toISOString().substr(0, 7);
+        //     var payment_type = data.payment_type;
+
+        //     var prefixStr = '';
+
+        //     var formatInt = function (intNum) {
+        //         if (intNum > 9999) {
+        //             return intNum;
+        //         } else {
+        //             let formattedNumber = ("000" + intNum).slice(-4);
+        //             return formattedNumber;
+        //         }
+        //     }
+
+        //     if (payment_type == 'Credit') {
+        //         prefixStr = 'CD_' + prefixStr;
+        //     } else if (payment_type == 'PettyCash') {
+        //         prefixStr = 'PC_' + prefixStr;
+        //     }
+
+        //     var setPurchaseSessionId = function (lastPurchaseSessionId) {
+        //         var sp = lastPurchaseSessionId.split(' ');
+        //         var result = null;
+        //         if (sp[0] == prefixStr + nowStr) {
+        //             result = self._lastPurchaseSessionId[prefixStr] = prefixStr + nowStr + ' ' + formatInt((sp[1] ? parseInt(sp[1]) + 1 : 1));
+        //         }
+        //         else {
+        //             result = self._lastPurchaseSessionId[prefixStr] = prefixStr + nowStr + ' ' + formatInt(1);
+        //         }
+        //         return result;
+        //     }
+
+        //     if (self._lastPurchaseSessionId[prefixStr]) {
+        //         setPurchaseSessionId(self._lastPurchaseSessionId[prefixStr])
+        //         if (cb) cb(self._lastPurchaseSessionId[prefixStr]);
+
+        //     } else {
+        //         self.getLastPurchaseSession(data, function (result) {
+        //             if (result && result.sessionId) {
+        //                 setPurchaseSessionId(result.sessionId);
+        //             } else {
+        //                 self._lastPurchaseSessionId[prefixStr] = prefixStr + nowStr + ' ' + formatInt(1);
+        //             }
+
+        //             if (cb) cb(self._lastPurchaseSessionId[prefixStr]);
+        //         });
+        //     }
+        // },
         genNewPurchaseSessionId: function (data, cb) {
             //findObj.store = stockName,
             var self = this;
             var date = new Date();
-            var nowStr = date.toISOString().substr(0, 10);
+            var nowStr = date.toISOString().substr(0, 7);
+            var payment_type = data.payment_type;
+
+            var prefixStr = '';
+
+            var formatInt = function (intNum) {
+                if (intNum > 9999) {
+                    return intNum;
+                } else {
+                    let formattedNumber = ("000" + intNum).slice(-4);
+                    return formattedNumber;
+                }
+            }
+
+            if (payment_type == 'Credit') {
+                prefixStr = 'CD_' + prefixStr;
+            } else if (payment_type == 'PettyCash') {
+                prefixStr = 'PC_' + prefixStr;
+            }
+
             var setPurchaseSessionId = function (lastPurchaseSessionId) {
-                var sp = lastPurchaseSessionId.split('#');
-                if (sp[0] == nowStr) {
-                    self._lastPurchaseSessionId = nowStr + '#' + (sp[1] ? parseInt(sp[1]) + 1 : 1);
+                var sp = lastPurchaseSessionId.split(' ');
+                var result = null;
+                if (sp[0] == prefixStr + nowStr) {
+                    result = prefixStr + nowStr + ' ' + formatInt((sp[1] ? parseInt(sp[1]) + 1 : 1));
                 }
                 else {
-                    self._lastPurchaseSessionId = nowStr + '#1';
+                    result = prefixStr + nowStr + ' ' + formatInt(1);
                 }
+                return result;
             }
 
-            if (self._lastPurchaseSessionId) {
-                setPurchaseSessionId(self._lastPurchaseSessionId)
-                if (cb) cb(self._lastPurchaseSessionId);
+            self.getLastPurchaseSession(data, function (result) {
+                var resultResp = null;
+                if (result && result.sessionId) {
+                    resultResp = setPurchaseSessionId(result.sessionId);
+                } else {
+                    resultResp = prefixStr + nowStr + ' ' + formatInt(1);
+                }
 
-            } else {
-                self.getLastPurchaseSession(data, function (result) {
-                    if (result && result.sessionId) {
-                        setPurchaseSessionId(result.sessionId);
-                    } else {
-                        self._lastPurchaseSessionId = nowStr + '#1';
-                    }
+                if (cb) cb(resultResp);
+            });
+        },
+        getPurchaseSessionInPeriod: function (data, cb) {
+            console.log('getPurchaseSessionInPeriod', data);
 
-                    if (cb) cb(self._lastPurchaseSessionId);
+            //var timeStart = new Date(data.timeStart);
+            //var timeEnd = new Date(data.timeEnd);
+
+            var timeStart = data.timeStart;
+            var timeEnd = data.timeEnd;
+
+            var userId = data.userId;
+            var findObj = {};
+
+
+            var db = getStock('globalDB', data.dpm);
+            //stock.findInPeriod(importProductTableName, findObj, 'createingLog.createDate', timeStart, timeEnd, function (result) {
+            //    if (cb) { cb(result) }
+            //});
+
+            db.findInPeriod(purchaseSessionTableName, findObj, 'in_date', timeStart, timeEnd, function (result) {
+
+                _.each(result, function (obj) {
+                    delete obj.createingLog;
                 });
-            }
+
+                //result = objArrCompress(result);
+
+                //console.log(result);
+                if (cb) { cb(result) }
+            });
         },
         findPurchaseSession: function (data, cb) {
             //console.log(data);
@@ -1121,7 +1313,7 @@
                         db.find(importProductTableName, findObj, function (resultArray) {
 
                             var sum = _.reduce(resultArray, function (memo, obj) {
-                                return memo + (obj.sum ? obj.sum : 0);
+                                return memo + (obj.sum ? parseFloat(obj.sum) : 0);
                             }, 0);
                             result.sum = sum;
 
@@ -1154,7 +1346,10 @@
             var stockName = data.stock_name;
 
             var dataObj = _.pick(data, exportProductDataField);
-
+            if (_.isEmpty(dataObj.out_date)) {
+                dataObj.out_date = new Date().toISOString().slice(0, 10);
+            }
+            
             dataObj.createingLog = { creator: data.user, 'createDate': new Date() };
 
             var stock = getStock(stockName, data.dpm);
@@ -1561,7 +1756,23 @@
         },
         //#endregion
 
+        getServerDateTime: function (data, cb) {
+            //console.log('getServerDateTime',new Date());
+            if (cb) cb(new Date())
+        },
 
+        setServerDateTime: function (data, cb) {
+            console.log('setServerDateTime', data);
+            var date = data.date;
+            var time = data.time;
+
+            const exec = require('child_process').exec;
+            exec('date --set=' + date, (error, stdout, stderr) => {
+                exec('date --set=' + time, (error, stdout, stderr) => {
+                    if (cb) cb(new Date())
+                });
+            });
+        },
 
     };
 

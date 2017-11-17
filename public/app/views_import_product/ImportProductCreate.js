@@ -17,6 +17,17 @@ var app = app || { models: {}, collections: {}, views: {} };
         $("#sure").popup('open');
     }
 
+    function savedAlert(text1, text2, button, callback) {
+        console.log('savedAlert');
+        $("#savedAlert .sure-1").text(text1);
+        $("#savedAlert .sure-2").text(text2);
+        $("#savedAlert .sure-do").text(button).on("click", function () {
+            callback();
+            $(this).off("click");
+        });
+        $("#savedAlert").popup('open');
+    }
+
     // normally, you'd get these from the server with .fetch()
     function attr(attr) {
         // this lets us remember `attr` for when when it is get/set
@@ -56,7 +67,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             //'click .cancelClick': 'cancelClick',
             'change select.select-supplier-in': 'supplierChange',
             'click .ClearNewProductRow': 'clearNewProductRow',
-            'click .SaveImportProduct': 'saveImportProduct'
+            'click .SaveImportProduct': 'saveImportProduct',
+            'click #PrintFormButton': 'printReport'
         },
         initialize: function () {
 
@@ -72,6 +84,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             var stockModel = this.model.get('stockModel');
             var importProductCollection = this.importProductCollection = this.model.get('importProductCollection');
             var purchaseSessionModel = this.purchaseSessionModel = this.model.get('purchaseSessionModel');
+            purchaseSessionModel.set('payment_type', this.model.get('payment_type'))
 
             importProductCollection.splice = hackedSplice;
 
@@ -79,19 +92,19 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             self.currentListType = null;
             self.$el.find(".select-stock").bind("change", function (event, ui) {
-                var stockSelected = self.$el.find('.select-stock option:selected').select().text();
+
+                var stockSelected = self.$el.find('.select-stock option:selected').select().val();
                 console.log('stock_selected', stockSelected);
-                stockModel.set('stock_selected', stockSelected);
-                var listType = stockSelected.split('-')[0];
+                if (stockSelected) {
+                    stockModel.set('stock_selected', stockSelected);
+                    var listType = stockSelected.split('-')[0];
 
-                if (self.currentListType != listType) {
-                    self.currentListType = listType;
+                    if (self.currentListType != listType) {
+                        self.currentListType = listType;
 
-                    self.initTable();
-
-                    importProductCollection.reset();
+                        //importProductCollection.reset();
+                    }
                 }
-
             });
 
             stockModel.on('change:stock', function (model, stock) {
@@ -108,7 +121,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             stockModel.on('change:stock_selected', function (model, stock_selected) {
 
                 //self.$el.find('.select-stock select').val(stock_selected).trigger("change");
-                var stockSelectedInner = self.$el.find('.select-stock option:selected').select().text();
+                var stockSelectedInner = self.$el.find('.select-stock option:selected').select().val();
 
                 if (stock_selected != stockSelectedInner) {
                     //console.log('change:stock_selected iner');
@@ -143,10 +156,11 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             //$('#sum-amount-label').text('All Amount: ''฿');
             this.initImportProductCollectionEventHandle();
+            self.initTable();
 
-            this.purchaseSessionModel.on('change:sessionId', function (model) {
-                self.$el.find("#SesseionId").val(model.get('sessionId'))
-            })
+            // this.purchaseSessionModel.on('change:sessionId', function (model) {
+            //     self.$el.find("#SessionId").val(model.get('sessionId'))
+            // })
 
         },
 
@@ -188,6 +202,50 @@ var app = app || { models: {}, collections: {}, views: {} };
                         modelEach.attributes['in_date'] = in_date;
                     }
                 });
+            });
+
+            importProductCollection.on('change:sum', function (model) {
+                var numPrice = 0;
+
+                for (var i = 1; i <= 3; i++) {
+                    if (model.get('unit_price' + i)) {
+                        numPrice++;
+                    }
+                }
+
+                if (numPrice != 0) {
+                    var sum = model.attributes.unit * model.attributes.unit_price;
+                    if (sum != model.get('sum')) {
+                        alert('Can not set amount directly.')
+                        model.calSum();
+                    }
+                }
+
+
+            });
+
+            importProductCollection.on('change:unit', function (model) {
+                if (model.get('unit') != '') {
+                    var numPrice = 0;
+
+                    for (var i = 1; i <= 3; i++) {
+                        if (model.get('unit_price' + i)) {
+                            numPrice++;
+                        }
+                    }
+                    //var stock_name = ImportProductModel.get('stock_name')
+                    // console.log(stock_name);
+                    if (numPrice == 0) {//(stock_name.split('-')[0] == 'OE') {
+                        alert('Can not set unit number')
+                        model.set('unit', '')
+                    }
+
+                    //    // var stock_name = model.get('stock_name');
+                    //     if (stock_name.split('-')[0] == 'OE') {
+                    //         alert('Can not set unit number for OE')
+                    //         model.set('unit', '')
+                    //     }
+                }
 
             });
 
@@ -240,6 +298,18 @@ var app = app || { models: {}, collections: {}, views: {} };
                 columns.splice(colId, 1);
             }
 
+            var unit_priceConDition = function () {
+                // this lets us remember `attr` for when when it is get/set
+                return function (m) {
+                    m.get('')
+                    // if (_.isUndefined(value)) {
+                    //     return m.get(attr);
+                    // } else {
+                    //     //console.log('set', value);
+                    //     m.set(attr, value);
+                    // }
+                };
+            }
 
             columns = [
                 { readOnly: true, data: attr('code') },
@@ -247,12 +317,12 @@ var app = app || { models: {}, collections: {}, views: {} };
                 { readOnly: true, data: attr('nameEn') },
                 { readOnly: true, data: attr('unit_type') },
                 {
-                    //readOnly: true,
+
                     data: attr('unit_price'),
                     //type: 'autocomplete',
                     type: 'dropdown',
-                    allowInvalid: false,
-                    strict: true,
+                    //allowInvalid: false,
+                    //strict: true,
                     source: function (query, process) {
                         //    //console.log(this.row);
 
@@ -265,7 +335,11 @@ var app = app || { models: {}, collections: {}, views: {} };
                                 priceArr.push(ImportProductModel.get('unit_price' + i));
                             }
                         }
-
+                        //var stock_name = ImportProductModel.get('stock_name')
+                        // console.log(stock_name);
+                        if (priceArr.length == 0) {//(stock_name.split('-')[0] == 'OE') {
+                            priceArr.push('')
+                        }
 
                         //    console.log(stockModel.get('stock_selected'), ImportProductModel.get('code'));
 
@@ -292,6 +366,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     strict: true
                 },
                 {
+
                     data: attr('unit'),
                     type: 'numeric',
                     format: '0,0.00',
@@ -299,7 +374,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 },
                 {
                     data: attr('sum'),
-                    readOnly: true,
+                    //readOnly: true,
                     type: 'numeric',
                     format: '0,0.00',
                     //strict: true
@@ -327,18 +402,18 @@ var app = app || { models: {}, collections: {}, views: {} };
                 removeCol('DescriptionEn');
             }
 
-            if (self.currentListType == 'OE') {
+            // if (self.currentListType == 'OE') {
 
-                setCol('Amount', {
-                    data: attr('sum'),
+            //     setCol('Amount', {
+            //         data: attr('sum'),
 
-                    type: 'numeric',
-                    format: '0,0.00',
-                    //strict: true
-                })
-                removeCol('Price/Unit');
-                removeCol('Unit-In');
-            }
+            //         type: 'numeric',
+            //         format: '0,0.00',
+            //         //strict: true
+            //     })
+            //     removeCol('Price/Unit');
+            //     removeCol('Unit-In');
+            // }
 
             var importDataTable = this.importDataTable = new Handsontable(importProductTable, {
                 data: importProductCollection,
@@ -348,7 +423,23 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //contextMenu: ['remove_row'],
                 height: 400,
                 columns: columns,
-                colHeaders: colHeaders
+                colHeaders: colHeaders,
+                // cells: function (row, col, prop) {
+                //     //console.log(row);
+
+                //     if (col === 1) {
+                //         var model = importProductCollection.at(row);
+                //         if(model)
+                //         console.log('in cell ', row, col, prop(model));
+
+                //         // if (model && model.get('hi')) {
+                //         //     this.renderer = greenRenderer;
+                //         //     return;
+                //         // }
+
+                //     }
+
+                // }
                 //afterChange: function (e) {
                 //    console.log('afterChange', JSON.stringify(e));
                 //},
@@ -457,7 +548,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var stock_selected = stockModel.get('stock_selected');
                 //console.log(self.importProductCollection.toArray());
 
-                var sessionId = self.purchaseSessionModel.get('sessionId');
+                //var sessionId = self.purchaseSessionModel.get('sessionId');
                 var userId = self.purchaseSessionModel.get('userId');
 
                 var prementType = self.model.get('payment_type');
@@ -481,52 +572,83 @@ var app = app || { models: {}, collections: {}, views: {} };
                     if (isAllValid && !model.isValid()) {
                         isAllValid = false;
                     } else {
-                        model.set('sessionId', sessionId)
-                        model.set('userId', userId)
 
+                        model.set('userId', userId)
                         //model.set('payment_type', prementType)
                     }
 
                 });
 
                 if (isAllValid) {
-                    self.purchaseSessionModel.save(stock_selected, function (result) {
-                        self.importProductCollection.saveToServer(stock_selected, function (err, numSave) {
-                            if (err) {
-                                setTimeout(function () {
-                                    alert(err);
-                                }, 10);
+                    self.importProductCollection.checkDuplicate(stock_selected, prementType, function (result, err) {
+                        if (result) {
+                            self.purchaseSessionModel.setNewSessionId(function (sessionId) {
 
-                            } else {
-                                setTimeout(function () {
-                                    alert('Data has save to stock "' + stock_selected + '" ' + numSave + ' row');
-                                }, 1);
+                                self.importProductCollection.each(function (model) {
+                                    model.set('sessionId', sessionId)
+                                });
 
-                                self.invoid_id_last = null;
+                                self.importProductCollection.saveToServerAtOnce(stock_selected, function (err, numSave) {
+                                    async.series([
+                                        function (callback) {
+                                            if (numSave > 0) {
+                                                self.purchaseSessionModel.save(stock_selected, function (result) {
+                                                    callback(null);
+                                                });
+                                            } else {
+                                                callback(null);
+                                            }
 
-                                // if (self.purchaseSessionModel) {
-                                //     //self.purchaseSessionModel.setInItemArray(self.importProductCollection.toJSON());
-                                //     self.purchaseSessionModel.save(stock_selected, function () {
-                                //         self.clearNewProductRow();
-                                //     });
-                                // } else {
+                                        },
+                                        function (callback) {
+                                            if (err) {
+                                                setTimeout(function () {
+                                                    alert(err);
+                                                }, 10);
 
-                                // }
+                                            } else {
+                                                setTimeout(function () {
+                                                    savedAlert('Data has save to "' + stock_selected + '" ' + numSave + ' row',
+                                                        'Purchase ID: ' + sessionId,
+                                                        'Purchase Summary', function () {
+                                                            self.goToPurchaseSessionPage(sessionId);
+                                                        })
 
-                                self.clearNewProductRow();
-                                self.purchaseSessionModel.clearInItem();
-                                self.purchaseSessionModel.setNewSessionId();
+                                                }, 1);
 
-                                if (prementType == 'PettyCash') {
-                                    self.purchaseSessionModel.setLastPettyCashData();
-                                }
+                                                self.invoid_id_last = null;
 
-                            }
+                                                // if (self.purchaseSessionModel) {
+                                                //     //self.purchaseSessionModel.setInItemArray(self.importProductCollection.toJSON());
+                                                //     self.purchaseSessionModel.save(stock_selected, function () {
+                                                //         self.clearNewProductRow();
+                                                //     });
+                                                // } else {
 
-                        });
+                                                // }
+
+                                                self.clearNewProductRow();
+                                                self.purchaseSessionModel.clearInItem();
+                                                //self.purchaseSessionModel.setNewSessionId();
+
+                                                if (prementType == 'PettyCash') {
+                                                    self.purchaseSessionModel.setLastPettyCashData();
+                                                }
+                                            }
+                                        }
+                                    ])
+
+                                });
+
+                            })
+
+
+                        } else {
+                            setTimeout(function () {
+                                alert(err);
+                            }, 10);
+                        }
                     });
-
-
                 }
 
                 //self.importProductCollection.forEach(function (model) {
@@ -538,7 +660,44 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 //});
             });
-        }
+        },
+        printReport: function () {
+           this.goToPurchaseSessionPage();
+        },
+        goToPurchaseSessionPage:function (id) {
+            var v = (new Date()).getTime();
+            var prementType = this.model.get('payment_type');
+            var urlPara = 'payment_type=' + prementType;
+
+            if (id) {
+                urlPara += '&id=' + id;
+            }
+            window.location = 'PurchaseSession.html?' + urlPara + '#' + v;
+        },
+
+        printReport0: function () {
+            console.log('printReport');
+            var collection = this.importProductCollection;
+            var model = this.purchaseSessionModel;
+            var detailStr = 'Presave Date: ' + new Date().toString().split(' (')[0];
+
+            var myWindow = window.open("../report/PurchaseSessionReport.html", 'test', 'width=' + 900 + ',height=' + 500 + '');
+
+            var handle = setInterval(function () {
+                console.log('in', myWindow.window.printFunc);
+                if (myWindow.window.createReportFunc) {
+                    clearInterval(handle);
+                    var reportObj = {
+                        detail: detailStr,
+                        collection: collection,
+                        model: model
+                    }
+
+                    myWindow.window.createReportFunc(reportObj);
+                }
+            }, 100);
+        },
+
     });
 
 })(jQuery);

@@ -6,25 +6,6 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     $(function () {
-
-
-        function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
-        function addMonths(date, months) {
-            var result = new Date(date);
-            result.setMonth(result.getMonth() + months);
-            return result;
-        }
-        function addYears(date, years) {
-            var result = new Date(date);
-            result.setYear(result.getYear() + years);
-            return result;
-        }
-
-
         app.views.ImportProductEdit = Backbone.View.extend({
 
             // Instead of generating a new element, bind to the existing skeleton of
@@ -34,10 +15,12 @@ var app = app || { models: {}, collections: {}, views: {} };
             // Delegated events for creating new items, and clearing completed ones.
             events: {
                 'keyup .import_product_search': 'search',
+                'keyup .import_product_searchPurchaseID': 'search',
                 //'change .import_product_search': 'search',
                 //'click #downLoadFile': 'downLoadFile',
                 //'change .select-time': 'selectTimeChange'
                 'change select.select-supplier-in-edit': 'supplierChange',
+
             },
 
             initialize: function () {
@@ -45,7 +28,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 this.supplierCollection = this.model.get('supplierCollection'); //new app.collections.SupplierCollection();
 
-                var stockModel  = this.stockModel= this.model.get('stockModel');
+                var stockModel = this.stockModel = this.model.get('stockModel');
 
                 var selectTimePeriodModel = this.selectTimePeriodModel = new Backbone.Model();
 
@@ -54,9 +37,18 @@ var app = app || { models: {}, collections: {}, views: {} };
                     model: selectTimePeriodModel
                 });
 
+                var payment_type = this.model.get('payment_type');
+
+                self.searchSessionId(payment_type, function () {
+                    self.$el.find(".select-sessionId").bind("change", function (event, ui) {
+                        self.search();
+                    });
+                });
 
                 selectTimePeriodModel.on('change', function (model) {
-                    self.search();
+                    self.searchSessionId(payment_type, function () {
+                        self.search();
+                    });
                 });
 
                 stockModel.on('change:stock', function (model, stock) {
@@ -65,25 +57,29 @@ var app = app || { models: {}, collections: {}, views: {} };
                         self.$el.find('.select-stock option').remove();
                         _.each(stock, function (item) {
                             self.$el.find('.select-stock').append('<option value="' + item + '">' + item + '</option>');
-                            self.$el.find('.select-stock').trigger("change");
                         });
+
+                        self.$el.find('.select-stock').append('<option value="">All List</option>');                        
+                        self.$el.find('.select-stock').trigger("change");
                     }
                 });
                 stockModel.on('change:stock_selected', function (model, stock_selected) {
 
                     //self.$el.find('.select-stock select').val(stock_selected).trigger("change");
-                    var stockSelectedInner = self.$el.find('.select-stock option:selected').select().text();
+                    var stockSelectedInner = self.$el.find('.select-stock option:selected').select().val();
 
                     if (stock_selected != stockSelectedInner) {
-                        //console.log('change:stock_selected iner');
-                        self.$el.find('.select-stock option[value=' + stock_selected + ']').prop('selected', true).trigger("change");;
+                        console.log('change:stock_selected iner');
+                        self.$el.find('.select-stock option[value=' + stock_selected + ']').prop('selected', true).trigger("change");
                     }
                 });
                 //var stock_selected = stockModel.get('stock_selected');
                 //console.log(stock_selected);
 
                 self.$el.find(".select-stock").bind("change", function (event, ui) {
-                    var stockSelected = self.$el.find('.select-stock option:selected').select().text();
+                    //var stockSelected = self.$el.find('.select-stock option:selected').select().text();
+                    var stockSelected = self.$el.find('.select-stock option:selected').select().val();                    
+
                     //console.log('stock_selected', stockSelected);
                     stockModel.set('stock_selected', stockSelected);
                 });
@@ -92,12 +88,12 @@ var app = app || { models: {}, collections: {}, views: {} };
                 this.collection.on('reset', this.resetProduct, this);
 
                 this.render();
-                
+
                 if (app.userModel.get('type') == 'staff_support') {
                     self.$el.find('.div-select-supplier-in-edit').remove();//select-supplier-in
                 }
                 else {
-               
+
                     this.supplierCollection.on('reset', function () {
                         self.$el.find('.select-supplier-in-edit option').remove();
                         self.supplierCollection.each(function (model) {
@@ -123,7 +119,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 this.$el.find('.EditTableTr').remove();
                 this.collection.each(this.addOne, this);
-         
+
                 if (app.userModel.get('type') == 'staff_support') {
                     this.$el.find('td:nth-child(5),th:nth-child(5)').hide();
                     this.$el.find('td:nth-child(7),th:nth-child(7)').hide();
@@ -162,9 +158,11 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             search: function (ev) {
-              
+
                 //var searchText = this.$el.find('.show_search').val();
                 var searchText = this.$el.find('.import_product_search').val().trim();
+                var purchaseID = this.getSearchSession();// this.$el.find('.import_product_searchPurchaseID').val().trim();
+
                 var supplierSelected = null
 
                 if (app.userModel.get('type') != 'staff_support') {
@@ -175,7 +173,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     supplierSelected = null;
                 }
 
-           
+
                 var selectTimePeriodModel = this.selectTimePeriodModel;
 
                 var timeStart = selectTimePeriodModel.get('timeStart');
@@ -183,20 +181,21 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 var stockSelected = this.stockModel.get('stock_selected');
 
-              
+
                 //this.showInPeriod(timeStart, timeEnd);
 
-                if (!searchText && !supplierSelected) {
+                if (!searchText && !supplierSelected && !purchaseID) {
                     this.collection.getInPeriod(stockSelected, timeStart, timeEnd);
-                } else
-
-                {
-                    var searchObj = { };
+                } else {
+                    var searchObj = {};
                     if (searchText) {
                         searchObj.invoid_id = searchText;
                     }
                     if (supplierSelected) {
                         searchObj.supplier_code = supplierSelected;
+                    }
+                    if (purchaseID) {
+                        searchObj.sessionId = purchaseID;
                     }
 
                     //console.log('search', stockSelected, timeStart, timeEnd, searchObj);
@@ -229,6 +228,78 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             supplierChange: function () {
                 this.search();
+            },
+            getSearchSession: function () {
+                var selectedId = this.$el.find('.select-sessionId option:selected').select().val();
+
+                if (selectedId == '###ALL###') {
+                    selectedId = null;
+                }
+
+                return selectedId;
+            },
+            searchSessionId: function (payment_type, cb) {
+                var self = this;
+
+                var selectTimePeriodModel = this.selectTimePeriodModel;
+
+                var timeStart = selectTimePeriodModel.get('timeStart');
+                var timeEnd = selectTimePeriodModel.get('timeEnd');
+
+
+                this.getSessionInPeriod(payment_type, timeStart, timeEnd, function (result) {
+                    self._purchaseSessionDataObj = {}
+
+                    self.$el.find('.select-sessionId option').remove();
+
+                    self.$el.find('.select-sessionId').append('<option value="###ALL###">All</option>');
+
+                    if (result.length) {
+                        self.$el.find('.select-sessionId').prop('disabled', false);
+                        _.each(result, function (item) {
+                            var sessionId = item.sessionId;
+
+                            self._purchaseSessionDataObj[sessionId] = item;
+
+                            var name = sessionId + ' (' + item.payment_type + ')';
+
+                            self.$el.find('.select-sessionId')
+                                .append('<option value="' + sessionId + '">' + name + '</option>');
+
+                        })
+
+                    } else {
+
+                        self.$el.find('.select-sessionId').prop('disabled', true);
+                    }
+
+                    // self.supplierCollection.each(function (model) {
+                    //     var code = model.get('code');
+                    //     var name = code + ' (' + model.get('name') + ')';
+
+                    //     self.$el.find('.select-supplier-in-edit').append('<option value="' + code + '">' + name + '</option>');
+                    // });
+
+                    //self.$el.find('.select-supplier-in-edit').append('<option value="[--All Suppliers--]">[--All Suppliers--]</option>');
+                    self.$el.find('.select-sessionId').trigger("change");
+
+                    if (cb) { cb() };
+                });
+            },
+
+            getSessionInPeriod: function (payment_type, timeStart, timeEnd, cb) {
+                console.log('getSessionIdInPeriod', timeStart, timeEnd);
+                var self = this;
+                app.serviceMethod.getPurchaseSessionInPeriod({ timeStart: timeStart, timeEnd: timeEnd }, function (result) {
+
+                    if (payment_type) {
+                        result = _.where(result, { payment_type: payment_type })
+                    }
+                    // var sessionIds = _.chain(result).pluck('sessionId').value();
+                    // console.log(sessionIds);
+                    result = result.reverse()
+                    if (cb) cb(result);
+                });
             },
         });
     });

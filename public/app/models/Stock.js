@@ -22,7 +22,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         //}
 
         update: function (cb, type) {
-            if (!type) type = 'Store'
+            //if (!type) type = 'Store'
             var self = this;
             var result = app.userModel.getListsName(type);
             self.set('stock', result);

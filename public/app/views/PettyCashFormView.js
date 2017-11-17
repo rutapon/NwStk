@@ -15,7 +15,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             // Delegated events for creating new items, and clearing completed ones.
             events: {
                 'keyup #moneyAddAmount': 'moneyAddAmountChange',
-
+                'keyup #chqueData': 'chqueDataChange',
             },
 
             initialize: function () {
@@ -43,11 +43,14 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
             moneyAddAmountChange: function () {
                 var self = this;
-                var chqueData = self.$el.find('#chqueData').val();
                 var moneyAddAmount = Number(self.$el.find('#moneyAddAmount').val());
-                self.model.set('chqueData', chqueData);
                 self.model.set('moneyAddAmount', moneyAddAmount);
 
+            },
+            chqueDataChange:function () {
+                var self = this;
+                var chqueData = self.$el.find('#chqueData').val();
+                self.model.set('chqueData', chqueData);
             }
 
         });

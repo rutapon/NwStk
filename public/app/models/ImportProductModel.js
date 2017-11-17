@@ -7,10 +7,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 
 (function ($) {
     'use strict';
-    function precision(a, precision) {
-        var x = Math.pow(10, precision || 2);
-        return (Math.round(a * x)) / x;
-    }
     // Person Model
     app.models.ImportProductModel = Backbone.Model.extend({
         defaults: {
@@ -22,7 +18,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             unit: null,
             invoid_id: '',
             in_date: '',
-            sum: 0, //canot edit
+            sum: 0, //canot edit -> if it have unit and price
             stock_name: '', //canot edit
             remark: null,
 
@@ -63,10 +59,11 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
 
         calSum: function () {
-
-            var sum = this.attributes.unit * this.attributes.unit_price;
-            sum = precision(sum)
-            this.set('sum', sum);
+            if (this.attributes.unit && this.attributes.unit_price) {
+                var sum = parseFloat(this.attributes.unit) * parseFloat(this.attributes.unit_price);
+                sum = app.math.precision(sum)
+                this.set('sum', sum);
+            }
         },
 
         //supplierNameChange:function () {
@@ -76,16 +73,38 @@ var app = app || { models: {}, collections: {}, views: {} };
         validate: function (attrs, options) {
             console.log('validate', options);
             // if (!attrs.code || !attrs.stock_name || !attrs.unit_price || !attrs.unit || !attrs.invoid_id || !attrs.sum) {
-            var isValid = attrs.code && attrs.stock_name && attrs.invoid_id;
+            let resultObj = null;
+            var checkList1 = ['code', 'stock_name', 'invoid_id'];
+            var checkList2 = ['unit', 'unit_price'];
+
+            function paraCheck(params, checkList) {
+                let resultObj = { result: true };
+                for (var index = 0; index < checkList.length; index++) {
+                    var element = checkList[index];
+                    if (!params[element]) {
+                        resultObj.result = false;
+                        resultObj.errParam = element;
+                        return resultObj
+                    }
+                }
+
+                return resultObj
+            }
+            resultObj = paraCheck(attrs, checkList1);
+
+            var isValid = resultObj.result;// attrs.code && attrs.stock_name && attrs.invoid_id;
+
 
             if (isValid && attrs.stock_name.split('-')[0] != 'OE') {
-                isValid = isValid && attrs.unit && attrs.unit_price;
+                resultObj = paraCheck(attrs, checkList2);
+                isValid = isValid && resultObj.result;//attrs.unit && attrs.unit_price;
             }
 
             if (!isValid) {
 
                 //alert("validate false -> (!attrs.code || !attrs.name || !attrs.unit || !attrs.unit_price) ");
-                alert("ข้อมูลไม่ครบ \n In item code:" + attrs.code);
+                alert("ข้อมูลไม่ครบ \n In item code: " + attrs.code + ' name: ' + attrs.name +
+                    '\n attrs:' + resultObj.errParam);
 
                 //alert(" ข้อมูลไม่ครบหรือผิดพลาด \n To err is human, but so, too, is to repent for those mistakes and learn from them.");
 
@@ -97,6 +116,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             var self = this;
             var dataObj = this.attributes;// _.extend(this.attributes, { stockName: stockName });
             var checkDuplicateObj = { stock_name: stockName, code: self.attributes.code, invoid_id: self.attributes.invoid_id };
+
             app.serviceMethod.checkDuplicateImportProduct(checkDuplicateObj, function (result) {
                 if (!result) {
                     app.serviceMethod.insertImportProduct(dataObj, function (result) {
@@ -124,6 +144,19 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 } else {
                     if (cb) cb(false, 'Product is duplicate.');//\n\n' + JSON.stringify(checkDuplicateObj)
+                }
+            });
+        },
+        checkDuplicate: function (stockName, cb) {
+            var self = this;
+            var dataObj = this.attributes;// _.extend(this.attributes, { stockName: stockName });
+            var checkDuplicateObj = { stock_name: stockName, code: self.attributes.code, invoid_id: self.attributes.invoid_id };
+
+            app.serviceMethod.checkDuplicateImportProduct(checkDuplicateObj, function (result) {
+                if (result) {
+                    if (cb) cb(result, 'Product is duplicate.');//\n\n' + JSON.stringify(checkDuplicateObj)
+                } else {
+                    if (cb) cb(false);
                 }
             });
         },

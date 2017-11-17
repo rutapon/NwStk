@@ -4,12 +4,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 
 (function ($) {
     'use strict';
-
-    function precision(a, precision) {
-        var x = Math.pow(10, precision || 2);
-        return (Math.round(a * x)) / x;
-    }
-
     $(function () {
 
         app.views.ReportPurchaseSupplier = Backbone.View.extend({
@@ -154,7 +148,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     var amount = _.chain(dataArrayObject).pluck('amount').reduce(function (memo, num) { return memo + num; }, 0).value();
 
                     var dataArray = ArrayObjectToDataArray(dataArrayObject);
-                    data.push(['code: ' + code + ' name: ' + name + ' ### amount: ' + precision(amount)]);
+                    data.push(['code: ' + code + ' name: ' + name + ' ### amount: ' + app.math.precision(amount)]);
                     data = data.concat(dataArray);
                     data.push([]);
                 });
@@ -222,7 +216,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                                     eachView.$el.show();
                                 }
                                 sumTalal += sum;
-                                sumTalal = precision(sumTalal);
+                                sumTalal = app.math.precision(sumTalal);
                                 self.$el.find('.sumTotal h3').text('Grand Total #' + sumTalal + ' ฿');
                             });
                         });
@@ -236,7 +230,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                         var supplierObj = self.supplierCollection.findWhere({ code: supplierSelected }).toJSON();
                         eachView.search(stockSelected, supplierObj, timeStart, timeEnd, function (result, sum) {
                             sumTalal += sum;
-                            sumTalal = precision(sumTalal);
+                            sumTalal = app.math.precision(sumTalal);
                             self.$el.find('.sumTotal h3').text('Grand Total #' + sumTalal + ' ฿');
                         });
 
@@ -397,7 +391,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     self.renderObj = supplierObj;//self.supplierCollection.findWhere({ code: supplierSelected }).toJSON();
                     //var supplier = _.findWhere(self.supplierCollection.toJSON(), { code: stockSelected });
                     self.renderObj.sum = _.chain(result).pluck('sum').reduce(function (memo, num) { return memo + num; }, 0).value();
-                    self.renderObj.sum = precision(self.renderObj.sum);
+                    self.renderObj.sum = app.math.precision(self.renderObj.sum);
                     self.collection.renderObj = self.renderObj
 
                     self.render();

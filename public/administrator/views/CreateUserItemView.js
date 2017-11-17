@@ -6,22 +6,19 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     var menuStuctureObj = {
-       
-        'Supplier': { 'createSupplier': false, 'editSupplier': false },
-        'Stock': { 'createItem': false, 'showItem': false, 'editItem': false },
-        'OE': { 'createItem': false, 'editItem': false },
 
-        
-        'Stock-In': { 'importProduct': false, 'editImportProduct': false },
-        'OE-In': { 'importOE': false, 'editImportOE': false },
+        'Account Create->Supplier-Create': { 'createSupplier': false, 'editSupplier': false },
+        'Account Create->Item-Create': { 'createItem': false, 'showItem': false, 'editItem': false },
 
-        
-        'Stock-In (PettyCash)': { 'importProduct': false, 'editImportProduct': false },
-        'OE-In (PettyCash)': { 'importOE': false, 'editImportOE': false },
+        'Purchase->Credit': { 'importProduct': false, 'editImportProduct': false },
 
-        'Stock-Out': { 'exportProduct': false, 'editExportProduct': false },
+        'Purchase->PettyCash': { 'importProduct': false, 'editImportProduct': false },
+        'Purchase->SummaryCredit': false,
+        'Purchase->SummaryPettyCash': false,
 
-        'Stock-Checking': { 'checkProduct': false, 'editCheckProduct': false },
+        'Stock->Stock-Out': { 'exportProduct': false, 'editExportProduct': false },
+        'Stock->Stock-Checking': { 'checkProduct': false, 'editCheckProduct': false },
+
         'Report': {
             'ReportStockCard': false, 'ReportStockLasting': false, 'ReportCheckProduct': false,
             'ReportPurchaseSupplier': false, 'ReportPurchaseProduct': false
@@ -29,37 +26,51 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     };
 
+
     function createPermissionDataObj(stuctureObj, permissionObj) {
         var dataObj = [];
         dataObj.push({ "id": '#all', "text": 'Menu', parent: "#", 'state': { 'open': false } });
         _.each(stuctureObj, function (item0, key0) {
-            dataObj.push({ "id": key0, "text": key0, parent: "#all" });
+            var parentObj = { "id": key0, "text": key0, parent: "#all" };
+            dataObj.push(parentObj);
+            if (_.isObject(item0)) {
+                _.each(item0, function (item1, key1) {
+                    var obj = { "id": key0 + '.' + key1, "text": key1, parent: key0, "icon": "jstree-file" };
+                    if (permissionObj && permissionObj[key0] && permissionObj[key0][key1]) {
+                        obj.state = { selected: true };
+                    }
 
-            _.each(item0, function (item1, key1) {
-                var obj = { "id": key0 + '.' + key1, "text": key1, parent: key0, "icon": "jstree-file" };
-                if (permissionObj && permissionObj[key0] && permissionObj[key0][key1]) {
-                    obj.state = { selected: true };
-                }
+                    dataObj.push(obj);
+                });
+            } else if (permissionObj[key0]) {
+                parentObj.state = { selected: true };
+            }
 
-                dataObj.push(obj);
-
-            });
         });
         return dataObj
     }
     function toMenuStucture(ids) {
         var resultObj = {};
         _.each(menuStuctureObj, function (item0, key0) {
-            _.each(item0, function (item1, key1) {
-                var id = key0 + '.' + key1;
+            if (_.isObject(item0)) {
+                _.each(item0, function (item1, key1) {
+                    var id = key0 + '.' + key1;
+                    if (_.indexOf(ids, id) > -1) {
+                        var obj = {};
+                        obj[key0] = {};
+                        obj[key0][key1] = true;
+                        $.extend(true, resultObj, obj);
+                    }
+                    //item0[key1] = _.indexOf(ids, id) > -1 ? true : false;
+                });
+            } else {
+                var id = key0;
                 if (_.indexOf(ids, id) > -1) {
                     var obj = {};
-                    obj[key0] = {};
-                    obj[key0][key1] = true;
+                    obj[key0] = true;
                     $.extend(true, resultObj, obj);
                 }
-                //item0[key1] = _.indexOf(ids, id) > -1 ? true : false;
-            });
+            }
         });
 
         return resultObj;
@@ -154,9 +165,9 @@ var app = app || { models: {}, collections: {}, views: {} };
                     var tree = self.$el.find('.jstree').jstree(true);
                     var ids = tree.get_selected();
                     var permissionObj = toMenuStucture(ids);
+                    var permission = self.model.get('permission');
 
-
-                    if (!_.isEqual(permissionObj, self.model.get('permission'))) {
+                    if (!_.isEqual(permissionObj, permission)) {
                         var i, j, r = [];
                         for (i = 0, j = data.selected.length; i < j; i++) {
                             //r.push(data.selected[i] + ':' + data.instance.get_node(data.selected[i]).text);
@@ -176,7 +187,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 var self = this;
                 console.log('renderListAccessPermission');
                 var listStuctureObj =
-                           createListPermissionDataObj(self.collection.toJSON(), self.model.get('listAccessPermission'));
+                    createListPermissionDataObj(self.collection.toJSON(), self.model.get('listAccessPermission'));
 
 
                 //var dataObj = createListPermissionDataObj(self.collection.toJSON());

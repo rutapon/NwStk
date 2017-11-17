@@ -32,13 +32,14 @@
     <script>
 
     </script>
+
 </head>
 
 <body>
     <ul id="idmenu">
         <li data-href="Home.html" data-menu="Home"><a href="#"><span>Home</span></a></li>
 
-        <li><a><span>Account Create</span></a>
+        <li class="permissible"><a><span>Account Create</span></a>
             <ul>
                 <li data-href="Supplier.html" data-menu="Supplier"> <a href="#"><span>Supplier-Create</span></a></li>
                 <li data-href="Stock.html" data-menu="Stock"><a href="#"><span>Item-Create</span></a>
@@ -46,29 +47,41 @@
             </ul>
         </li>
 
-        <li><a><span>Purchase</span></a>
+        <li class="permissible"><a><span>Purchase</span></a>
             <ul>
                 <li data-href="ImportProducts.html" data-menu="Stock-In"> <a href="#"><span>Credit</span></a></li>
                 <li data-href="ImportProductsPettyCash.html" data-menu="Stock-In (PettyCash)"><a href="#"><span>PettyCash</span></a>
                 </li>
+                <li data-href="PurchaseSession.html?payment_type=Credit" data-menu="PurchaseSession (Credit)"><a href="#"><span>SummaryCredit</span></a>
+                </li>
+                <li data-href="PurchaseSession.html?payment_type=PettyCash" data-menu="PurchaseSession (PettyCash)"><a href="#"><span>SummaryPettyCash</span></a>
+                </li>
             </ul>
         </li>
 
-        <li>
+        <li class="permissible">
             <a><span>Stock</span></a>
             <ul>
                 <li data-href="ExportProducts.html" data-menu="Stock-Out"><a href="#"><span>Stock-Out</span></a></li>
                 <li data-href="CheckProducts.html" data-menu="Stock-Checking"><a href="#"><span>Stock-Checking</span></a></li>
             </ul>
         </li>
-        <li data-href="Report.html" data-menu="Report">
+        <li class="permissible" data-href="Report.html" data-menu="Report">
             <a href="#"><span>Report</span></a>
         </li>
-        <li data-href="/administrator/index.html" data-menu="">
+
+        <li data-href="#update" data-menu="">
+            <a href="#"><span>Update</span></a>
+        </li>
+
+        <li id="setting" data-href="/administrator/index.html" data-menu="">
             <a href="#"><span>Setting</span></a>
         </li>
-        <li data-href="#logging" data-menu="">
-            <a href="#"><span id='loginText'>Log In</span></a>
+        <li id="logging" data-href="#logging" data-menu="">
+            <a href="#"><span>Log In</span></a>
+        </li>
+        <li id="logout" data-href="#logout" data-menu="">
+            <a href="#"><span>Log Out</span></a>
         </li>
     </ul>
     <!-- src="Home.html" -->

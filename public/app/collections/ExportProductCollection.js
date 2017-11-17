@@ -7,12 +7,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
 (function ($) {
     'use strict';
-
-    function precision(a, precision) {
-        var x = Math.pow(10, precision || 2);
-        return (Math.round(a * x)) / x;
-    }
-
+    
     app.collections.ExportProductCollection = Backbone.Collection.extend({
         model: app.models.ExportProductModel,
 

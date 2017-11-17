@@ -23,8 +23,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             chqueData: '',
 
             sum: 0,
-            payment_type:'Credit',
-            
+            payment_type: 'Credit',
+
             sessionId: null,
 
             //inItems: [],//[{code: '',unit: 0,price:0,sum:0}] or Id ?
@@ -35,9 +35,13 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         initialize: function () {
             var self = this;
-            this.on('change:moneyAddAmount', this._calBalance, this);
-            this.on('change:sum', this._calBalance, this);
-            this.on('change:BF', this._calBalance, this);
+
+            this.on('change', this._calBalance, this);
+
+            // this.on('change:moneyAddAmount', this._calBalance, this);
+            // this.on('change:sum', this._calBalance, this);
+            // this.on('change:BF', this._calBalance, this);
+
 
             if (!self.attributes.userId) {
                 self.attributes.userId = app.userModel.get('user');
@@ -48,12 +52,24 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             //self.setLastPettyCashData();
         },
-        setNewSessionId: function () {
+        setSessionId: function () {
             var self = this;
-            app.serviceMethod.genNewPurchaseSessionId({}, function (result) {
+            var sessionStoragePurchaseSessionId = sessionStorage['PurchaseSessionId' + self.attributes.payment_type];
+            if (sessionStoragePurchaseSessionId) {
+                self.set('sessionId', sessionStoragePurchaseSessionId);
+            } else {
+                this.setNewSessionId();
+            }
+        },
+        setNewSessionId: function (cb) {
+            var self = this;
+            app.serviceMethod.genNewPurchaseSessionId({ payment_type: this.attributes.payment_type }, function (result) {
+                sessionStorage['PurchaseSessionId' + self.attributes.payment_type] = result
                 self.set('sessionId', result);
+                if (cb) cb(result);
             })
         },
+
         setLastPettyCashData: function () {
             var self = this;
             app.serviceMethod.getLastPettyCash({ userId: this.attributes.userId }, function (result) {
@@ -62,6 +78,19 @@ var app = app || { models: {}, collections: {}, views: {} };
                 //self.clearInItem();
             });
         },
+        setCurrentPettyCashData: function () {
+            var self = this;
+            //{ userId: this.attributes.userId, sessionId: this.attributes.sessionId }
+            app.serviceMethod.getฺBeforePettyCash(
+                this.attributes,
+                function (result) {
+                    var BF = result ? result.BF : 0;
+                    self.set('BF', BF);
+                    //self.clearInItem();
+                });
+        },
+
+
         _calBalance: function () {
             var self = this;
             self.attributes.balance = (self.attributes.BF + self.attributes.moneyAddAmount) - self.attributes.sum;
@@ -119,10 +148,10 @@ var app = app || { models: {}, collections: {}, views: {} };
         save: function (stock_name, cb) {
             var self = this;
             self.attributes.stock_name = stock_name;
-            var findObj = { 'sessionId':self.attributes.sessionId };
+            var findObj = { 'sessionId': self.attributes.sessionId };
             app.serviceMethod.findPurchaseSession(findObj,
                 function (result) {
-                    if (result & result.length) {
+                    if (result && result.length) {
                         app.serviceMethod.reCalulatePurchaseSession(findObj,
                             function (result) {
                                 if (cb) cb(result);

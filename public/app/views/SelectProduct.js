@@ -172,6 +172,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             },
 
             search: function (ev) {
+             
                 var self = this;
 
                 var searchText = this.$el.find('.select_product_search').val();// $(ev.target).val();
@@ -184,7 +185,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 if (app.userModel.get('type') != 'staff_support') {
                     supplierSelected = $('select.select-supplier-in').val(); // self.supplierSelected;
                 }
-
+               
                 //console.log('search', searchText);
                 if (searchText && (!this.lastText || this.lastText != searchText)) {
                     self.lastText = searchText;
@@ -204,7 +205,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                     }, supplierSelected);
 
                 } else {
-
+                    console.log('select product search getAll',searchText,stockSelected);
                     self.lastText = false;
                     self.selectProductCollection.getAll(stockSelected, function (result) {
                         //self.selectProductCollection.setLocalDatabase(stockSelected, result);

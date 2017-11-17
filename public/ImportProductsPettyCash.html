@@ -103,7 +103,7 @@
 
 <body>
 
-    <div data-role="page" data-title="Stock-In (PettyCash)" class="jqm-demos ui-responsive-panel">
+    <div data-role="page" data-title="Purchase-PettyCash" class="jqm-demos ui-responsive-panel">
 
         <div data-role="header" data-position="fixed" data-theme="a">
             <!-- <a href="../toolbar/" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>-->
@@ -126,7 +126,7 @@
                     <div class="ui-block-a">
                         <div class="ui-grid-a ui-responsive">
                             <div class="ui-block-a">
-                                <label for="select-stock">Store Name</label>
+                                <label for="select-stock">List Name</label>
                                 <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
                             </select>
                             </div>
@@ -142,13 +142,19 @@
                         <div data-role="fieldcontain">
                            
                         </div> -->
-                      
+
                         <!-- <a data-rel="popup" data-position-to="window" class="SelectProductPopUpButton ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all"
                             data-transition="pop">Item Selecting</a> -->
-                            <button class="SelectProductPopUpButton ui-btn ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all" >Item Selecting</button>
-                            
+                        <button class="SelectProductPopUpButton ui-btn ui-btn ui-icon-search ui-btn-icon-left  ui-corner-all">Item Selecting</button>
+
                     </div>
                     <div id="PettyCashForm" class="ui-block-b" style="padding-left: 30px;">
+                        <!-- <div data-role="fieldcontain">
+                            <label>Purchase ID:</label>
+                            <input type="text" data-wrapper-class="SessionId" id="SessionId" data-mini="true" value="" disabled="disabled" placeholder="0"
+                            />
+                        </div> -->
+
                         <div data-role="fieldcontain">
                             <label id="PettyCashBF">B/F: 0</label>
                             <label id="PettyCashBalance">Balance: 0</label>
@@ -162,12 +168,9 @@
                             <input data-wrapper-class="chqueData" type="text" id="chqueData" data-mini="true" placeholder="Chq no./dd" />
                         </div>
 
-                        <div data-role="fieldcontain">
-                                <label>Sesseion Id</label>
-                                <input type="text" data-wrapper-class="SesseionId" id="SesseionId" data-mini="true" value="" disabled="disabled" placeholder="0" />
-                            </div>
-                            
-                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="PrintFormButton">Print Form</button>
+
+
+                        <button class="ui-btn ui-icon-arrow-d ui-btn-icon-left  ui-corner-all" id="PrintFormButton">Purchase Summary</button>
                     </div>
                     <!--   <div class="ui-block-c">
                           <label for="bill-date">bill-date</label>
@@ -247,10 +250,10 @@
 
                 </div>
 
-                <div class="ui-grid-b ui-responsive">
+                <div class="ui-grid-c ui-responsive">
                     <div class="ui-block-a">
                         <div>
-                            <label for="select-stock">Store Name</label>
+                            <label for="select-stock">List Name</label>
                             <select name="select-stock" class="select-stock" data-mini="true" data-native-menu="true">
                             </select>
                         </div>
@@ -265,7 +268,15 @@
                         <input type="search" data-theme="a" name="searchbar" class="import_product_search" data-mini="true" value="" placeholder="search by Bill Number"
                             data-inline="true">
                     </div>
+                    <div class="ui-block-d">
+                        <label for="select-supplier2">Purchase ID</label>
+                        <!-- <input type="search" data-theme="a" name="searchbarPurchaseID" class="import_product_searchPurchaseID" data-mini="true" value="" placeholder="search by Purchase ID"
+                            data-inline="true"> -->
 
+                        <select name="select-sessionId" class="select-sessionId" data-mini="true" data-native-menu="true">
+                                <!--<option value="oneMonthPeriod">Month</option>-->
+                            </select>
+                    </div>
                 </div>
 
                 <!--<input type="search" data-theme="a" name="searchbar" class="show_product_search" data-mini="true" value="" placeholder="search by code or name" data-inline="true">-->
@@ -274,6 +285,7 @@
 
                     <col width="80px" />
                     <!--  <col width="100px" />-->
+                    <col />
                     <col />
                     <col />
                     <col width="120px" />
@@ -288,7 +300,7 @@
                             <!--<th>����</th>
                             <th>˹���</th>-->
                             <!--<th>Supplier</th>-->
-
+                            <th>Purchase ID</th>
                             <th>Bill Number</th>
                             <th>Bill Date</th>
                             <th>Price/Unit</th>
@@ -311,7 +323,9 @@
                             </td>
 
                             <!--   <td style="padding: 9px 4px;"><%- supplier_code %></td>-->
-
+                            <td style="padding: 9px 4px;">
+                                <%- sessionId %>
+                            </td>
                             <td style="padding: 9px 4px;">
                                 <%- invoid_id %>
                             </td>
@@ -359,7 +373,9 @@
                                 </select>
                             </td>-->
 
-
+                            <td style="padding: 9px 4px;">
+                                <%- p.sessionId %>
+                            </td>
                             <td>
                                 <input class="input" placeholder="Bill Number" data-type="invoid_id" value="<%- p.invoid_id %>" /></td>
                             <td>
@@ -418,7 +434,14 @@
             </div>
         </div>
 
-
+        <div data-role="popup" id="savedAlert" data-title="Data has saved.">
+            <div data-role="content">
+                <h3 class="sure-1">???</h3>
+                <p class="sure-2">???</p>
+                <a href="#" class="sure-do" data-role="button" data-theme="b" data-rel="back">Purchase Summary</a>
+                <a href="#" data-role="button" data-theme="c" data-rel="back">OK</a>
+            </div>
+        </div>
     </div>
     <!-- /page -->
 

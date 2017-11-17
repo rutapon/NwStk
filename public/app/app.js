@@ -37,6 +37,72 @@ var app = app || { models: {}, collections: {}, views: {} };
 
     });
 
+
+    app.time = {
+        addHours: function (date, hours) {
+            var result = new Date(date);
+            result.setHours(result.getHours() + hours);
+            return result;
+        },
+        addDays: function (date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        },
+        addMonths: function (date, months) {
+            var result = new Date(date);
+            result.setMonth(result.getMonth() + months);
+            return result;
+        },
+        addYears: function (date, years) {
+            var result = new Date(date);
+            result.setFullYear(result.getFullYear() + years);
+            return result;
+        },
+        removeTimezoneOffset: function (now) {
+            return this.addHours(now, -now.getTimezoneOffset() / 60);
+        },
+        addTimezoneOffset: function (now) {
+            return this.addHours(now, now.getTimezoneOffset() / 60);
+        }
+    };
+    app.math = {
+        subtraction: function (a, b, fix) {
+            if (!fix) fix = 10000000;
+            return (a * fix - b * fix) / fix;
+            // Math.floor((-0.2-0.1)*SIGDIG)/SIGDIG 
+        },
+        addition: function (a, b, fix) {
+            if (!fix) fix = 10000000;
+            return (a * fix + b * fix) / fix;
+        },
+        add: function (a, b, precision) {
+            var x = Math.pow(10, precision || 2);
+            return (Math.round(a * x) + Math.round(b * x)) / x;
+        },
+        precision: function (a, precision) {
+            var x = Math.pow(10, precision || 2);
+            return (Math.round(a * x)) / x;
+        }
+    };
+    app.url = {
+        getUrlParameter: function (sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }
+    }
+
+
     $(function () {
 
         if (typeof (Storage) !== "undefined") {
@@ -82,13 +148,13 @@ var app = app || { models: {}, collections: {}, views: {} };
             //if (app.userModel.get('type') != 'admin') {
 
             var current = $('[data-role="page"]').each(function (i, elPage) {
-                 
+
                 var $elPage = $(elPage);
                 var current = $elPage.jqmData("title");
                 //console.log('current page:', current);
                 if (current) {
                     $("[data-role='header'] h1").text('Anda-Stock' + (current == 'Anda-Stock' ? '' : '#' + current) + ' - by ' + sessionStorage.user);
-                    
+
                     if (permissionObj[current]) {
                         var subMenuPermission = permissionObj[current];
 

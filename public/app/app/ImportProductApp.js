@@ -6,7 +6,10 @@ var app = app || { models: {}, collections: {}, views: {} };
     //app.Control.Products = {};
 
     app.initImportProduct = function (listType) {
+        var payment_type = 'Credit';
         var stockModel = new app.models.Stock();
+        var stockModelForEditView = new app.models.Stock();
+
         var purchaseSessionModel = new app.models.PurchaseSessionModel();
 
         var selectProductCollection = new app.collections.products();
@@ -19,7 +22,8 @@ var app = app || { models: {}, collections: {}, views: {} };
             selectProductCollection: selectProductCollection,
             importProductCollection: importProductCollection,
             supplierCollection: supplierCollection,
-            purchaseSessionModel:purchaseSessionModel
+            purchaseSessionModel: purchaseSessionModel,
+            payment_type: payment_type
         });
 
         var addImportProduct = new app.views.ImportProductCreate({
@@ -27,19 +31,17 @@ var app = app || { models: {}, collections: {}, views: {} };
             model: addImportProductModel
         });
 
-        purchaseSessionModel.setNewSessionId();
+        //purchaseSessionModel.setSessionId();
 
         var viewSelectProduct = new app.views.SelectProduct({
             el: '#popupSelectProduct',
             model: addImportProductModel
         });
 
-        viewSelectProduct.search();
-
         var importProductCollection = new app.collections.ImportProductCollection();
         var importProductEdit = new app.views.ImportProductEdit({
             el: '.editImportProduct',
-            model: new Backbone.Model({ stockModel: stockModel, supplierCollection: supplierCollection }),
+            model: new Backbone.Model({ stockModel: stockModelForEditView, supplierCollection: supplierCollection, payment_type: payment_type }),
             collection: importProductCollection
         });
 
@@ -55,12 +57,6 @@ var app = app || { models: {}, collections: {}, views: {} };
         //    //}
         //});
 
-        var updateView = function () {
-            if (curTab == 'editImportProduct') {
-                importProductEdit.search();
-            }
-        };
-
         var curTab = 'importProduct';
         $(".ui-page-active [data-role='header'] li a").click(function () {
             //curTab = $(this).text();//.text();
@@ -68,19 +64,33 @@ var app = app || { models: {}, collections: {}, views: {} };
 
             $('.importProductNav').hide();
             $('.' + curTab).show();
-            updateView();
+
+            if (curTab == 'editImportProduct') {
+                importProductEdit.searchSessionId(payment_type, function () {
+                    importProductEdit.search();
+                });
+            }
         });
 
 
         stockModel.on('change:stock_selected', function (model, stock_selected) {
             console.log('change:stock_selected');
-            selectProductCollection.setLocalData(stock_selected);
-            updateView();
+            selectProductCollection.setLocalData(stock_selected, function () {
+                // viewSelectProduct.search();
+            });
+        });
+        
+        stockModelForEditView.on('change:stock_selected', function (model, stock_selected) {
+            if (curTab == 'editImportProduct') {
+                importProductEdit.search();
+            }
         });
 
-
         stockModel.set('stock', []);
-        stockModel.update(null, listType);
+        stockModelForEditView.set('stock', []);
+        stockModel.update(function (result) {
+            stockModelForEditView.set('stock', result);
+        }, listType);
 
         supplierCollection.getAll();
 

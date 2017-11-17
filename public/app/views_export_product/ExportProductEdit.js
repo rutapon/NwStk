@@ -6,24 +6,6 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     $(function () {
-
-        function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
-        function addMonths(date, months) {
-            var result = new Date(date);
-            result.setMonth(result.getMonth() + months);
-            return result;
-        }
-        function addYears(date, years) {
-            var result = new Date(date);
-            result.setYear(result.getYear() + years);
-            return result;
-        }
-
-
         app.views.ExportProductEdit = Backbone.View.extend({
 
             // Instead of generating a new element, bind to the existing skeleton of

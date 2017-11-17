@@ -195,9 +195,31 @@
                 _.forEach(sumFields, function (item, id) {
                     groupObj['total_' + item] = { $sum: '$' + item }
                 })
-                console.log('groupObj',groupObj);
+                console.log('groupObj', groupObj);
                 db.aggregate([
-                    { $match: findObj }, 
+                    { $match: findObj },
+                    {
+                        $group: groupObj,
+                    },
+                ]).toArray(function (err, docs) {
+                    callback(docs);
+                });
+            },
+
+            sumValueBefore: function (tableName, findObj, sumFields, timeField, timeEnd, callback) {
+                var db = this._getDB(tableName);
+
+               
+                findObj[timeField] = { $lt: timeEnd };
+
+                var groupObj = { _id: null }
+                _.forEach(sumFields, function (item, id) {
+                    groupObj['total_' + item] = { $sum: '$' + item }
+                })
+
+                console.log('groupObj', groupObj);
+                db.aggregate([
+                    { $match: findObj },
                     {
                         $group: groupObj,
                     },

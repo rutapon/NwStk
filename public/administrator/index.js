@@ -40,7 +40,7 @@ window.login = function (user, pass, dpm, cb) {
             alert('Sorry! No Web Storage support..');
         }
     }
-    
+
 }
 
 window.logout = function () {
@@ -90,6 +90,36 @@ $(function () {
         loadLogout();
     });
 
+    $(document).on("click", '#getServerTime', function () {
+        serviceMethod.getServerDateTime({}, function (result) {
+            alert(new Date(result));
+        });
+    });
+    $(document).on("click", '#updateServerTime', function () {
+        var time = {
+            addHours: function (date, hours) {
+                var result = new Date(date);
+                result.setHours(result.getHours() + hours);
+                return result;
+            },
+
+            removeTimezoneOffset: function (now) {
+                return this.addHours(now, -now.getTimezoneOffset() / 60);
+            }
+
+        };
+
+        var now = time.removeTimezoneOffset(new Date());
+        var dateTime = now.toISOString().substr(0, 19).split('T');
+        var date = dateTime[0];
+        var time = dateTime[1];
+
+        serviceMethod.setServerDateTime({ date: date, time: time }, function (result) {
+            alert('respont from server: ' + result + '\n' + new Date(result));
+        });
+    });
+
+
 
     if (typeof (Storage) !== "undefined") {
         // Code for localStorage/sessionStorage.
@@ -115,4 +145,6 @@ $(function () {
     } else {
         alert('Sorry! No Web Storage support..');
     }
+
+
 })

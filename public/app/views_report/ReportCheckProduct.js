@@ -5,36 +5,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 (function ($) {
     'use strict';
 
-    function addHours(date, hours) {
-        var result = new Date(date);
-        result.setHours(result.getHours() + hours);
-        return result;
-    }
-    function addDays(date, days) {
-        var result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
-    function addMonths(date, months) {
-        var result = new Date(date);
-        result.setMonth(result.getMonth() + months);
-        return result;
-    }
-    function addYears(date, years) {
-        var result = new Date(date);
-        result.setFullYear(result.getFullYear() + years);
-        return result;
-    }
-    function removeTimezoneOffset(now) {
-        return addHours(now, -now.getTimezoneOffset() / 60);
-    }
-    function addTimezoneOffset(now) {
-        return addHours(now, now.getTimezoneOffset() / 60);
-    }
-
-    function removeTimezoneOffset(now) {
-        return addHours(now, -now.getTimezoneOffset() / 60);
-    }
     $(function () {
         app.views.ReportCheckProduct = Backbone.View.extend({
 
@@ -93,7 +63,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 var now = new Date();
                 for (var i = 0; i < 12; i++) {
-                    var timeStr = addMonths(now, -i).toISOString().slice(0, 7);
+                    var timeStr = app.time.addMonths(now, -i).toISOString().slice(0, 7);
                     self.$el.find('.select-cheking-month').append('<option value="' + timeStr + '" >' + timeStr + '</option>');
                 }
 
@@ -234,7 +204,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
 
 
-                var nowDateStr = removeTimezoneOffset(new Date()).toISOString().slice(0, 10);
+                var nowDateStr = app.time.removeTimezoneOffset(new Date()).toISOString().slice(0, 10);
 
                 do {
 
@@ -244,7 +214,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                     dataArray.push({ item: item, dateStr: dateStr });
 
-                    stockChekingMonthDate = addDays(stockChekingMonthDate, 1);
+                    stockChekingMonthDate = app.time.addDays(stockChekingMonthDate, 1);
                     item = stockChekingMonthDate.toISOString().slice(8, 10);
                     dateStr = stockChekingMonthDate.toISOString().slice(0, 10);
 

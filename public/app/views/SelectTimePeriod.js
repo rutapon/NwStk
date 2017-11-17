@@ -7,32 +7,7 @@ var app = app || { models: {}, collections: {}, views: {} };
     'use strict';
 
     $(function () {
-        function addHours(date, hours) {
-            var result = new Date(date);
-            result.setHours(result.getHours() + hours);
-            return result;
-        }
-        function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
-        function addMonths(date, months) {
-            var result = new Date(date);
-            result.setMonth(result.getMonth() + months);
-            return result;
-        }
-        function addYears(date, years) {
-            var result = new Date(date);
-            result.setFullYear(result.getFullYear() + years);
-            return result;
-        }
-        function removeTimezoneOffset(now) {
-            return addHours(now, -now.getTimezoneOffset() / 60);
-        }
-        function addTimezoneOffset(now) {
-            return addHours(now, now.getTimezoneOffset() / 60);
-        }
+
         function pad10(n) {
             return (n < 10) ? ("0" + n) : n;
         }
@@ -81,7 +56,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 
                 this.render();
 
-
                 var $timeStart = self.$el.find("#startTime");;
                 var $timeEnd = self.$el.find("#endTime");
 
@@ -117,10 +91,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                         self.$el.find('select.select-time option').remove();
 
                         var now = new Date();
-                        now = removeTimezoneOffset(now);
+                        now = app.time.removeTimezoneOffset(now);
 
                         for (var i = 0; i < 12; i++) {
-                            var timeStr = addMonths(now, -i).toISOString().slice(0, 7);
+                            var timeStr = app.time.addMonths(now, -i).toISOString().slice(0, 7);
                             self.$el.find('select.select-time').append('<option value="' + timeStr + '" >' + timeStr + '</option>');
                         }
 
@@ -131,10 +105,10 @@ var app = app || { models: {}, collections: {}, views: {} };
                         self.$el.find('select.select-time option').remove();
 
                         var now = new Date();
-                        now = removeTimezoneOffset(now);
-                        console.log(addYears(now, 0));
+                        now = app.time.removeTimezoneOffset(now);
+                        console.log(app.time.addYears(now, 0));
                         for (var i = 0; i < 4; i++) {
-                            var timeStr = addYears(now, -i).toISOString().slice(0, 4);
+                            var timeStr = app.time.addYears(now, -i).toISOString().slice(0, 4);
                             self.$el.find('select.select-time').append('<option value="' + timeStr + '" >' + timeStr + '</option>');
                         }
 
@@ -170,7 +144,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 if (selectTimeTypeValue == 'last') {
 
                     var now = new Date();
-                    now = removeTimezoneOffset(now);
+                    now = app.time.removeTimezoneOffset(now);
 
                     var timeStart = now;
 
@@ -179,13 +153,13 @@ var app = app || { models: {}, collections: {}, views: {} };
                             //$timeStart.val(now.toISOString().slice(0, 10));
                         },
                         sevenDay: function () {
-                            timeStart = addDays(now, -7);
+                            timeStart = app.time.addDays(now, -7);
                         },
                         oneMonth: function () {
-                            timeStart = addMonths(now, -1);
+                            timeStart = app.time.addMonths(now, -1);
                         },
                         oneYear: function () {
-                            timeStart = addYears(now, -1);
+                            timeStart = app.time.addYears(now, -1);
                         }
                     };
                     mapFunc[value]();
@@ -196,7 +170,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 }
                 else if (selectTimeTypeValue == 'oneMonthPeriod') {
                     var timeStartStr = value + '-01';
-                    var timeEndStr = addDays(addMonths(new Date(timeStartStr), 1), -1).toISOString().slice(0, 10);
+                    var timeEndStr = app.time.addDays(app.time.addMonths(new Date(timeStartStr), 1), -1).toISOString().slice(0, 10);
 
                     $timeStart.val(timeStartStr);
                     $timeEnd.val(timeEndStr);
@@ -204,7 +178,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                 }
                 else if (selectTimeTypeValue == 'oneYearPeriod') {
                     var timeStartStr = value + '-01-01';
-                    var timeEndStr = addDays(addYears(new Date(timeStartStr), 1), -1).toISOString().slice(0, 10);
+                    var timeEndStr = app.time.addDays(app.time.addYears(new Date(timeStartStr), 1), -1).toISOString().slice(0, 10);
                     $timeStart.val(timeStartStr);
                     $timeEnd.val(timeEndStr);
                 }

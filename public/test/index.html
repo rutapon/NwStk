@@ -7,24 +7,39 @@
     <meta name="viewport" content="initial-scale=1"></meta>
     <script src="../lib/jquery/jquery-2.1.1.min.js"></script>
 
-   
 
-    <script src="test.js"></script>
+
+    <!-- <script src="test.js"></script> -->
     <script>
-            //console.log('script');
-            $('script').each(function(id){
-                var src =  $( this ).attr('src');
-                console.log(src);
-                if(src)  $( this ).attr('src',src+'?123');
-               
-                 
-                //console.log(el.attr('scr'));
-            });
-        </script>
+        //console.log('script');
+        $('script').each(function (id) {
+            var src = $(this).attr('src');
+            console.log(src);
+            if (src) $(this).attr('src', src + '?123');
+
+
+            //console.log(el.attr('scr'));
+        });
+        $(function () {
+            $('label').val('hello').text('text');
+        })
+
+        var myNumber = 70700;
+        function formatInt(intNum) {
+            if (intNum > 9999) {
+                return intNum;
+            } else {
+                let formattedNumber = ("000" + intNum).slice(-4);
+                return formattedNumber;
+            }
+        }
+
+        console.log(formatInt(myNumber));
+    </script>
 </head>
 
 <body>
-abc
+    <label></label>
 </body>
 
 </html>

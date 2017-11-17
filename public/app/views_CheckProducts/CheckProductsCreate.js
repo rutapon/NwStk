@@ -22,32 +22,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 
         $("#sure").popup('open');
     }
-    function addHours(date, hours) {
-        var result = new Date(date);
-        result.setHours(result.getHours() + hours);
-        return result;
-    }
-    function addDays(date, days) {
-        var result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
-    function addMonths(date, months) {
-        var result = new Date(date);
-        result.setMonth(result.getMonth() + months);
-        return result;
-    }
-    function addYears(date, years) {
-        var result = new Date(date);
-        result.setFullYear(result.getFullYear() + years);
-        return result;
-    }
-    function removeTimezoneOffset(now) {
-        return addHours(now, -now.getTimezoneOffset() / 60);
-    }
-    function addTimezoneOffset(now) {
-        return addHours(now, now.getTimezoneOffset() / 60);
-    }
 
     app.views.CheckProductsCreate = Backbone.View.extend({
 

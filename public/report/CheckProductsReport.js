@@ -2,7 +2,7 @@
     var is_chrome = function () { return Boolean(window.chrome); }
     if (is_chrome) {
         window.print();
-        setTimeout(function () { window.close(); }, 2000);
+        setTimeout(function () { window.close(); }, 5000);
         //give them 10 seconds to print, then close
     }
     else {

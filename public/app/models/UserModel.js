@@ -15,6 +15,7 @@ var app = app || { models: {}, collections: {}, views: {} };
             pass: '',
             dpm: '',
             type: '',//'admin' || 'staff_main' || 'staff_support'|| 'viewer'
+            lng: 'th',
             permission: {},
             listAccessPermission: []
         },
@@ -68,7 +69,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         },
         getListsName: function (listType) {
             console.log(this.attributes.listAccessPermission);
-            if (listType == 'All') {
+            if (!listType) {
                 return this.attributes.listAccessPermission;
             }
             else {

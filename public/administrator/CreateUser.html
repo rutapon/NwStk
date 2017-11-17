@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title></title>
     <script src="../lib/underscore/underscore-min.js"></script>
@@ -33,8 +34,8 @@
 
     <link href="../lib/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
     <script src="../lib/jstree/dist/jstree.min.js"></script>
-   
-     <script src="views/CreateUserItemView.js"></script>
+
+    <script src="views/CreateUserItemView.js"></script>
     <script src="views/CreateUserView.js"></script>
 
 
@@ -43,9 +44,10 @@
     <script src="CreateUser.js"></script>
 
 </head>
+
 <body>
-       <a href="/administrator/">back</a> || <a href="/">HOME</a> 
-     <h2 class="demoHeaders">Cleate User:
+    <a href="/administrator/">back</a> || <a href="/">HOME</a>
+    <h2 class="demoHeaders">Cleate User:
         <label id="dpmName"></label>
     </h2>
 
@@ -57,27 +59,36 @@
     <div id="UserView">
 
         <script type="text/template" id="ItemTemplate">
-        <fieldset>
-          
-            <legend><%- user %></legend>      
-              <label>Type: </label>
-             <label class="userType"><%- type %></label>   
-           <br>   
-                <label>Password: </label>
+            <fieldset>
+
+                <legend>
+                    <%- user %>
+                </legend>
+                <label>Type: </label>
+                <label class="userType"><%- type %></label>
+                <br>
+                    <label>Password: </label>
                 <label class="userPassword"><%- pass %></label>
-                <button class="changePasswordButton">Change Password</button>          
-            <br>
-      
+                <button class="changePasswordButton">Change Password</button>
+                <br>
 
-           <label class="ui-controlgroup-label">Menu Permission:</label>
+                
+                <label>Main Language: </label>
+                <select id="lng" class="selectmenu">                    
+                     <option>Th</option>
+                     <option>En</option>
+                    </select>
+
+                <br>
+                <label class="ui-controlgroup-label">Menu Permission:</label>
                 <div class="jstree"></div>
-        
-            <label class="ui-controlgroup-label">List Permission:</label>
-                <div class="listPermission"></div>
-            <br>
 
-             <button class="removeButton">Remove</button>        
-        </fieldset>
+                <label class="ui-controlgroup-label">List Permission:</label>
+                <div class="listPermission"></div>
+                <br>
+
+                <button class="removeButton">Remove</button>
+            </fieldset>
         </script>
 
     </div>
@@ -104,9 +115,11 @@
         </form>
     </div>
     <div id="dialog-confirm" title="Delete?">
-        <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 12px 12px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+        <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 12px 12px 20px 0;"></span>These items will be permanently
+            deleted and cannot be recovered. Are you sure?</p>
     </div>
 
 
 </body>
+
 </html>

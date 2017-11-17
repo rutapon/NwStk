@@ -279,17 +279,29 @@
 
                 this.wsClient.callService('getLastPettyCash', dataObj, cb);
             },
+            getฺBeforePettyCash: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getฺBeforePettyCash', dataObj, cb);
+            },
             getLastPurchaseSession: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
                 dataObj = _.extend(dataObj, userObj);
 
                 this.wsClient.callService('getLastPurchaseSession', dataObj, cb);
-            }, 
+            },
             genNewPurchaseSessionId: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
                 dataObj = _.extend(dataObj, userObj);
 
                 this.wsClient.callService('genNewPurchaseSessionId', dataObj, cb);
+            },
+            getPurchaseSessionInPeriod: function (dataObj, cb) {
+                var userObj = app.userModel.getUserObj();
+                dataObj = _.extend(dataObj, userObj);
+
+                this.wsClient.callService('getPurchaseSessionInPeriod', dataObj, cb);
             },
             findPurchaseSession: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
@@ -303,7 +315,7 @@
 
                 this.wsClient.callService('insertPurchaseSession', dataObj, cb);
             },
-           
+
             reCalulatePurchaseSession: function (dataObj, cb) {
                 var userObj = app.userModel.getUserObj();
                 dataObj = _.extend(dataObj, userObj);
@@ -500,7 +512,12 @@
                 this.wsClient.callService('findUser', dataObj, cb);
             },
             //#endregion
-
+            getServerDateTime: function (dataObj, cb) {
+                this.wsClient.callService('getServerDateTime', dataObj, cb);
+            },
+            setServerDateTime: function (dataObj, cb) {
+                this.wsClient.callService('setServerDateTime', dataObj, cb);
+            },
         };
     });
 

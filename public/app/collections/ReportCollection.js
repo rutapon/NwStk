@@ -8,32 +8,7 @@ var app = app || { models: {}, collections: {}, views: {} };
 
 (function ($) {
     'use strict';
-    function addHours(date, hours) {
-        var result = new Date(date);
-        result.setHours(result.getHours() + hours);
-        return result;
-    }
-    function addDays(date, days) {
-        var result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
-    function addMonths(date, months) {
-        var result = new Date(date);
-        result.setMonth(result.getMonth() + months);
-        return result;
-    }
-    function addYears(date, years) {
-        var result = new Date(date);
-        result.setFullYear(result.getFullYear() + years);
-        return result;
-    }
-    function removeTimezoneOffset(now) {
-        return addHours(now, -now.getTimezoneOffset() / 60);
-    }
-    function addTimezoneOffset(now) {
-        return addHours(now, now.getTimezoneOffset() / 60);
-    }
+
     function subtraction(a, b, fix) {
         if (!fix) fix = 10000000;
         return (a * fix - b * fix) / fix;
@@ -51,6 +26,7 @@ var app = app || { models: {}, collections: {}, views: {} };
         var x = Math.pow(10, precision || 2);
         return (Math.round(a * x)) / x;
     }
+    
     app.collections.ReportCollection = Backbone.Collection.extend({
         model: Backbone.Model,
 

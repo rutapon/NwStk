@@ -5,11 +5,6 @@ var app = app || { models: {}, collections: {}, views: {} };
 (function ($) {
     'use strict';
 
-    function precision(a, precision) {
-        var x = Math.pow(10, precision || 2);
-        return (Math.round(a * x)) / x;
-    }
-
     $(function () {
         app.views.ReportPurchaseProduct = Backbone.View.extend({
 
@@ -179,7 +174,7 @@ var app = app || { models: {}, collections: {}, views: {} };
                         var amount = _.chain(dataArrayObject).pluck('amount').reduce(function (memo, num) { return memo + num; }, 0).value();
 
                         var dataArray = ArrayObjectToDataArray(dataArrayObject);
-                        data.push(['code: ' + code + ' name: ' + name + ' ### amount: ' + precision(amount)]);
+                        data.push(['code: ' + code + ' name: ' + name + ' ### amount: ' + app.math.precision(amount)]);
                         data = data.concat(dataArray);
                         data.push([]);
                     //}
